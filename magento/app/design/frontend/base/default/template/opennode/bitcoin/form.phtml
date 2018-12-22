@@ -1,0 +1,38 @@
+<?php
+/*
+ * The MIT License (MIT)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+/** @var OpenNode_Bitcoin_Block_Form $form */
+$form = $this;
+
+/** @var OpenNode_Bitcoin_Helper_Data $helper */
+$helper = Mage::helper('opennode_bitcoin');
+
+?>
+
+<ul class="form-list" id="payment_form_<?php echo $form->escapeHtml($form->getMethodCode()); ?>" style="display:none">
+    <li>
+        <?php echo $helper->__('After you confirm the order you will be presented with a QR code that contains a unique Bitcoin address.') ?>
+        <?php echo $helper->__('You must send the payment to this address within 1-hour for the order to be confirmed.'); ?>
+        <?php echo $helper->__('If you do not send the payment the order will be automatically cancelled'); ?>
+    </li>
+</ul>
