@@ -203,10 +203,14 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     /**
      * Return url for redirection after order placed
      * @return string
+     *
+     * TODO Good or bad idea to have a form key for validation here? Maybe the session will expire before the payment?
      */
     public function getOrderPlaceRedirectUrl()
     {
-        return Mage::getUrl('opennode_bitcoin/payment/payment');
+        /** @var Mage_Core_Model_Session $session */
+        $session = Mage::getSingleton('core/session');
+        return Mage::getUrl('opennode_bitcoin/payment/payment', ['form_key' => $session->getFormKey()]);
     }
 
     /**
