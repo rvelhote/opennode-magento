@@ -97,7 +97,11 @@ try {
     </tr>
     <tr>
         <td><?php print $helper->__('Address'); ?></td>
-        <td><?php print $block->escapeHtml($charge->chain_invoice['address']); ?></td>
+        <td>
+            <a target="_blank" rel="noopener noreferrer" href="https://blockstream.info/address/<?php print print $block->escapeHtml($charge->chain_invoice['address']);; ?>">
+                <?php print $block->escapeHtml($charge->chain_invoice['address']); ?>
+            </a>
+        </td>
     </tr>
     <tr>
         <td><?php print $helper->__('Transaction ID'); ?></td>
