@@ -45,7 +45,6 @@
             </opennode_bitcoin>
         </models>
     </global>
-
     <default>
         <payment>
             <opennode_bitcoin>
@@ -58,8 +57,27 @@
             </opennode_bitcoin>
         </payment>
     </default>
-
+    <adminhtml>
+        <translate>
+            <modules>
+                <OpenNode_Bitcoin>
+                    <files>
+                        <default>OpenNode_Bitcoin.csv</default>
+                    </files>
+                </OpenNode_Bitcoin>
+            </modules>
+        </translate>
+    </adminhtml>
     <frontend>
+        <translate>
+            <modules>
+                <OpenNode_Bitcoin>
+                    <files>
+                        <default>OpenNode_Bitcoin.csv</default>
+                    </files>
+                </OpenNode_Bitcoin>
+            </modules>
+        </translate>
         <layout>
             <updates>
                 <opennode_bitcoin>
