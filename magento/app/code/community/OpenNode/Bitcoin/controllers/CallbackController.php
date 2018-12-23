@@ -45,11 +45,33 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $calculated = hash_hmac('sha256', $callback->getId(), $config->getAuthToken());
 
         if (!hash_equals($callback->getHashedOrder(), $calculated)) {
-            $this->getResponse()->setHttpResponseCode(403)->sendResponse();
+            $this->getResponse()->setHttpResponseCode(403);
             return;
         }
 
-        // TODO Check the status of sent by the callback
-        // TODO Update the order status, create a transaction and an invoice
+        /** @var Mage_Sales_Model_Order $order */
+        $order = Mage::getModel('sales/order');
+        $order->loadByIncrementId($callback->getIncrementId());
+
+        if (!$order->getId()) {
+            $this->getResponse()->setHttpResponseCode(404);
+            return;
+        }
+
+        $id = $order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
+        if ($callback->getId() != $id) {
+            $this->getResponse()->setHttpResponseCode(404);
+            return;
+        }
+
+        try {
+            $order->getPayment()->capture(null);
+            $order->save();
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->getResponse()->setHttpResponseCode(500);
+        }
+
+        return;
     }
 }

@@ -26,6 +26,9 @@
  */
 class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
 {
+    /** @var Mage_Core_Model_Store */
+    protected $_store;
+
     /**
      * Constructor. Set template.
      */
@@ -36,23 +39,28 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
     }
 
     /**
-     * Returns code of payment method
-     *
-     * @return string
+     * @return bool|\OpenNode\Merchant\Charge
+     * @throws Mage_Core_Exception
      */
-    public function getMethodCode()
+    public function getCharge()
     {
-        return $this->getInfo()->getMethodInstance()->getCode();
+        /** @var OpenNode_Bitcoin_Model_Bitcoin $method */
+        $method = $this->getInfo()->getMethodInstance();
+        return $method->getCharge();
     }
 
     /**
-     * Build PDF content of info block
-     *
-     * @return string
+     * @param $timestamp
+     * @return Zend_Date
      */
-    public function toPdf()
+    public function getStoreDate($timestamp)
     {
-        $this->setTemplate('opennode/bitcoin/pdf/info.phtml');
-        return $this->toHtml();
+        if (!$this->_store) {
+            /** @var Mage_Sales_Model_Order_Payment $payment */
+            $payment = $this->getInfo();
+            $this->_store = $payment->getOrder()->getStore();
+        }
+
+        return Mage::app()->getLocale()->storeDate($this->_store, $timestamp, true, 'full');
     }
 }

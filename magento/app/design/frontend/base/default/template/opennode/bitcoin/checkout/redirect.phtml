@@ -27,8 +27,7 @@ $block = $this;
 /** @var $h OpenNode_Bitcoin_Helper_Data */
 $h = Mage::helper('opennode_bitcoin');
 
-$charge = $block->getCharge();
-$store = $block->getStore(); ?>
+$charge = $block->getCharge(); ?>
 
 
 <div class="block block-opennode">
@@ -68,6 +67,31 @@ $store = $block->getStore(); ?>
         </div>
     </div>
     </div>
+
+    <form action="<?php print Mage::getUrl('opennode_bitcoin/payment/cancel'); ?>" method="get">
+        <?php echo $this->getBlockHtml('formkey')?>
+        <button type="submit">Cancel</button>
+    </form>
+
+    <form action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
+
+        <div id="payment-status-unpaid" class="payment-status payment-status-unpaid">
+            <div>Your payment has not been seen in the mempool (if using on-chain payment) or settled in the Ligthning Network.</div>
+            <div>If still decide to continue at this point your order will be placed in a Pending Payment status.</div>
+
+            <label for="confirm">I understand. I will continue now instead of waiting for confirmation.</label>
+            <input id="confirm" required type="checkbox">
+
+            <button type="submit"><?php print $h->__('I\'ll pay later'); ?></button>
+        </div>
+
+        <div id="payment-status-paid" class="payment-status payment-status-unpaid" style="display: none;">
+            <button type="submit"><?php print $h->__('Confirm'); ?>/button>
+        </div>
+
+
+        <?php echo $this->getBlockHtml('formkey')?>
+    </form>
 </div>
 
 <div><?php var_dump($block->getParams());?></div>
@@ -92,6 +116,24 @@ $store = $block->getStore(); ?>
                 ecl: item.dataset.ecl
             }).svg();
         });
+
+        setInterval(function() {
+            new Ajax.Request('<?php print $block->escapeHtml($block->getStatusUrl()); ?>', {
+                onSuccess: function(response) {
+
+                    console.log(response);
+
+                    if(response.responseJSON.status === 'paid') {
+                        $('payment-status-unpaid').style.display = 'none';
+                        $('payment-status-paid').style.display = 'none';
+                    }
+
+                },
+                onFailure: function(response) {
+                    console.log(response);
+                }
+            });
+        }, 11000);
     });
 </script>
 

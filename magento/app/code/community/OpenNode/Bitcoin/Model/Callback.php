@@ -51,4 +51,11 @@
  */
 class OpenNode_Bitcoin_Model_Callback extends Varien_Object
 {
+    /**
+     * @return string
+     */
+    public function getIncrementId()
+    {
+        return $this->getOrderId();
+    }
 }

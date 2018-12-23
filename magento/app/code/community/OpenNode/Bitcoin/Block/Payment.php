@@ -1,5 +1,4 @@
 <?php
-
 /*
  * The MIT License (MIT)
  *
@@ -22,6 +21,8 @@
  * SOFTWARE.
  */
 
+use OpenNode_Bitcoin_Model_Bitcoin as PaymentMethod;
+
 /**
  * Class OpenNode_Bitcoin_Block_Payment
  */
@@ -39,10 +40,19 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
     /**
      * OpenNode_Bitcoin_Block_Payment constructor.
      * @param array $args
+     * @throws Mage_Core_Exception
      */
     public function __construct(array $args = array())
     {
         parent::__construct($args);
+
+        if (!isset($args['order'])) {
+            Mage::throwException('The payment block must contain an \'order\' key');
+        }
+
+        if (!($args['order'] instanceof Mage_Sales_Model_Order)) {
+            Mage::throwException('The payment block must contain an order key with an Mage_Sales_Model_Order object');
+        }
 
         $this->_config = Mage::helper('opennode_bitcoin/config');
         $this->_order = $args['order'];
@@ -55,36 +65,40 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
      */
     public function getParams()
     {
-        return json_decode($this->_order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_PARAMS_KEY));
+        /** @var Mage_Core_Helper_Data $core */
+        $core = Mage::helper('core');
+        $payment = $this->getOrder()->getPayment();
+
+        return $core->jsonDecode($payment->getAdditionalInformation(PaymentMethod::OPENNODE_PARAMS_KEY));
+    }
+
+    /**
+     * @return Mage_Sales_Model_Order|mixed
+     */
+    public function getOrder()
+    {
+        return $this->_order;
     }
 
     /**
      * @return bool|\OpenNode\Merchant\Charge
-     *
-     * TODO Check or load transaction here?
+     * @throws Mage_Core_Exception
      */
     public function getCharge()
     {
-        if (!$this->_charge) {
-            $authentication = array(
-                'environment' => $this->_config->getEnvironment(),
-                'auth_token' => $this->_config->getAuthToken(),
-                'curlopt_ssl_verifypeer' => true,
-            );
-
-            $transactionId = $this->_order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
-            $this->_charge = \OpenNode\Merchant\Charge::find($transactionId, [], $authentication);
-        }
-
-        return $this->_charge;
+        /** @var OpenNode_Bitcoin_Model_Bitcoin $method */
+        $method = $this->getOrder()->getPayment()->getMethodInstance();
+        return $method->getCharge();
     }
 
     /**
-     * @return Mage_Core_Model_Store
-     * @throws Mage_Core_Model_Store_Exception
+     * Get the URL that's used to verify the status of the charge in the Blockchain or the Lightning Network.
+     * @return string A URL with an FormKey for validation
      */
-    public function getStore()
+    public function getStatusUrl()
     {
-        return Mage::app()->getStore();
+        /** @var Mage_Core_Model_Session $session */
+        $session = Mage::getSingleton('core/session');
+        return Mage::getUrl('opennode_bitcoin/payment/status', ['form_key' => $session->getFormKey()]);
     }
 }
