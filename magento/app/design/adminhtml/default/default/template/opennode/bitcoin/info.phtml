@@ -103,7 +103,9 @@ try {
         <td><?php print $helper->__('Transaction ID'); ?></td>
         <td>
             <?php if (isset($charge->chain_invoice['tx'])) : ?>
-                <?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>
+                <a target="_blank" rel="noopener noreferrer" href="https://blockstream.info/tx/<?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>">
+                    <?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>
+                </a>
             <?php else: ?>
                 <?php print $helper->__('No transaction seen on the blockchain yet'); ?>
             <?php endif; ?>
