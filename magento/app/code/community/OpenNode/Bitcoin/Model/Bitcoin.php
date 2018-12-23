@@ -50,6 +50,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     /** @var \OpenNode\Merchant\Charge */
     protected $_charge;
 
+    /** @var OpenNode_Bitcoin_Helper_Logger */
+    protected $_logger;
+
     /** @var bool */
     protected $_canCapture = true;
 
@@ -179,10 +182,17 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     public function canUseCheckout()
     {
         if ($this->_config->isProductionMode() && !$this->_config->getProductionApiKey()) {
+            $this->_logger->warn('PRODUCTION mode is ON but an API Key is missing. Payment method disabled.');
             return false;
         }
 
         if ($this->_config->isTestMode() && !$this->_config->getDevelopmentApiKey()) {
+            $this->_logger->warn('DEVELOPMENT mode is ON but an API Key is missing. Payment method disabled.');
+            return false;
+        }
+
+        if ($this->_config->getProductionApiKey() == $this->_config->getDevelopmentApiKey()) {
+            $this->_logger->warn('DEVELOPMENT and PRODUCTION API Keys are the same. Payment method disabled.');
             return false;
         }
 

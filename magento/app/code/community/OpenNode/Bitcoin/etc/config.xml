@@ -58,6 +58,16 @@
         </payment>
     </default>
     <adminhtml>
+        <events>
+            <admin_system_config_changed_section_payment>
+                <observers>
+                    <opennode_bitcoin>
+                        <class>opennode_bitcoin/observer</class>
+                        <method>systemConfigSectionChangeAfter</method>
+                    </opennode_bitcoin>
+                </observers>
+            </admin_system_config_changed_section_payment>
+        </events>
         <translate>
             <modules>
                 <OpenNode_Bitcoin>
