@@ -69,6 +69,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     {
         // FIXME Perhaps use getConfigData instead of this helper?
         $this->_config = Mage::helper('opennode_bitcoin/config');
+        $this->_logger = Mage::helper('opennode_bitcoin/logger');
         parent::__construct();
     }
 
