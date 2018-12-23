@@ -38,7 +38,9 @@ $charge = $block->getCharge(); ?>
     <div class="description h-space"><?php print $block->escapeHtml($charge->description); ?></div>
 
     <div class="total h-space">
-        <div class="text-main-dark"><?php print $h->__('%s Satoshis', $charge->amount); ?></div>
+        <div class="text-main-dark">
+            <?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?>
+        </div>
         <div class="text-grey-darkest"><?php print $h->__('%s %s', $charge->fiat_value, $charge->currency); ?></div>
     </div>
 

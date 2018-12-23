@@ -26,4 +26,16 @@
  */
 class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    /**
+     * @param int $sats
+     * @return string
+     */
+    public function satoshiToBtc($sats)
+    {
+        if (function_exists('bcdiv')) {
+            return bcdiv($sats, 100000000, 8);
+        }
+
+        return number_format($sats / 100000000, 8, '.', '');
+    }
 }
