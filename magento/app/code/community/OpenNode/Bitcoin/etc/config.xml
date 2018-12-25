@@ -105,4 +105,14 @@
             </opennode_bitcoin>
         </routers>
     </frontend>
+    <crontab>
+        <jobs>
+            <opennode_bitcoin>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run><model>opennode_bitcoin/cron::cancel</model></run>
+            </opennode_bitcoin>
+        </jobs>
+    </crontab>
 </config>
