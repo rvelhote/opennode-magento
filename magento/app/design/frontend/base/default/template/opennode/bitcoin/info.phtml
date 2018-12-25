@@ -24,7 +24,51 @@
 /** @var OpenNode_Bitcoin_Helper_Data $helper */
 $helper = Mage::helper('opennode_bitcoin');
 
-?>
+/** @var OpenNode_Bitcoin_Block_Info $block */
+$block = $this; ?>
 
-<?php echo $helper->__('Bitcoin'); ?>
+<?php if (is_null($block->getOrder())) : ?>
+    <?php print $helper->__('Bitcoin'); ?>
+    <?php return; ?>
+<?php endif; ?>
 
+<?php $charge = $block->getCharge(); ?>
+<?php print $helper->__('Bitcoin'); ?>
+
+<table>
+    <tbody>
+    <tr>
+        <td><?php print $helper->__('Status'); ?>:</td>
+        <td><?php print $block->escapeHtml($charge->status); ?></td>
+    </tr>
+
+    <?php if ($charge->status === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID) : ?>
+    <tr>
+        <td colspan="2">
+            <strong><?php print $helper->__('Your order is still unpaid. ') ?></strong>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Pay with Lightning'); ?></a>
+            <a href="bitcoin:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Pay On-Chain'); ?></a>
+        </td>
+    </tr>
+    <?php endif; ?>
+
+    <?php if (isset($charge->chain_invoice['tx'])) : ?>
+        <tr>
+            <td><?php print $helper->__('Transaction ID'); ?></td>
+            <td>
+                <?php if (isset($charge->chain_invoice['tx'])) : ?>
+                    <a target="_blank" rel="noopener noreferrer" href="https://blockstream.info/tx/<?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>">
+                        <?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>
+                    </a>
+                <?php else: ?>
+                    <?php print $helper->__('No transaction seen on the blockchain yet'); ?>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
+</table>

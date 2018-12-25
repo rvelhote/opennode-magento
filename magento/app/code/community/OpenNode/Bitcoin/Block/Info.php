@@ -29,6 +29,9 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
     /** @var Mage_Core_Model_Store */
     protected $_store;
 
+    /** @var Mage_Sales_Model_Order */
+    protected $_order;
+
     /**
      * Constructor. Set template.
      */
@@ -50,15 +53,27 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
     }
 
     /**
+     * @return Mage_Sales_Model_Order
+     */
+    public function getOrder()
+    {
+        if (!$this->_order) {
+            /** @var Mage_Sales_Model_Order_Payment $payment */
+            $payment = $this->getInfo();
+            $this->_order = $payment->getOrder();
+        }
+
+        return $this->_order;
+    }
+
+    /**
      * @param $timestamp
      * @return Zend_Date
      */
     public function getStoreDate($timestamp)
     {
         if (!$this->_store) {
-            /** @var Mage_Sales_Model_Order_Payment $payment */
-            $payment = $this->getInfo();
-            $this->_store = $payment->getOrder()->getStore();
+            $this->_store = $this->getOrder()->getStore();
         }
 
         return Mage::app()->getLocale()->storeDate($this->_store, $timestamp, true, 'full');
