@@ -25,11 +25,9 @@
 $form = $this;
 
 /** @var OpenNode_Bitcoin_Helper_Data $helper */
-$helper = Mage::helper('opennode_bitcoin');
+$helper = Mage::helper('opennode_bitcoin'); ?>
 
-?>
-
-<ul class="form-list" id="payment_form_<?php echo $form->escapeHtml($form->getMethodCode()); ?>" style="display:none">
+<ul class="form-list" id="payment_form_<?php echo $form->escapeHtml($form->getMethodCode()); ?>" style="display:none;">
     <li>
         <?php echo $helper->__('After you confirm the order you will be presented with a QR code that contains a unique Bitcoin address.') ?>
         <?php echo $helper->__('You must send the payment to this address within 1-hour for the order to be confirmed.'); ?>

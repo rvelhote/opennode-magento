@@ -81,6 +81,14 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
     }
 
     /**
+     * @return string
+     */
+    public function getStoreName()
+    {
+        return $this->getOrder()->getStore()->getFrontendName();
+    }
+
+    /**
      * @return bool|\OpenNode\Merchant\Charge
      * @throws Mage_Core_Exception
      */
@@ -100,5 +108,15 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
         /** @var Mage_Core_Model_Session $session */
         $session = Mage::getSingleton('core/session');
         return Mage::getUrl('opennode_bitcoin/payment/status', ['form_key' => $session->getFormKey()]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCancelUrl()
+    {
+        /** @var Mage_Core_Model_Session $session */
+        $session = Mage::getSingleton('core/session');
+        return Mage::getUrl('opennode_bitcoin/payment/cancel', ['form_key' => $session->getFormKey()]);
     }
 }

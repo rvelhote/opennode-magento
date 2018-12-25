@@ -53,11 +53,16 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
                 Mage::throwException('No order for processing found');
             }
 
+            /** @var OpenNode_Bitcoin_Model_Bitcoin $block */
             $block = $this->getLayout()->createBlock('opennode_bitcoin/payment', 'bitcoin', [
                 'order' => $order,
             ]);
 
             $this->loadLayout();
+
+            $title = $helper->__('Pay your order with Bitcoin', $order->getIncrementId());
+            $this->getLayout()->getBlock('head')->setTitle($title);
+
             $this->getLayout()->getBlock('content')->append($block);
             $this->renderLayout();
         } catch (Exception $e) {

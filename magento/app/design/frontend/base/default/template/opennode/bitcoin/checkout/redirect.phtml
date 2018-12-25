@@ -30,80 +30,126 @@ $h = Mage::helper('opennode_bitcoin');
 $charge = $block->getCharge(); ?>
 
 
-<div class="block block-opennode">
-    <div class="block-title">
-        <span><strong><span><?php print $h->__('Order Summary'); ?></span></strong></span>
-    </div>
+<div class="block-opennode">
 
-    <div class="description h-space"><?php print $block->escapeHtml($charge->description); ?></div>
-
-    <div class="total h-space">
-        <div class="text-main-dark">
-            <?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?>
+    <div class="block block-summary">
+        <div class="block-title">
+            <span><strong><span><?php print $h->__('Order Summary'); ?></span></strong></span>
         </div>
-        <div class="text-grey-darkest"><?php print $h->__('%s %s', $charge->fiat_value, $charge->currency); ?></div>
+
+        <div><?php print $block->escapeHtml($charge->description); ?></div>
+
+        <div>
+            <div>
+                <?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?>
+            </div>
+            <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
+        </div>
     </div>
 
-    <div class="payment h-space">
-    <div><?php print $h->__('Select bitcoin payment method'); ?>:</div>
+    <div class="col2-set block-payment-methods">
+        <div class="block-title">
+            <span><strong><span><?php print $h->__('Select bitcoin payment method'); ?></span></strong></span>
+        </div>
 
-    <div>
-        <div class="box h-space">
-            <div><?php print $h->__('Lightning'); ?></div>
-            <div><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
-
-            <div class="qr-code">
-                <div data-ecl="M" data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
-                <div><a href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Open in wallet'); ?></a></div>
+        <div class="col-1">
+            <div class="box payment-method">
+                <div class="box-title">
+                    <strong><?php print $h->__('Lightning Network'); ?></strong>
+                </div>
+                <div class="box-content">
+                    <div class="fee"><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
+                    <div class="qr-code" data-ecl="M"
+                         data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
+                    <div>
+                        <a class="button"
+                           href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Open in wallet'); ?></a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="box h-space">
-            <div><?php print $h->__('On Chain'); ?></div>
-            <div><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
-
-            <div class="qr-code">
-                <div data-ecl="M" data-address="<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"></div>
-                <div><a href="lightning:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Open in wallet'); ?></a></div>
+        <div class="col-2">
+            <div class="box payment-method">
+                <div class="box-title">
+                    <strong><?php print $h->__('On-Chain'); ?></strong>
+                </div>
+                <div class="box-content">
+                    <div class="fee"><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
+                    <div class="qr-code" data-ecl="M"
+                         data-address="<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"></div>
+                    <div>
+                        <a target="_blank" class="button"
+                           href="lightning:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Open in wallet'); ?></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="col2-set block-actions">
+        <div class="col-1"><!-- Just some filler so we can achieve two columns with the default Magento theme! --></div>
+        <div class="col-2">
+            <div class="box action action-pay">
+                <div class="box-content">
+                    <form action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
+                        <ul id="payment-status-unpaid" class="form-list">
+                            <li style="margin-bottom: 20px;"><?php print $h->__('Your payment has not been seen in the mempool (if using on-chain payment) or settled in the Ligthning Network. If still decide to continue your order will be placed in a <i>Pending Payment</i> status and will be cancelled in 1 hour.'); ?></li>
+
+
+                            <li class="a-right">
+                                <label for="confirm"><?php print $h->__('I understand. I will continue now instead of waiting for confirmation.'); ?></label>
+                                <input style="vertical-align: middle;" id="confirm" required class="checkbox" type="checkbox">
+                            </li>
+
+                            <li class="a-right">
+                                <button class="button" type="submit"><?php print $h->__('I\'ll pay later'); ?></button>
+                            </li>
+                        </ul>
+
+                        <ul id="payment-status-paid" class="form-list" style="display: none;">
+                            <li>
+                                <p><?php print $h->__('Your order was paid successfully.'); ?></p>
+                                <p><?php print $h->__('Your should be redirected to the order summary automatically in a few moments.'); ?></p>
+                            </li>
+
+                            <li class="a-right">
+                                <button class="button" type="submit"><?php print $h->__('Continue to order summary'); ?></button>
+                            </li>
+                        </ul>
+
+                        <?php echo $this->getBlockHtml('formkey') ?>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <form action="<?php print Mage::getUrl('opennode_bitcoin/payment/cancel'); ?>" method="get">
-        <?php echo $this->getBlockHtml('formkey')?>
-        <button type="submit">Cancel</button>
-    </form>
-
-    <form action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
-
-        <div id="payment-status-unpaid" class="payment-status payment-status-unpaid">
-            <div>Your payment has not been seen in the mempool (if using on-chain payment) or settled in the Ligthning Network.</div>
-            <div>If still decide to continue at this point your order will be placed in a Pending Payment status.</div>
-
-            <label for="confirm">I understand. I will continue now instead of waiting for confirmation.</label>
-            <input id="confirm" required type="checkbox">
-
-            <button type="submit"><?php print $h->__('I\'ll pay later'); ?></button>
+    <div class="info-set col2-set">
+        <div class="col-1">
+            <div class="box action-cancel">
+                <div class="box-content">
+                    <a href="<?php print $block->escapeHtml($block->getCancelUrl()); ?>">
+                        <?php print $h->__('Cancel the order and return to %s', $block->getStoreName()); ?>
+                    </a>
+                </div>
+            </div>
         </div>
-
-        <div id="payment-status-paid" class="payment-status payment-status-unpaid" style="display: none;">
-            <button type="submit"><?php print $h->__('Confirm'); ?>/button>
-        </div>
-
-
-        <?php echo $this->getBlockHtml('formkey')?>
-    </form>
+    </div>
 </div>
 
-<div><?php var_dump($block->getParams());?></div>
-<div><?php var_dump($charge);?></div>
+
+
+<!--
+<div><?php var_dump($block->getParams()); ?></div>
+<div><?php var_dump($charge); ?></div>
+-->
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-svg@1.0.0/dist/qrcode.min.js"></script>
 <script>
-    document.observe("dom:loaded", function() {
+    document.observe("dom:loaded", function () {
         $$('div[data-address]').forEach(item => {
-            if(!item.dataset.address || item.dataset.address.length === 0) {
+            if (!item.dataset.address || item.dataset.address.length === 0) {
                 item.innerHTML = '<?php print $block->__('Something wrong'); ?>';
                 return;
             }
@@ -119,34 +165,65 @@ $charge = $block->getCharge(); ?>
             }).svg();
         });
 
-        setInterval(function() {
+        setInterval(function () {
             new Ajax.Request('<?php print $block->escapeHtml($block->getStatusUrl()); ?>', {
-                onSuccess: function(response) {
+                onSuccess: function (response) {
 
                     console.log(response);
 
-                    if(response.responseJSON.status === 'paid') {
+                    if (response.responseJSON.status === 'paid') {
                         $('payment-status-unpaid').style.display = 'none';
-                        $('payment-status-paid').style.display = 'none';
+                        $('payment-status-paid').style.display = 'block';
                     }
 
                 },
-                onFailure: function(response) {
+                onFailure: function (response) {
                     console.log(response);
                 }
             });
-        }, 11000);
+        }, 1000);
     });
 </script>
 
 <style>
-    .block-opennode .h-space { margin-top: 15px; }
-    .block-opennode .payment .box { position: relative; border-left-style: solid; border-left-width: 4px; border-color: #fff; background-color: #fff; -webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,.08); box-shadow: 0 1px 4px 0 rgba(0,0,0,.08); width: 100%; padding: 1rem; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; border-radius: .375rem; }
-    .block-opennode .payment .box:hover { border-color: #4896f0; cursor: pointer; }
+    /*.block-opennode .payment-methods {*/
+    /*white-space: nowrap;*/
+    /*}*/
 
-    .block-opennode .payment .box .qr-code { display: none; }
-    .block-opennode .payment .box:hover .qr-code { display: block; }
+    .block-opennode .payment-method {
+        text-align: center;
+        /*display: inline-block;*/
+        padding: 20px 0;
+        /*white-space: normal;*/
+        /*width: 50%;*/
+        background-color: #f4f4f4;
+        border: 1px solid #cccccc;
+    }
 
-    .block-opennode .text-main-dark { color: #1d2229; font-size: 18px; }
-    .block-opennode .text-grey-darkest { color: #6f7885; font-size: 14px; }
+    .block-opennode .block-actions .action-pay {
+        background-color: #f4f4f4;
+        border: 1px solid #cccccc;
+        padding: 20px;
+        /*width: 50%;*/
+    }
+
+    .block-opennode .payment-method .qr-code {
+        margin: 10px 0;
+    }
+
+    .block-opennode .payment-method .fee {
+        font-size: 14px;
+    }
+
+    .block-opennode .block-actions {
+        clear: both;
+    }
+
+    .block-opennode .action-cancel {
+        font-size: 11.4px;
+    }
+
+    .block-opennode .block-actions .action-pay {
+        /*margin-bottom: 30px;*/
+    }
 </style>
