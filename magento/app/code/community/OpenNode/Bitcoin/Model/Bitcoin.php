@@ -33,6 +33,15 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     const OPENNODE_PARAMS_KEY = 'opennode_params';
 
     /** @var string */
+    const OPENNODE_STATUS_PAID = 'paid';
+
+    /** @var string */
+    const OPENNODE_STATUS_PROCESSING = 'processing';
+
+    /** @var string */
+    const OPENNODE_STATUS_UNPAID = 'unpaid';
+
+    /** @var string */
     protected $_code = 'opennode_bitcoin';
 
     /** @var string */
@@ -85,6 +94,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
             $payment = $this->getInfoInstance();
             $this->_order = $payment->getOrder();
         }
+
         return $this->_order;
     }
 
