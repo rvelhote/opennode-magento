@@ -26,6 +26,17 @@
  */
 class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    /** @var OpenNode_Bitcoin_Helper_Config */
+    protected $_config;
+
+    /**
+     * OpenNode_Bitcoin_Helper_Data constructor.
+     */
+    public function __construct()
+    {
+        $this->_config = Mage::helper('opennode_bitcoin/config');
+    }
+
     /**
      * @param int $sats
      * @return string
@@ -37,5 +48,31 @@ class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         return number_format($sats / 100000000, 8, '.', '');
+    }
+
+    /**
+     * @param $tx
+     * @return string
+     */
+    public function getTransactionExplorerUrl($tx)
+    {
+        if($this->_config->isTestMode()) {
+            return sprintf('https://blockstream.info/testnet/tx/%s', $tx);
+        }
+
+        return sprintf('https://blockstream.info/tx/%s', $tx);
+    }
+
+    /**
+     * @param $address
+     * @return string
+     */
+    public function getAddressExplorerUrl($address)
+    {
+        if($this->_config->isTestMode()) {
+            return sprintf('https://blockstream.info/testnet/address/%s', $address);
+        }
+
+        return sprintf('https://blockstream.info/address/%s', $address);
     }
 }
