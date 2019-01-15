@@ -126,6 +126,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function initialize($paymentAction, $stateObject)
     {
+        /** @var Mage_Core_Helper_Data $core */
+        $core = Mage::helper('core');
+
         $order = $this->getOrder();
         $payment = $this->getOrder()->getPayment();
 
@@ -153,7 +156,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
         $this->_charge = \OpenNode\Merchant\Charge::create($params, $authentication);
 
         $payment->setAdditionalInformation(self::OPENNODE_TXN_ID_KEY, $this->_charge->id);
-        $payment->setAdditionalInformation(self::OPENNODE_PARAMS_KEY, json_encode($params));
+        $payment->setAdditionalInformation(self::OPENNODE_PARAMS_KEY, $core->jsonEncode($params));
 
         return parent::initialize($paymentAction, $stateObject);
     }
