@@ -126,6 +126,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function initialize($paymentAction, $stateObject)
     {
+        $order = $this->getOrder();
+        $payment = $this->getOrder()->getPayment();
+
         $stateObject->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
         $stateObject->setIsNotified(false);
@@ -138,19 +141,19 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
 
         $params = array(
             'description' => $this->getDescription(),
-            'amount' => $this->getOrder()->getGrandTotal(),
-            'currency' => $this->getOrder()->getOrderCurrencyCode(),
-            'order_id' => $this->getOrder()->getIncrementId(),
-            'email' => $this->getOrder()->getCustomerEmail(),
-            'name' => $this->getOrder()->getCustomerName(),
+            'amount' => $order->getGrandTotal(),
+            'currency' => $order->getOrderCurrencyCode(),
+            'order_id' => $order->getIncrementId(),
+            'email' => $order->getCustomerEmail(),
+            'name' => $order->getCustomerName(),
             'callback_url' => Mage::getUrl('opennode_bitcoin/callback/index'),
             'auto_settle' => $this->_config->isAutoSettle(),
         );
 
         $this->_charge = \OpenNode\Merchant\Charge::create($params, $authentication);
 
-        $this->getOrder()->getPayment()->setAdditionalInformation(self::OPENNODE_TXN_ID_KEY, $this->_charge->id);
-        $this->getOrder()->getPayment()->setAdditionalInformation(self::OPENNODE_PARAMS_KEY, json_encode($params));
+        $payment->setAdditionalInformation(self::OPENNODE_TXN_ID_KEY, $this->_charge->id);
+        $payment->setAdditionalInformation(self::OPENNODE_PARAMS_KEY, json_encode($params));
 
         return parent::initialize($paymentAction, $stateObject);
     }
