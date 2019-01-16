@@ -80,7 +80,7 @@ $charge = $block->getCharge(); ?>
                          data-address="<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"></div>
                     <div>
                         <a target="_blank" class="button"
-                           href="lightning:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Open in wallet'); ?></a>
+                           href="bitcoin:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Open in wallet'); ?></a>
                     </div>
                 </div>
             </div>
