@@ -92,8 +92,8 @@ $charge = $block->getCharge(); ?>
         <div class="col-2">
             <div class="box action action-pay">
                 <div class="box-content">
-                    <form action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
-                        <ul id="payment-status-unpaid" class="form-list">
+                    <form id="payment-status-unpaid" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
+                        <ul class="form-list">
                             <li style="margin-bottom: 20px;"><?php print $h->__('Your payment has not been seen in the mempool (if using on-chain payment) or settled in the Ligthning Network. If still decide to continue your order will be placed in a <i>Pending Payment</i> status and will be cancelled in 1 hour.'); ?></li>
 
 
@@ -106,13 +106,25 @@ $charge = $block->getCharge(); ?>
                                 <button class="button" type="submit"><?php print $h->__('I\'ll pay later'); ?></button>
                             </li>
                         </ul>
+                    </form>
 
-                        <ul id="payment-status-paid" class="form-list" style="display: none;">
+                    <form id="payment-status-processing" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get" style="display: none;">
+                        <ul class="form-list">
+                            <li style="margin-bottom: 20px;">
+                                <p><?php print $h->__('Your payment was seen in the mempool and is now waiting to be included in a block.'); ?></p>
+                            </li>
+                            <li class="a-right">
+                                <button class="button" type="submit"><?php print $h->__('Continue to order summary'); ?></button>
+                            </li>
+                        </ul>
+                    </form>
+
+                    <form id="payment-status-paid" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get" style="display: none;">
+                        <ul  class="form-list">
                             <li>
                                 <p><?php print $h->__('Your order was paid successfully.'); ?></p>
                                 <p><?php print $h->__('Your should be redirected to the order summary automatically in a few moments.'); ?></p>
                             </li>
-
                             <li class="a-right">
                                 <button class="button" type="submit"><?php print $h->__('Continue to order summary'); ?></button>
                             </li>
@@ -168,14 +180,17 @@ $charge = $block->getCharge(); ?>
         setInterval(function () {
             new Ajax.Request('<?php print $block->escapeHtml($block->getStatusUrl()); ?>', {
                 onSuccess: function (response) {
-
-                    console.log(response);
+                    if (response.responseJSON.status === 'processing') {
+                        $('payment-status-processing').style.display = 'block';
+                        $('payment-status-unpaid').style.display = 'none';
+                        $('payment-status-paid').style.display = 'none';
+                    }
 
                     if (response.responseJSON.status === 'paid') {
+                        $('payment-status-processing').style.display = 'none';
                         $('payment-status-unpaid').style.display = 'none';
                         $('payment-status-paid').style.display = 'block';
                     }
-
                 },
                 onFailure: function (response) {
                     console.log(response);
