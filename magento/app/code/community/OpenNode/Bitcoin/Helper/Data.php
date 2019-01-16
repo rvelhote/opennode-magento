@@ -51,6 +51,20 @@ class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * @param string $address
+     * @param float $amount
+     * @param string $message
+     */
+    public function formatBitcoinUri($address, $amount, $message) {
+        $query = [
+            'amount' => $amount,
+            'label' => $message,
+        ];
+
+        return sprintf('bitcoin:%s?%s', $address, http_build_query($query));
+    }
+
+    /**
      * @param $tx
      * @return string
      */

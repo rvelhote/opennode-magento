@@ -77,10 +77,11 @@ $charge = $block->getCharge(); ?>
                 <div class="box-content">
                     <div class="fee"><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
                     <div class="qr-code" data-ecl="M"
-                         data-address="<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"></div>
+                         data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"></div>
                     <div>
-                        <a target="_blank" class="button"
-                           href="bitcoin:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Open in wallet'); ?></a>
+                        <a target="_blank"
+                           class="button"
+                           href="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"><?php print $h->__('Open in wallet'); ?></a>
                     </div>
                 </div>
             </div>
