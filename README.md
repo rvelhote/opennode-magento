@@ -24,8 +24,10 @@ The module was only tested with the default theme and Onepage Checkout.
 - What to do if the user navigates away from the payment page
 - Validate payment currency during checkout
 - Unit Tests
+- Encapsulate Charges and other stuff on the API (e.g. don't use lightning_invoice['payreq'] directly - use a method for mat)
 - Testing various scenarios and make sure all possibilities are covered
 - More stuff that I forgot to include
+- Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
 
 # Screenshots
 
