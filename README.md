@@ -28,6 +28,12 @@ The module was only tested with the default theme and Onepage Checkout.
 - Testing various scenarios and make sure all possibilities are covered
 - More stuff that I forgot to include
 - Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
+- Use an autoloader for the module because for sure most Magento installs don't use firegento/magento with composer
+- Add the OpenNode PHP library to the lib dir
+- Add modman files
+- Move the module content to the root of the repository so it can be drag-and-dropped into Magento
+- Include Docker related configurations and allow a full environment to the created with docker-compose
+- Test various PHP versions
 
 # Screenshots
 
