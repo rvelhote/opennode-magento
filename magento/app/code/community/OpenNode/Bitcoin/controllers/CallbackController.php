@@ -31,7 +31,7 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
      */
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
+        if (!$this->getRequest()->isPost()) {
             $this->getResponse()->setHttpResponseCode(405)->sendResponse();
             return;
         }
