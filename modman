@@ -1,2 +1,13 @@
-# OpenNode_Bitcoin
-app/* app
+# MODULE
+OpenNode_Bitcoin.xml                                            app/etc/modules/OpenNode_Bitcoin.xml
+
+# CODE
+code                                                            app/code/community/OpenNode/Bitcoin
+
+# DESIGN
+design/adminhtml/default/default/template/opennode          app/design/adminhtml/default/default/template/opennode
+design/frontend/base/default/template/opennode              app/design/frontend/base/default/template/opennode
+design/frontend/base/default/layout/opennodebitcoin.xml     app/design/frontend/base/default/layout/opennodebitcoin.xml
+
+# LOCALE
+locale/en_US/OpenNode_Bitcoin.csv       app/locale/en_US/OpenNode_Bitcoin.csv
