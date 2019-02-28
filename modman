@@ -11,3 +11,6 @@ design/frontend/base/default/layout/opennodebitcoin.xml     app/design/frontend/
 
 # LOCALE
 locale/en_US/OpenNode_Bitcoin.csv       app/locale/en_US/OpenNode_Bitcoin.csv
+
+# JAVASCRIPT
+js/lib                    js/opennode/bitcoin/lib
