@@ -1,0 +1,45 @@
+version: "2"
+services:
+  web:
+    container_name: opennode-nginx
+    image: magento-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - mailhog
+      - php
+      - db
+    volumes:
+      - ./:/var/www/html/
+      - ./docker/local/nginx/sites-enabled:/etc/nginx/sites-enabled
+    links:
+      - php
+
+  php:
+    container_name: opennode-php
+    image: magento-php
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html/
+    links:
+      - mailhog
+      - db
+
+  db:
+    container_name: opennode-mariadb
+    image: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=control
+
+  mailhog:
+    container_name: opennode-mailhog
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"

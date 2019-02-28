@@ -1,0 +1,29 @@
+server {
+	listen 80;
+
+	server_name _;
+	root /var/www/html/magento;
+
+	index index.php;
+
+    # Default
+    location / {
+        try_files $uri $uri/ @handler;
+
+        location ~ [^/]\.php(/|$) {
+            fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+
+            include fastcgi_params;
+
+            fastcgi_param SCRIPT_FILENAME $request_filename;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+            fastcgi_param PATH_TRANSLATED $fastcgi_path_info;
+
+            fastcgi_pass php:9000;
+            fastcgi_index index.php;
+            fastcgi_read_timeout 180;
+        }
+    }
+
+    location @handler { rewrite / /index.php; }
+}
