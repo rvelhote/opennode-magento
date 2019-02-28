@@ -42,6 +42,9 @@
             <action method="addJs">
                 <script>opennode/bitcoin/lib/qrcodegen.min.js</script>
             </action>
+            <action method="addJs">
+                <script>opennode/bitcoin/payment.js</script>
+            </action>
         </reference>
     </opennode_bitcoin_payment_payment>
 </layout>

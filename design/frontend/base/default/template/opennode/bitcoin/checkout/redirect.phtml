@@ -31,6 +31,7 @@ $charge = $block->getCharge(); ?>
 
 
 <div class="block-opennode">
+    <input type="hidden" id="__opennodestatusurl__" value="<?php print $block->escapeHtml($block->getStatusUrl()); ?>" />
 
     <div class="block block-summary">
         <div class="block-title">
@@ -157,42 +158,6 @@ $charge = $block->getCharge(); ?>
 <div><?php var_dump($block->getParams()); ?></div>
 <div><?php var_dump($charge); ?></div>
 -->
-
-
-<script>
-    document.observe("dom:loaded", function () {
-        $$('div[data-address]').forEach(item => {
-            if (!item.dataset.address || item.dataset.address.length === 0) {
-                item.innerHTML = '<?php print $block->__('Something wrong'); ?>';
-                return;
-            }
-
-            const qrc = qrcodegen.QrCode.encodeText(item.dataset.address, qrcodegen.QrCode.Ecc.HIGH);
-            item.innerHTML = qrc.toSvgString(4);
-        });
-
-        setInterval(function () {
-            new Ajax.Request('<?php print $block->escapeHtml($block->getStatusUrl()); ?>', {
-                onSuccess: function (response) {
-                    if (response.responseJSON.status === 'processing') {
-                        $('payment-status-processing').style.display = 'block';
-                        $('payment-status-unpaid').style.display = 'none';
-                        $('payment-status-paid').style.display = 'none';
-                    }
-
-                    if (response.responseJSON.status === 'paid') {
-                        $('payment-status-processing').style.display = 'none';
-                        $('payment-status-unpaid').style.display = 'none';
-                        $('payment-status-paid').style.display = 'block';
-                    }
-                },
-                onFailure: function (response) {
-                    console.log(response);
-                }
-            });
-        }, 1000);
-    });
-</script>
 
 <style>
     /*.block-opennode .payment-methods {*/
