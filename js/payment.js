@@ -35,7 +35,15 @@ document.observe("dom:loaded", function () {
         item.innerHTML = qrc.toSvgString(4);
     });
 
+    var lock = false;
+
     setInterval(function () {
+        if (lock) {
+            return;
+        }
+
+        lock = true;
+
         new Ajax.Request(statusUrl, {
             onSuccess: function (response) {
                 if (response.responseJSON.status === 'processing') {
@@ -52,6 +60,9 @@ document.observe("dom:loaded", function () {
             },
             onFailure: function (response) {
                 console.log(response);
+            },
+            onComplete: function () {
+                lock = false;
             }
         });
     }, 1000);
