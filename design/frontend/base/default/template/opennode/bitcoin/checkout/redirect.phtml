@@ -33,33 +33,22 @@ $charge = $block->getCharge(); ?>
 <div class="block-opennode">
     <input type="hidden" id="__opennodestatusurl__" value="<?php print $block->escapeHtml($block->getStatusUrl()); ?>" />
 
-    <div class="block block-summary">
-        <div class="block-title">
-            <span><strong><span><?php print $h->__('Order Summary'); ?></span></strong></span>
-        </div>
-
-        <div><?php print $block->escapeHtml($charge->description); ?></div>
-
-        <div>
-            <div>
-                <?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?>
-            </div>
-            <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
-        </div>
-    </div>
-
     <div class="col2-set block-payment-methods">
         <div class="block-title">
             <span><strong><span><?php print $h->__('Select bitcoin payment method'); ?></span></strong></span>
         </div>
-
         <div class="col-1">
             <div class="box payment-method">
                 <div class="box-title">
                     <strong><?php print $h->__('Lightning Network'); ?></strong>
                 </div>
+
+                <div><?php print $h->__('Lightning Network Wallet'); ?></div>
+                <div><?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?></div>
+                <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
+
                 <div class="box-content">
-                    <div class="qr-code" data-ecl="M"
+                    <div class="qr-code"
                          data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
                     <div>
                         <a class="button"
@@ -68,14 +57,18 @@ $charge = $block->getCharge(); ?>
                 </div>
             </div>
         </div>
-
         <div class="col-2">
             <div class="box payment-method">
                 <div class="box-title">
                     <strong><?php print $h->__('On-Chain'); ?></strong>
                 </div>
+
+                <div><?php print $h->__('Standard bitcoin wallet'); ?></div>
+                <div><?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?></div>
+                <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
+
                 <div class="box-content">
-                    <div class="qr-code" data-ecl="M"
+                    <div class="qr-code"
                          data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"></div>
                     <div>
                         <a target="_blank"
