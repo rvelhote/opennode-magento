@@ -59,7 +59,6 @@ $charge = $block->getCharge(); ?>
                     <strong><?php print $h->__('Lightning Network'); ?></strong>
                 </div>
                 <div class="box-content">
-                    <div class="fee"><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
                     <div class="qr-code" data-ecl="M"
                          data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
                     <div>
@@ -76,7 +75,6 @@ $charge = $block->getCharge(); ?>
                     <strong><?php print $h->__('On-Chain'); ?></strong>
                 </div>
                 <div class="box-content">
-                    <div class="fee"><?php print $h->__('network fee of %s %s', '0.00', 'USD'); ?></div>
                     <div class="qr-code" data-ecl="M"
                          data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"></div>
                     <div>
