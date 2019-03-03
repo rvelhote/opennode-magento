@@ -103,14 +103,10 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function getDescription()
     {
-        $description = [];
+        $store = $this->getOrder()->getStore()->getFrontendName();
+        $amount = Mage::helper('core')->currency($this->getOrder()->getGrandTotal(), true, false);
 
-        /** @var Mage_Sales_Model_Order_Item $item */
-        foreach ($this->getOrder()->getAllVisibleItems() as $item) {
-            $description[] = sprintf('%sx%s', $item->getQtyOrdered(), $item->getName());
-        }
-
-        return implode('<br>', $description);
+        return sprintf('Pay %s to %s', $amount, $store);
     }
 
 
