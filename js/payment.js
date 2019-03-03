@@ -67,5 +67,8 @@ document.observe("dom:loaded", function () {
         });
     }, 1000);
 
-    new ClipboardJS('button[data-clipboard-text]');
+    var clipboard = new ClipboardJS('button[data-clipboard-text]');
+    clipboard.on('error', function(e) {
+        alert('Error copying to the clipboard!');
+    });
 });

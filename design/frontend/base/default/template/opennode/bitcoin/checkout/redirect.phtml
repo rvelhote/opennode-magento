@@ -53,6 +53,8 @@ $charge = $block->getCharge(); ?>
                     <div>
                         <a class="button"
                            href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Open in wallet'); ?></a>
+
+                        <!-- FIXME Data will not change if the lightning payment request expires -->
                         <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Copy'); ?></button>
                     </div>
                 </div>
