@@ -66,4 +66,6 @@ document.observe("dom:loaded", function () {
             }
         });
     }, 1000);
+
+    new ClipboardJS('button[data-clipboard-text]');
 });

@@ -30,7 +30,7 @@ $h = Mage::helper('opennode_bitcoin');
 $charge = $block->getCharge(); ?>
 
 
-<div class="block-opennode">
+<div class="block-opennode" id="block-opennode">
     <input type="hidden" id="__opennodestatusurl__" value="<?php print $block->escapeHtml($block->getStatusUrl()); ?>" />
 
     <div class="col2-set block-payment-methods">
@@ -53,6 +53,7 @@ $charge = $block->getCharge(); ?>
                     <div>
                         <a class="button"
                            href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Open in wallet'); ?></a>
+                        <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Copy'); ?></button>
                     </div>
                 </div>
             </div>
@@ -74,6 +75,7 @@ $charge = $block->getCharge(); ?>
                         <a target="_blank"
                            class="button"
                            href="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"><?php print $h->__('Open in wallet'); ?></a>
+                        <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Copy'); ?></button>
                     </div>
                 </div>
             </div>
