@@ -28,7 +28,7 @@ $charge = $block->getCharge();
 /** @var $h OpenNode_Bitcoin_Helper_Data */
 $h = Mage::helper('opennode_bitcoin'); ?>
 
-<div class="box payment-method" data-type="onchain">
+<div class="box payment-method" data-payment-method="onchain">
     <div class="box-title">
         <strong><?php print $h->__('On-Chain'); ?></strong>
     </div>
@@ -40,8 +40,8 @@ $h = Mage::helper('opennode_bitcoin'); ?>
     <?php if($charge->status === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID) : ?>
         <div class="box-content">
             <div class="qr-code"
-                 data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"
-                 data-type="onchain"></div>
+                 data-qrcode
+                 data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"></div>
             <div>
                 <a target="_blank"
                    class="button"

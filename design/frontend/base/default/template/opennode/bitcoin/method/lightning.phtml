@@ -28,7 +28,7 @@ $charge = $block->getCharge();
 /** @var $h OpenNode_Bitcoin_Helper_Data */
 $h = Mage::helper('opennode_bitcoin'); ?>
 
-<div class="box payment-method" data-type="lightning">
+<div class="box payment-method" data-payment-method="lightning">
     <div class="box-title">
         <strong><?php print $h->__('Lightning Network'); ?></strong>
     </div>
@@ -40,7 +40,7 @@ $h = Mage::helper('opennode_bitcoin'); ?>
     <?php if($charge->status === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID) : ?>
         <div class="box-content">
             <div><span id="lightning-timer">?</span>&nbsp;<?php print $h->__('Remaining'); ?></div>
-            <div class="qr-code" data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
+            <div class="qr-code" data-qrcode data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
             <div>
                 <a data-wallet class="button"
                    href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Open in wallet'); ?></a>

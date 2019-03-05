@@ -28,14 +28,22 @@ export default class QrCode {
      */
     constructor(item) {
         this.item = item;
-        this.address = item.dataset.address;
         this.update(item.dataset.address);
     }
 
+    /**
+     *
+     * @param {string} address
+     * @returns {boolean}
+     */
     shouldUpdate(address) {
         return this.address !== address
     }
 
+    /**
+     *
+     * @param {string} address
+     */
     update(address) {
         this.address = address;
         this.qrcode = qrcodegen.QrCode.encodeText(address, qrcodegen.QrCode.Ecc.HIGH);
@@ -44,7 +52,7 @@ export default class QrCode {
 
     /**
      *
-     * @returns {*}
+     * @returns {string}
      */
     getQrCodeAsSvg() {
         return this.qrcode.toSvgString(4);

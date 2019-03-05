@@ -34,19 +34,19 @@ document.observe("dom:loaded", function () {
         onchain: null,
     };
 
-    const addresses = document.querySelectorAll('div[data-address]');
-    addresses.forEach(item => {
-        if (!item.dataset.address || item.dataset.address.length === 0) {
-            return;
-        }
+    const paymentMethods = document.querySelectorAll('[data-payment-method]');
+    paymentMethods.forEach(method => {
+        const qrcode = method.querySelector('[data-qrcode]');
+        const clipboard = method.querySelector(['data-clipboard']);
+        const wallet = method.querySelector('[data-wallet]');
 
-        qrcodes[item.dataset.type] = new QrCode(item);
+        qrcodes[method.dataset.paymentMethod] = new QrCode(qrcode, clipboard, wallet);
     });
 
     const status = new Status(statusUrl);
     const timer = new Timer();
 
-    const payment = new Payment(status, timer, qrcodes);
+    new Payment(status, timer, qrcodes);
 
     const clipboard = new ClipboardJS('button[data-clipboard-text]');
     clipboard.on('error', () => {
