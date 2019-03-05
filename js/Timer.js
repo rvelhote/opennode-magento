@@ -19,34 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 "use strict";
 
-import Payment from './Payment';
-import QrCode from './QrCode';
-import Status from './Status';
-import Timer from "./Timer";
+export default class Timer {
+    /**
+     *
+     * @returns {number}
+     */
+    static now() {
+        const date = new Date();
+        return Math.round(date.getTime() / 1000);
+    }
 
-document.observe("dom:loaded", function () {
-    const statusUrl = document.getElementById('__opennodestatusurl__').value;
+    /**
+     *
+     * @param timestamp
+     * @returns {string}
+     */
+    getTimeRemaining(timestamp) {
+        const timeRemaining = timestamp - Timer.now();
 
-    const addresses = document.querySelectorAll('div[data-address]');
-    addresses.forEach(item => {
-        if (!item.dataset.address || item.dataset.address.length === 0) {
-            return;
-        }
+        const hours = Math.round(timeRemaining / 60).toFixed(0);
+        const minutes = Math.round(timeRemaining % 60).toFixed(0);
 
-        const qrc = new QrCode(item.dataset.address);
-        item.innerHTML = qrc.getQrCodeAsSvg();
-    });
-
-    const status = new Status(statusUrl);
-    const timer = new Timer();
-
-    const payment = new Payment(status, timer);
-
-    const clipboard = new ClipboardJS('button[data-clipboard-text]');
-    clipboard.on('error', () => {
-        alert('Error copying to the clipboard!');
-    });
-});
+        return `${hours}:${minutes}`;
+    }
+}

@@ -25,19 +25,27 @@ export default class Payment {
     /**
      *
      * @param status
+     * @param timer
      */
-    constructor(status) {
+    constructor(status, timer) {
         this.status = status;
+        this.timer = timer;
 
         this.status.setOnUnpaid(this.onUnpaid.bind(this));
         this.status.setOnPaid(this.onPaid.bind(this));
         this.status.setOnProcessing(this.onProcessing.bind(this));
+        this.status.setOnRequestComplete(this.onComplete.bind(this));
 
         this.elements = {
             unpaid: document.getElementById('payment-status-unpaid'),
             processing: document.getElementById('payment-status-processing'),
             paid: document.getElementById('payment-status-paid'),
+            timer: document.getElementById('lightning-timer'),
         }
+    }
+
+    onComplete(response) {
+        this.elements.timer.innerHTML = this.timer.getTimeRemaining(response.lightning.expires_at);
     }
 
     /**

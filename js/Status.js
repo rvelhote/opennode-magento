@@ -36,9 +36,26 @@ export default class Status {
 
         this.onPaid = () => {
         };
+
         this.onProcessing = () => {
         };
+
         this.onUnpaid = () => {
+        };
+
+        this.onLightningAddressChange = () => {
+        };
+
+        this.onRequestSuccess = () => {
+
+        };
+
+        this.onRequestComplete = () => {
+
+        };
+
+        this.onRequestFailure = () => {
+
         };
 
         setInterval(this.onInterval.bind(this), 1000);
@@ -65,21 +82,23 @@ export default class Status {
     onSuccess(response) {
         switch (response.responseJSON.status) {
             case PROCESSING: {
-                this.onProcessing();
+                this.onProcessing(response.responseJSON);
                 break;
             }
 
             case PAID: {
-                this.onPaid();
+                this.onPaid(response.responseJSON);
                 break;
             }
 
             default:
             case UNPAID: {
-                this.onUnpaid();
+                this.onUnpaid(response.responseJSON);
                 break;
             }
         }
+
+        this.onRequestComplete(response.responseJSON);
     }
 
     /**
@@ -87,6 +106,7 @@ export default class Status {
      * @param response
      */
     onFailure(response) {
+        this.onRequestFailure();
     }
 
     /**
@@ -94,6 +114,15 @@ export default class Status {
      */
     onComplete() {
         this.lock = false;
+        this.onRequestComplete();
+    }
+
+    /**
+     *
+     * @param fn
+     */
+    setOnRequestComplete(fn) {
+        this.onRequestComplete = fn;
     }
 
     /**
