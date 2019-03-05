@@ -38,7 +38,7 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
         $helper = Mage::helper('opennode_bitcoin');
 
         // FIXME Should cancel the order? Good of bad idea to perform a formkey validation here?
-        if(!$this->_validateFormKey()) {
+        if (!$this->_validateFormKey()) {
             $session->addError($helper->__('Your payment session has expired. Please try again!'));
             parent::_redirect('checkout/cart');
             return;
@@ -175,6 +175,12 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
         $data = [
             'id' => $charge->id,
             'status' => $charge->status,
+            'lightning' => $charge->lightning_invoice,
+            'onchain' => $charge->chain_invoice,
+            'addresses' => [
+                'lightning' => $charge->lightning_invoice['payreq'],
+                'onchain' => $charge->chain_invoice['address'],
+            ]
         ];
 
         $this->getResponse()->setHeader('Content-Type', 'application/json');
