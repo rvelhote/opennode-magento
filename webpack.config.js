@@ -22,7 +22,7 @@
 const path = require('path');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: {
         main: './js/index.js'
     },

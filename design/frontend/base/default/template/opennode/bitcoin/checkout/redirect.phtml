@@ -53,7 +53,8 @@ $charge = $block->getCharge(); ?>
 
                 <div class="box-content">
                     <div class="qr-code"
-                         data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
+                         data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"
+                         data-type="lightning"></div>
                     <div>
                         <a class="button"
                            href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Open in wallet'); ?></a>
@@ -76,7 +77,8 @@ $charge = $block->getCharge(); ?>
 
                 <div class="box-content">
                     <div class="qr-code"
-                         data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"></div>
+                         data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"
+                         data-type="onchain"></div>
                     <div>
                         <a target="_blank"
                            class="button"

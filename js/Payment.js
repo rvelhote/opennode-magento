@@ -24,12 +24,14 @@
 export default class Payment {
     /**
      *
-     * @param status
-     * @param timer
+     * @param {Status} status
+     * @param {Timer} timer
+     * @param {Object.<QrCode>} qrcodes
      */
-    constructor(status, timer) {
+    constructor(status, timer, qrcodes) {
         this.status = status;
         this.timer = timer;
+        this.qrcodes = qrcodes;
 
         this.status.setOnUnpaid(this.onUnpaid.bind(this));
         this.status.setOnPaid(this.onPaid.bind(this));
@@ -45,6 +47,15 @@ export default class Payment {
     }
 
     onComplete(response) {
+        for (const [type, address] of Object.entries(response.addresses)) {
+            const qrcode = this.qrcodes[type];
+
+            // FIXME Still have to update the copy button too. The Clipboard should be integrated with the QrCode
+            if(qrcode.shouldUpdate(address)) {
+                qrcode.update(address);
+            }
+        }
+
         this.elements.timer.innerHTML = this.timer.getTimeRemaining(response.lightning.expires_at);
     }
 

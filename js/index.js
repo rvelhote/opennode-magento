@@ -29,6 +29,10 @@ import Timer from "./Timer";
 
 document.observe("dom:loaded", function () {
     const statusUrl = document.getElementById('__opennodestatusurl__').value;
+    const qrcodes = {
+        lightning: null,
+        onchain: null,
+    };
 
     const addresses = document.querySelectorAll('div[data-address]');
     addresses.forEach(item => {
@@ -36,14 +40,13 @@ document.observe("dom:loaded", function () {
             return;
         }
 
-        const qrc = new QrCode(item.dataset.address);
-        item.innerHTML = qrc.getQrCodeAsSvg();
+        qrcodes[item.dataset.type] = new QrCode(item);
     });
 
     const status = new Status(statusUrl);
     const timer = new Timer();
 
-    const payment = new Payment(status, timer);
+    const payment = new Payment(status, timer, qrcodes);
 
     const clipboard = new ClipboardJS('button[data-clipboard-text]');
     clipboard.on('error', () => {

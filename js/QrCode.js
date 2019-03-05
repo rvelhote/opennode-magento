@@ -24,10 +24,22 @@
 export default class QrCode {
     /**
      *
-     * @param address
+     * @param {Element} item
      */
-    constructor(address) {
+    constructor(item) {
+        this.item = item;
+        this.address = item.dataset.address;
+        this.update(item.dataset.address);
+    }
+
+    shouldUpdate(address) {
+        return this.address !== address
+    }
+
+    update(address) {
+        this.address = address;
         this.qrcode = qrcodegen.QrCode.encodeText(address, qrcodegen.QrCode.Ecc.HIGH);
+        this.item.innerHTML = this.getQrCodeAsSvg();
     }
 
     /**
