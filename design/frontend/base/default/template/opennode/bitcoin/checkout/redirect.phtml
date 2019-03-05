@@ -47,11 +47,10 @@ $charge = $block->getCharge(); ?>
                 <div><?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?></div>
                 <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
 
-                <div>
-                    <span id="lightning-timer">?</span>&nbsp;<?php print $h->__('Remaining'); ?>
-                </div>
-
                 <div class="box-content">
+                    <div>
+                        <span id="lightning-timer">?</span>&nbsp;<?php print $h->__('Remaining'); ?>
+                    </div>
                     <div class="qr-code"
                          data-address="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"
                          data-type="lightning"></div>
