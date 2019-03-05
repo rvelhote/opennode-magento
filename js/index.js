@@ -1,4 +1,4 @@
-/*
+/**
  * The MIT License (MIT)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,54 +21,34 @@
  */
 "use strict";
 
+import Payment from './Payment';
+import QrCode from './QrCode';
+import Status from './Status';
+
 document.observe("dom:loaded", function () {
     const statusUrl = document.getElementById('__opennodestatusurl__').value;
 
-    $$('div[data-address]').forEach(item => {
+
+    const addresses = document.querySelectorAll('div[data-address]');
+    addresses.forEach(item => {
         if (!item.dataset.address || item.dataset.address.length === 0) {
-            // TODO Translate me!!
-            item.innerHTML = 'Something wrong';
             return;
         }
 
-        const qrc = qrcodegen.QrCode.encodeText(item.dataset.address, qrcodegen.QrCode.Ecc.HIGH);
-        item.innerHTML = qrc.toSvgString(4);
+        const qrc = new QrCode(item.dataset.address);
+        item.innerHTML = qrc.getQrCodeAsSvg();
     });
 
-    var lock = false;
 
-    setInterval(function () {
-        if (lock) {
-            return;
-        }
+    const status = new Status(statusUrl);
+    const payment = new Payment(status);
 
-        lock = true;
 
-        new Ajax.Request(statusUrl, {
-            onSuccess: function (response) {
-                if (response.responseJSON.status === 'processing') {
-                    $('payment-status-processing').style.display = 'block';
-                    $('payment-status-unpaid').style.display = 'none';
-                    $('payment-status-paid').style.display = 'none';
-                }
+    // console.log(pay.doSomething());
 
-                if (response.responseJSON.status === 'paid') {
-                    $('payment-status-processing').style.display = 'none';
-                    $('payment-status-unpaid').style.display = 'none';
-                    $('payment-status-paid').style.display = 'block';
-                }
-            },
-            onFailure: function (response) {
-                console.log(response);
-            },
-            onComplete: function () {
-                lock = false;
-            }
-        });
-    }, 1000);
 
-    var clipboard = new ClipboardJS('button[data-clipboard-text]');
-    clipboard.on('error', function(e) {
+    const clipboard = new ClipboardJS('button[data-clipboard-text]');
+    clipboard.on('error', () => {
         alert('Error copying to the clipboard!');
     });
 });

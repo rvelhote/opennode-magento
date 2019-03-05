@@ -1,4 +1,4 @@
 .idea
 .database
-vendor
-magento/var
+/vendor
+/node_modules

@@ -46,7 +46,7 @@
                 <script>opennode/bitcoin/lib/clipboard.min.js</script>
             </action>
             <action method="addJs">
-                <script>opennode/bitcoin/payment.js</script>
+                <script>opennode/bitcoin/index.min.js</script>
             </action>
         </reference>
     </opennode_bitcoin_payment_payment>

@@ -1,0 +1,27 @@
+{
+  "name": "opennode-magento",
+  "version": "1.0.0",
+  "description": "Magento 1.9 Payment Method for OpenNode Bitcoin",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "magento",
+    "bitcoin",
+    "gateway",
+    "payment-method"
+  ],
+  "author": "Ricardo Velhote <rvelhote+opennode@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
+  }
+}
