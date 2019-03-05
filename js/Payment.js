@@ -75,6 +75,11 @@ export default class Payment {
         this.elements.unpaid.style.display = 'none';
         this.elements.processing.style.display = 'block';
         this.elements.paid.style.display = 'none';
+
+        // FIXME
+        $$('.payment-method .box-content').forEach(i => {
+            i.style.display = 'none';
+        });
     }
 
     /**
@@ -84,5 +89,10 @@ export default class Payment {
         this.elements.unpaid.style.display = 'none';
         this.elements.processing.style.display = 'none';
         this.elements.paid.style.display = 'block';
+
+        // FIXME
+        $$('.payment-method .box-content').forEach(i => {
+            i.style.display = 'none';
+        });
     }
 }
