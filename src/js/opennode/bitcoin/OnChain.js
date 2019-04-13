@@ -19,23 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-const path = require('path');
+"use strict";
 
-module.exports = {
-    mode: 'development',
-    entry: {
-        main: './src/js/opennode/bitcoin/index.js'
-    },
-    output: {
-        filename: 'index.min.js',
-        path: path.resolve(__dirname, 'src', 'js', 'opennode', 'bitcoin'),
-    },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-        }]
-    },
-    watch: true
-};
+import QrCode from "./QrCode";
+import Wallet from "./Wallet";
+
+export default class OnChain {
+    /**
+     *
+     * @param element
+     * @param status
+     */
+    constructor(element, status) {
+        const qre = element.querySelector('[data-qrcode]');
+        const we = element.querySelector('[data-wallet]');
+
+        if (qre === null || we === null) {
+            return;
+        }
+
+        this.qrcode = new QrCode(qre);
+        this.wallet = new Wallet(we);
+
+        status.registerObserver(r => {
+            if (r.address.onchain === null) {
+                return;
+            }
+
+            if (this.wallet.shouldUpdate(r.address.onchain, r.wallet.onchain)) {
+                this.wallet.update(r.address.onchain, r.wallet.onchain);
+            }
+
+            if (this.qrcode.shouldUpdate(r.wallet.onchain)) {
+                this.qrcode.update(r.wallet.onchain);
+            }
+        });
+    }
+}

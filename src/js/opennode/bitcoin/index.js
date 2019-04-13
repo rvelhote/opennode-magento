@@ -19,37 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 "use strict";
 
-import Payment from './Payment';
-import QrCode from './QrCode';
 import Status from './Status';
+import OnChain from "./OnChain";
+import Lightning from "./Lightning";
 import Timer from "./Timer";
 
 document.observe("dom:loaded", function () {
     const statusUrl = document.getElementById('__opennodestatusurl__').value;
-    const qrcodes = {
-        lightning: null,
-        onchain: null,
-    };
 
-    const paymentMethods = document.querySelectorAll('[data-payment-method]');
-    paymentMethods.forEach(method => {
-        const qrcode = method.querySelector('[data-qrcode]');
-        const clipboard = method.querySelector(['data-clipboard']);
-        const wallet = method.querySelector('[data-wallet]');
-
-        qrcodes[method.dataset.paymentMethod] = new QrCode(qrcode, clipboard, wallet);
-    });
+    const lb = document.querySelector('div[data-payment-method=lightning]');
+    const ocb = document.querySelector('div[data-payment-method=onchain]');
 
     const status = new Status(statusUrl);
-    const timer = new Timer();
 
-    new Payment(status, timer, qrcodes);
-
-    const clipboard = new ClipboardJS('button[data-clipboard-text]');
-    clipboard.on('error', () => {
-        alert('Error copying to the clipboard!');
-    });
+    new Lightning(lb, status);
+    new OnChain(ocb, status);
 });

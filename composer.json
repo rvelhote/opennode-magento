@@ -1,0 +1,14 @@
+{
+    "require-dev": {
+        "aydin-hassan/magento-core-composer-installer": "*",
+        "openmage/magento-lts": "1.9.4.x-dev",
+        "phpunit/phpunit": "^6"
+    },
+    "extra": {
+        "magento-root-dir": "src",
+        "magento-core-package-type": "magento-source"
+    },
+    "require": {
+        "opennode/opennode-php": "^1.0"
+    }
+}

@@ -19,23 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-const path = require('path');
+"use strict";
 
-module.exports = {
-    mode: 'development',
-    entry: {
-        main: './src/js/opennode/bitcoin/index.js'
-    },
-    output: {
-        filename: 'index.min.js',
-        path: path.resolve(__dirname, 'src', 'js', 'opennode', 'bitcoin'),
-    },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-        }]
-    },
-    watch: true
-};
+export default class QrCode {
+    /**
+     *
+     * @param {Element} item
+     */
+    constructor(item) {
+        this.item = item;
+        this.update(item.dataset.address);
+    }
+
+    /**
+     *
+     * @param {string} address
+     * @returns {boolean}
+     */
+    shouldUpdate(address) {
+        return this.address.toString() !== address.toString();
+    }
+
+    /**
+     *
+     * @param {string} address
+     */
+    update(address) {
+        this.address = address;
+        this.qrcode = qrcodegen.QrCode.encodeText(address, qrcodegen.QrCode.Ecc.HIGH);
+        this.item.innerHTML = this.getQrCodeAsSvg();
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    getQrCodeAsSvg() {
+        return this.qrcode.toSvgString(4);
+    }
+}

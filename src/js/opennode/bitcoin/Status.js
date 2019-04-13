@@ -24,43 +24,40 @@
 const PROCESSING = 'processing';
 const PAID = 'paid';
 const UNPAID = 'unpaid';
+const INTERVAL = 1000;
 
 export default class Status {
     /**
      *
-     * @returns {number}
+     * @param endpoint
      */
     constructor(endpoint) {
         this.lock = false;
         this.endpoint = endpoint;
+        this.observers = [];
 
-        this.onPaid = () => {
+        this.elements = {
+            unpaid: document.getElementById('payment-status-unpaid'),
+            processing: document.getElementById('payment-status-processing'),
+            paid: document.getElementById('payment-status-paid'),
         };
 
-        this.onProcessing = () => {
-        };
-
-        this.onUnpaid = () => {
-        };
-
-        this.onLightningAddressChange = () => {
-        };
-
-        this.onRequestSuccess = () => {
-
-        };
-
-        this.onRequestComplete = () => {
-
-        };
-
-        this.onRequestFailure = () => {
-
-        };
-
-        setInterval(this.onInterval.bind(this), 1000);
+        setInterval(this.onInterval.bind(this), INTERVAL);
     }
 
+    /**
+     *
+     * @param observer
+     * @returns {Status}
+     */
+    registerObserver(observer) {
+        this.observers.push(observer);
+        return this;
+    }
+
+    /**
+     *
+     */
     onInterval() {
         if (this.lock) {
             return;
@@ -80,25 +77,34 @@ export default class Status {
      * @param response
      */
     onSuccess(response) {
-        switch (response.responseJSON.status) {
+        const r = response.responseJSON;
+
+        this.observers.forEach(o => {
+            o(r);
+        });
+
+        switch (r.status) {
             case PROCESSING: {
-                this.onProcessing(response.responseJSON);
+                this.elements.unpaid.style.display = 'none';
+                this.elements.processing.style.display = 'block';
+                this.elements.paid.style.display = 'none';
                 break;
             }
 
             case PAID: {
-                this.onPaid(response.responseJSON);
+                this.elements.unpaid.style.display = 'none';
+                this.elements.processing.style.display = 'none';
+                this.elements.paid.style.display = 'block';
                 break;
             }
 
-            default:
-            case UNPAID: {
-                this.onUnpaid(response.responseJSON);
-                break;
+            case UNPAID:
+            default: {
+                this.elements.unpaid.style.display = 'block';
+                this.elements.processing.style.display = 'none';
+                this.elements.paid.style.display = 'none';
             }
         }
-
-        this.onRequestComplete(response.responseJSON);
     }
 
     /**
@@ -106,7 +112,7 @@ export default class Status {
      * @param response
      */
     onFailure(response) {
-        this.onRequestFailure();
+        //this.onRequestFailure();
     }
 
     /**
@@ -114,38 +120,5 @@ export default class Status {
      */
     onComplete() {
         this.lock = false;
-        this.onRequestComplete();
-    }
-
-    /**
-     *
-     * @param fn
-     */
-    setOnRequestComplete(fn) {
-        this.onRequestComplete = fn;
-    }
-
-    /**
-     *
-     * @param fn
-     */
-    setOnUnpaid(fn) {
-        this.onUnpaid = fn;
-    }
-
-    /**
-     *
-     * @param fn
-     */
-    setOnPaid(fn) {
-        this.onPaid = fn;
-    }
-
-    /**
-     *
-     * @param fn
-     */
-    setOnProcessing(fn) {
-        this.onProcessing = fn;
     }
 }

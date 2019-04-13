@@ -2,7 +2,7 @@ server {
 	listen 80;
 
 	server_name _;
-	root /var/www/html/magento;
+	root /var/www/html/src;
 
 	index index.php;
 

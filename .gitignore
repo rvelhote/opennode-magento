@@ -2,3 +2,6 @@
 .database
 /vendor
 /node_modules
+/src/.gitignore
+/src/var
+/data/magento-sample-data

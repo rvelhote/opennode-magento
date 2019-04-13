@@ -21,32 +21,33 @@
  * SOFTWARE.
  */
 
-/** @var $block OpenNode_Bitcoin_Block_Method_OnChain*/
+/** @var $block OpenNode_Bitcoin_Block_Method_Lightning */
 $block = $this;
 $charge = $block->getCharge();
 
 /** @var $h OpenNode_Bitcoin_Helper_Data */
 $h = Mage::helper('opennode_bitcoin'); ?>
 
-<div class="box payment-method" data-payment-method="onchain">
+<div class="box payment-method" data-payment-method="lightning">
     <div class="box-title">
-        <strong><?php print $h->__('On-Chain'); ?></strong>
+        <strong><?php print $h->__('Lightning Network'); ?></strong>
     </div>
 
-    <div><?php print $h->__('Standard bitcoin wallet'); ?></div>
+    <div><?php print $h->__('Lightning Network Wallet'); ?></div>
     <div><?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?></div>
     <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
 
     <?php if($charge->status === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID) : ?>
         <div class="box-content">
-            <div class="qr-code"
-                 data-qrcode
-                 data-address="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"></div>
-            <div>
-                <a target="_blank"
-                   class="button"
-                   href="<?php print $block->escapeHtml($h->formatBitcoinUri($charge->chain_invoice['address'], $h->satoshiToBtc($charge->amount), $block->getStoreName())); ?>"><?php print $h->__('Open in wallet'); ?></a>
-                <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Copy'); ?></button>
+            <div><span data-timer>?</span>&nbsp;<?php print $h->__('Remaining'); ?></div>
+            <div class="qr-code" data-qrcode data-address="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
+            <div data-wallet>
+                <a data-wallet-link class="button" href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>" rel="noopener noreferrer">
+                    <?php print $h->__('Open in wallet'); ?>
+                </a>
+                <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>">
+                    <?php print $h->__('Copy'); ?>
+                </button>
             </div>
         </div>
     <?php endif; ?>

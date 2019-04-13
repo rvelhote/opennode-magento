@@ -154,6 +154,9 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
         /** @var Mage_Core_Helper_Data $core */
         $core = Mage::helper('core');
 
+        /** @var OpenNode_Bitcoin_Helper_Data $helper */
+        $helper = Mage::helper('opennode_bitcoin');
+
         /** @var Mage_Checkout_Model_Session $session */
         $session = Mage::getSingleton('checkout/session');
 
@@ -177,10 +180,14 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
             'status' => $charge->status,
             'lightning' => $charge->lightning_invoice,
             'onchain' => $charge->chain_invoice,
-            'addresses' => [
+            'address' => [
                 'lightning' => $charge->lightning_invoice['payreq'],
                 'onchain' => $charge->chain_invoice['address'],
-            ]
+            ],
+            'wallet' => [
+                'lightning' => 'lightning:' . $charge->lightning_invoice['payreq'],
+                'onchain' => $helper->formatBitcoinUri($charge->chain_invoice['address'], $helper->satoshiToBtc($charge->amount), 'English'),
+            ],
         ];
 
         $this->getResponse()->setHeader('Content-Type', 'application/json');

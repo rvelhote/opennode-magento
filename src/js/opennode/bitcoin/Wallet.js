@@ -21,40 +21,55 @@
  */
 "use strict";
 
-export default class QrCode {
+export default class Wallet {
     /**
      *
-     * @param {Element} item
+     * @param {Node} element
      */
-    constructor(item) {
-        this.item = item;
-        this.update(item.dataset.address);
+    constructor(element) {
+        this.element = element;
+
+        this.clipboardElm = this.element.querySelector('[data-clipboard-text]');
+        this.linkElm = this.element.querySelector('[data-wallet-link]');
+
+        this.clipboard = new ClipboardJS(this.clipboardElm, {
+            text: trigger => {
+                return trigger.dataset.clipboardText;
+            }
+        });
     }
 
     /**
      *
-     * @param {string} address
-     * @returns {boolean}
+     * @param ct
+     * @param lt
      */
-    shouldUpdate(address) {
-        return this.address !== address
+    shouldUpdate(ct, lt) {
+        const currentClipboardText = this.clipboardElm.dataset.clipboardText.toString();
+        const currentLinkText = this.linkElm.href.toString();
+
+        // console.log(currentClipboardText !== ct.toString());
+        // console.log(currentLinkText !== lt.toString());
+
+
+
+
+        return ct.toString() !== currentClipboardText || lt.toString() !== currentLinkText;
     }
 
     /**
      *
-     * @param {string} address
+     * @param {String} ct
+     * @param {String} lt
+     * @returns {Wallet}
      */
-    update(address) {
-        this.address = address;
-        this.qrcode = qrcodegen.QrCode.encodeText(address, qrcodegen.QrCode.Ecc.HIGH);
-        this.item.innerHTML = this.getQrCodeAsSvg();
-    }
+    update(ct, lt) {
+        this.clipboardElm.dataset.clipboardText = ct;
+        this.linkElm.href = lt;
 
-    /**
-     *
-     * @returns {string}
-     */
-    getQrCodeAsSvg() {
-        return this.qrcode.toSvgString(4);
+       // console.log(ct);
+       // console.log(lt);
+
+        return this;
     }
 }
