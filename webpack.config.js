@@ -22,20 +22,21 @@
 const path = require('path');
 
 module.exports = {
-    mode: 'development',
-    entry: {
-        main: './src/js/opennode/bitcoin/index.js'
-    },
-    output: {
-        filename: 'index.min.js',
-        path: path.resolve(__dirname, 'src', 'js', 'opennode', 'bitcoin'),
-    },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-        }]
-    },
-    watch: true
+  mode: 'development',
+  entry: {
+    main: './src/js/opennode/bitcoin/index.js',
+  },
+  output: {
+    filename: 'index.min.js',
+    path: path.resolve(__dirname, 'src', 'js', 'opennode', 'bitcoin'),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      }],
+  },
+  watch: true,
 };

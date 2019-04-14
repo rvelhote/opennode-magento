@@ -47,10 +47,15 @@ export default class Lightning {
 
     this.timer = element.querySelector('[data-timer]');
 
-    status.registerObserver(r => {
-      if (r.address.lightning === null) {
+    status.registerObserver((r) => {
+      if (r.status !== 'unpaid' || r.address.lightning === null) {
+        this.qrcode.hide();
+        this.wallet.hide();
         return;
       }
+
+      this.qrcode.show();
+      this.wallet.show();
 
       if (this.wallet.shouldUpdate(r.address.lightning, r.wallet.lightning)) {
         this.wallet.update(r.address.lightning, r.wallet.lightning);

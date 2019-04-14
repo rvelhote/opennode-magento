@@ -49,7 +49,9 @@ export default class Wallet {
    * @return {Boolean} Indicate if an update should occur or not
    */
   shouldUpdate(ct, lt) {
-    return ct.toString() !== this.clipboardText
+    return ct === null
+        || lt === null
+        || ct.toString() !== this.clipboardText
         || lt.toString() !== this.linkText;
   }
 
@@ -68,7 +70,8 @@ export default class Wallet {
    * @param {String} value A new value to store in the clipboard text
    */
   set clipboardText(value) {
-    this.clipboardElm.dataset.clipboardText = value.toString();
+    this.clipboardElm.dataset.clipboardText =
+        value === null ? '' : value.toString();
   }
 
   /**
@@ -76,7 +79,7 @@ export default class Wallet {
    * @param {String} value A new value to store in the link text
    */
   set linkText(value) {
-    this.linkElm.href = value.toString();
+    this.linkElm.href = value === null ? '' : value.toString();
   }
 
   /**
@@ -102,5 +105,19 @@ export default class Wallet {
     }
 
     return this.linkElm.href.toString();
+  }
+
+  /**
+   * Hides the parent element that contains the clipboard and link features
+   */
+  hide() {
+    this.element.style.display = 'none';
+  }
+
+  /**
+   * Shows  the parent element that contains the clipboard and link features
+   */
+  show() {
+    this.element.style.display = 'block';
   }
 }

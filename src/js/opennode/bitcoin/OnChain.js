@@ -41,18 +41,30 @@ export default class OnChain {
     this.qrcode = new QrCode(qre);
     this.wallet = new Wallet(we);
 
-    status.registerObserver(r => {
-      if (r.address.onchain === null) {
-        return;
-      }
 
-      if (this.wallet.shouldUpdate(r.address.onchain, r.wallet.onchain)) {
-        this.wallet.update(r.address.onchain, r.wallet.onchain);
-      }
 
-      if (this.qrcode.shouldUpdate(r.wallet.onchain)) {
-        this.qrcode.update(r.wallet.onchain);
-      }
-    });
+    status.registerObserver(this.observe.bind(this));
+  }
+
+  observe(r) {
+
+
+
+    if (r.status !== 'unpaid' || r.address.onchain === null) {
+      this.qrcode.hide();
+      this.wallet.hide();
+      return;
+    }
+
+    this.qrcode.show();
+    this.wallet.show();
+
+    if (this.wallet.shouldUpdate(r.address.onchain, r.wallet.onchain)) {
+      this.wallet.update(r.address.onchain, r.wallet.onchain);
+    }
+
+    if (this.qrcode.shouldUpdate(r.wallet.onchain)) {
+      this.qrcode.update(r.wallet.onchain);
+    }
   }
 }

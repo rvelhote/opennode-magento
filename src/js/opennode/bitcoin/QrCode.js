@@ -34,10 +34,10 @@ export default class QrCode {
   /**
    *
    * @param {string} address
-   * @returns {boolean}
+   * @return {boolean}
    */
   shouldUpdate(address) {
-    return this.address.toString() !== address.toString();
+    return address === null || this.address.toString() !== address.toString();
   }
 
   /**
@@ -45,17 +45,34 @@ export default class QrCode {
    * @param {string} address
    */
   update(address) {
-    this.address = address;
-    this.qrcode = qrcodegen.QrCode.encodeText(address,
-        qrcodegen.QrCode.Ecc.HIGH);
+    if (address === null) {
+      address = '';
+    }
+
+    this.address = address.toString();
+    this.qrcode = qrcodegen.QrCode.encodeText(this.address, qrcodegen.QrCode.Ecc.HIGH);
     this.item.innerHTML = this.getQrCodeAsSvg();
   }
 
   /**
    *
-   * @returns {string}
+   * @return {string}
    */
   getQrCodeAsSvg() {
     return this.qrcode.toSvgString(4);
+  }
+
+  /**
+   * Hides the parent element that contains the QRCode
+   */
+  hide() {
+    this.item.style.display = 'none';
+  }
+
+  /**
+   * Shows the parent element that contains the QRCode
+   */
+  show() {
+    this.item.style.display = 'block';
   }
 }

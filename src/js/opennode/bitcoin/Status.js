@@ -69,6 +69,7 @@ export default class Status {
       onSuccess: this.onSuccess.bind(this),
       onFailure: this.onFailure.bind(this),
       onComplete: this.onComplete.bind(this),
+      onException: this.onException.bind(this),
     });
   }
 
@@ -112,7 +113,16 @@ export default class Status {
    * @param response
    */
   onFailure(response) {
-    // this.onRequestFailure();
+    console.log(response);
+  }
+
+  /**
+   *
+   * @param r
+   * @param e
+   */
+  onException(r, e) {
+    throw e;
   }
 
   /**
