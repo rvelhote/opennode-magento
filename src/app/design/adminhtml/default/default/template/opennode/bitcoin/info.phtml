@@ -26,13 +26,7 @@ $block = $this;
 
 /** @var OpenNode_Bitcoin_Helper_Data $helper */
 $helper = Mage::helper('opennode_bitcoin');
-$charge = null;
-
-try {
-    $charge = $block->getCharge();
-} catch (Exception $e) {
-    Mage::logException($e);
-} ?>
+$charge = $block->getCharge(); ?>
 
 <?php if (is_null($charge)) : ?>
     <span><?php print $helper->__('It\'s not possible to obtain the transaction details at this moment.'); ?></span>
@@ -43,23 +37,25 @@ try {
     <tbody>
     <tr>
         <td style="width: 150px;"><?php print $helper->__('Charge ID'); ?></td>
-        <td><?php print $block->escapeHtml($charge->id); ?></td>
+        <td><?php print $block->escapeHtml($charge->getTransactionId()); ?></td>
     </tr>
     <tr>
-        <td><?php print $helper->__('Amount (Satoshis)'); ?></td>
-        <td><?php print $block->escapeHtml($charge->amount); ?></td>
+        <td><?php print $helper->__('Amount (Satoshis ~ BTC)'); ?></td>
+        <td><?php print $block->escapeHtml($charge->getAmount()); ?> ~ <?php print $block->escapeHtml($charge->getAmountBtc()) ?></td>
     </tr>
     <tr>
         <td><?php print $helper->__('Status'); ?></td>
-        <td><?php print $block->escapeHtml($charge->status); ?></td>
+        <td><?php print $block->escapeHtml($charge->getStatus()); ?></td>
     </tr>
     <tr>
         <td><?php print $helper->__('Auto-Settle'); ?></td>
-        <td><?php print $block->escapeHtml($charge->auto_settle ? $helper->__('Yes') : $helper->__('No')); ?></td>
+        <td><?php print $block->escapeHtml($charge->getAutoSettle() ? $helper->__('Yes') : $helper->__('No')); ?></td>
     </tr>
     </tbody>
 
-    <?php if (!is_null($charge->lightning_invoice)) : ?>
+
+
+    <?php if (!is_null($charge->getLightningInvoice())) : ?>
         <tbody>
         <tr>
             <td colspan="2" style="padding-top: 10px; font-weight: bold; border-bottom: 1px solid #d6d6d6;">
@@ -69,22 +65,22 @@ try {
         <tr>
             <td><?php print $helper->__('Request Hash'); ?></td>
             <td style="word-break: break-all;width:100px;">
-                <?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>
+                <?php print $block->escapeHtml($charge->getLightningInvoice()->getAddress()); ?>
             </td>
         </tr>
         <tr>
             <td><?php print $helper->__('Created At'); ?></td>
-            <td><?php print $block->escapeHtml($block->getStoreDate($charge->lightning_invoice['created_at'])); ?></td>
+            <td><?php print $block->escapeHtml($block->getStoreDate($charge->getLightningInvoice()->getCreatedAt())); ?></td>
         </tr>
         <tr>
             <td><?php print $helper->__('Expires At'); ?></td>
-            <td><?php print $block->escapeHtml($block->getStoreDate($charge->lightning_invoice['expires_at'])); ?></td>
+            <td><?php print $block->escapeHtml($block->getStoreDate($charge->getLightningInvoice()->getExpiresAt())); ?></td>
         </tr>
         <tr>
             <td><?php print $helper->__('Settled At'); ?></td>
             <td>
-                <?php if (isset($charge->lightning_invoice['settled_at'])) : ?>
-                    <?php print $block->escapeHtml($block->getStoreDate($charge->lightning_invoice['settled_at'])); ?>
+                <?php if (!is_null($charge->getLightningInvoice()->getSettledAt())) : ?>
+                    <?php print $block->escapeHtml($block->getStoreDate($charge->getLightningInvoice()->getSettledAt())); ?>
                 <?php else: ?>
                     <?php print $helper->__('Not settled yet'); ?>
                 <?php endif; ?>
@@ -93,13 +89,16 @@ try {
         </tbody>
     <?php endif; ?>
 
-    <?php if (!is_null($charge->chain_invoice)) : ?>
-        <?php $addressUrl = $helper->getAddressExplorerUrl($charge->chain_invoice['address']); ?>
-        <?php $txUrl = $helper->getTransactionExplorerUrl($charge->chain_invoice['tx']); ?>
+
+
+    <?php if (!is_null($charge->getChainInvoice())) : ?>
+        <?php $addressUrl = $helper->getAddressExplorerUrl($charge->getChainInvoice()->getAddress()); ?>
+        <?php $txUrl = $helper->getTransactionExplorerUrl($charge->getChainInvoice()->getTx()); ?>
 
         <tbody>
         <tr>
             <td colspan="2" style="padding-top: 10px; font-weight: bold; border-bottom: 1px solid #d6d6d6;">
+
                 <?php print $helper->__('Chain Invoice'); ?>
             </td>
         </tr>
@@ -107,16 +106,16 @@ try {
             <td><?php print $helper->__('Address'); ?></td>
             <td>
                 <a target="_blank" rel="noopener noreferrer" href="<?php print $block->escapeHtml($addressUrl); ?>">
-                    <?php print $block->escapeHtml($charge->chain_invoice['address']); ?>
+                    <?php print $block->escapeHtml($charge->getChainInvoice()->getAddress()); ?>
                 </a>
             </td>
         </tr>
         <tr>
             <td><?php print $helper->__('Transaction ID'); ?></td>
             <td>
-                <?php if (isset($charge->chain_invoice['tx'])) : ?>
+                <?php if (!is_null($charge->getChainInvoice()->getTx())) : ?>
                     <a target="_blank" rel="noopener noreferrer" href="<?php print $block->escapeHtml($txUrl); ?>">
-                        <?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>
+                        <?php print $block->escapeHtml($charge->getChainInvoice()->getTx()); ?>
                     </a>
                 <?php else: ?>
                     <?php print $helper->__('No transaction seen on the blockchain yet'); ?>
@@ -126,8 +125,8 @@ try {
         <tr>
             <td><?php print $helper->__('Settled At'); ?></td>
             <td>
-                <?php if (isset($charge->chain_invoice['settled_at'])) : ?>
-                    <?php print $block->escapeHtml($block->getStoreDate($charge->chain_invoice['settled_at'])); ?>
+                <?php if (!is_null($charge->getChainInvoice()->getSettledAt())) : ?>
+                    <?php print $block->escapeHtml($block->getStoreDate($charge->getChainInvoice()->getSettledAt())); ?>
                 <?php else: ?>
                     <?php print $helper->__('Not settled yet'); ?>
                 <?php endif; ?>

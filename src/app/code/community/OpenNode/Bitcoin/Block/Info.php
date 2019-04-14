@@ -42,7 +42,7 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
     }
 
     /**
-     * @return bool|\OpenNode\Merchant\Charge
+     * @return OpenNode_Bitcoin_Model_Charge
      * @throws Mage_Core_Exception
      */
     public function getCharge()

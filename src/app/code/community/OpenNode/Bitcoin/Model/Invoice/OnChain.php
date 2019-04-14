@@ -23,6 +23,7 @@
 
 /**
  * Class OpenNode_Bitcoin_Model_Invoice_OnChain
+ * @method string getTx()
  * @method string getSettledAt()
  */
 class OpenNode_Bitcoin_Model_Invoice_OnChain extends Varien_Object

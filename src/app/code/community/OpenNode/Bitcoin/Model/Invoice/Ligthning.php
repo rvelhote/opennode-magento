@@ -26,6 +26,7 @@
  * @method string getSettledAt()
  * @method string getCreatedAt()
  * @method string getExpiresAt()
+ * @method string getTx()
  */
 class OpenNode_Bitcoin_Model_Invoice_Ligthning extends Varien_Object
 {

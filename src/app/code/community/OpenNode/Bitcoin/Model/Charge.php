@@ -34,6 +34,7 @@ use OpenNode\Merchant\Charge;
  * @method float getSourceFiatValue()
  * @method string getCurrency()
  * @method array getParams()
+ * @method bool getAutoSettle()
  * @method OpenNode_Bitcoin_Model_Invoice_Ligthning getLightningInvoice()
  * @method OpenNode_Bitcoin_Model_Invoice_OnChain getChainInvoice()
  */
@@ -42,6 +43,7 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     /** @var bool|Charge */
     protected $_charge = null;
 
+    /** @var Mage_Sales_Model_Order */
     protected $_order = null;
 
     /**
@@ -102,13 +104,17 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
         $this->setData('success_url', $this->_charge->success_url);
         $this->setData('notes', $this->_charge->notes);
 
-        $this->setData('lightning_invoice', Mage::getModel('opennode_bitcoin/invoice_ligthning',
-            $this->_charge->lightning_invoice
-        ));
+        if (!is_null($this->_charge->lightning_invoice)) {
+            $this->setData('lightning_invoice', Mage::getModel('opennode_bitcoin/invoice_ligthning',
+                $this->_charge->lightning_invoice
+            ));
+        }
 
-        $this->setData('chain_invoice', Mage::getModel('opennode_bitcoin/invoice_onChain',
-            $this->_charge->chain_invoice
-        ));
+        if (!is_null($this->_charge->chain_invoice)) {
+            $this->setData('chain_invoice', Mage::getModel('opennode_bitcoin/invoice_onChain',
+                $this->_charge->chain_invoice
+            ));
+        }
 
         return $this;
     }
