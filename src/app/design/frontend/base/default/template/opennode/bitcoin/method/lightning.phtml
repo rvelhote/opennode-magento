@@ -43,9 +43,9 @@ $h = Mage::helper('opennode_bitcoin'); ?>
 
     <?php if($charge->isUnpaid()) : ?>
         <div class="box-content">
-            <div class="qr-code" data-qrcode data-address="<?php print $block->escapeHtml($invoice->formatUri()); ?>"></div>
+            <div class="qr-code" data-qrcode data-address="<?php print $block->escapeHtml($uri); ?>"></div>
             <div data-wallet>
-                <a data-wallet-link class="button" href="<?php print $block->escapeHtml($invoice->formatUri()); ?>" rel="noopener noreferrer">
+                <a data-wallet-link class="button" href="<?php print $block->escapeHtml($uri); ?>" rel="noopener noreferrer">
                     <?php print $h->__('Open in wallet'); ?>
                 </a>
                 <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($invoice->getAddress()); ?>">

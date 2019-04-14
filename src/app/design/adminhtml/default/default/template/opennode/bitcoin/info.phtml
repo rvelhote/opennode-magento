@@ -53,9 +53,7 @@ $charge = $block->getCharge(); ?>
     </tr>
     </tbody>
 
-
-
-    <?php if (!is_null($charge->getLightningInvoice())) : ?>
+    <?php if ($charge->getLightningInvoice()->hasData()) : ?>
         <tbody>
         <tr>
             <td colspan="2" style="padding-top: 10px; font-weight: bold; border-bottom: 1px solid #d6d6d6;">
@@ -89,9 +87,7 @@ $charge = $block->getCharge(); ?>
         </tbody>
     <?php endif; ?>
 
-
-
-    <?php if (!is_null($charge->getChainInvoice())) : ?>
+    <?php if ($charge->getChainInvoice()->hasData()) : ?>
         <?php $addressUrl = $helper->getAddressExplorerUrl($charge->getChainInvoice()->getAddress()); ?>
         <?php $txUrl = $helper->getTransactionExplorerUrl($charge->getChainInvoice()->getTx()); ?>
 

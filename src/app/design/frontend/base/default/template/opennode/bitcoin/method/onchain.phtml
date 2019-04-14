@@ -30,7 +30,7 @@ $h = Mage::helper('opennode_bitcoin');
 $charge = $block->getCharge();
 $invoice = $block->getCharge()->getChainInvoice();
 
-$uri = $invoice->formatUri($charge->getAmount(), $block->getStoreName()); ?>
+$uri = $invoice->formatUri($charge->getAmountBtc(), $block->getStoreName()); ?>
 
 <div class="box payment-method" data-payment-method="onchain">
     <div class="box-title">
