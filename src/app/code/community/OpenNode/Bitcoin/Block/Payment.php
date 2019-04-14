@@ -89,7 +89,7 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
     }
 
     /**
-     * @return bool|\OpenNode\Merchant\Charge
+     * @return OpenNode_Bitcoin_Model_Charge
      * @throws Mage_Core_Exception
      */
     public function getCharge()

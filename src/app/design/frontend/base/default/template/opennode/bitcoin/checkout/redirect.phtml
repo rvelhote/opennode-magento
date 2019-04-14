@@ -45,6 +45,7 @@ $charge = $block->getCharge(); ?>
         <div class="col-2">
             <?php print $block->getLayout()->createBlock('opennode_bitcoin/method_onChain','onchain', [
                 'charge' => $charge,
+                'store_name' => $block->getStoreName(),
             ])->toHtml(); ?>
         </div>
     </div>
@@ -85,7 +86,6 @@ $charge = $block->getCharge(); ?>
                         <ul  class="form-list">
                             <li>
                                 <p><?php print $h->__('Your order was paid successfully.'); ?></p>
-                                <p><?php print $h->__('Your should be redirected to the order summary automatically in a few moments.'); ?></p>
                             </li>
                             <li class="a-right">
                                 <button class="button" type="submit"><?php print $h->__('Continue to order summary'); ?></button>
@@ -112,12 +112,6 @@ $charge = $block->getCharge(); ?>
     </div>
 </div>
 
-
-
-<!--
-<div><?php var_dump($block->getParams()); ?></div>
-<div><?php var_dump($charge); ?></div>
--->
 
 <style>
     /*.block-opennode .payment-methods {*/

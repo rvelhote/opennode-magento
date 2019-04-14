@@ -50,7 +50,10 @@ export default class QrCode {
     }
 
     this.address = address.toString();
-    this.qrcode = qrcodegen.QrCode.encodeText(this.address, qrcodegen.QrCode.Ecc.HIGH);
+    this.qrcode = qrcodegen.QrCode.encodeText(
+        this.address,
+        qrcodegen.QrCode.Ecc.HIGH
+    );
     this.item.innerHTML = this.getQrCodeAsSvg();
   }
 

@@ -23,7 +23,11 @@
 
 /** @var $block OpenNode_Bitcoin_Block_Method_Lightning */
 $block = $this;
+
 $charge = $block->getCharge();
+$invoice = $block->getCharge()->getLightningInvoice();
+
+$uri = $invoice->formatUri();
 
 /** @var $h OpenNode_Bitcoin_Helper_Data */
 $h = Mage::helper('opennode_bitcoin'); ?>
@@ -34,18 +38,17 @@ $h = Mage::helper('opennode_bitcoin'); ?>
     </div>
 
     <div><?php print $h->__('Lightning Network Wallet'); ?></div>
-    <div><?php print $h->__('%s Satoshis ~ %s BTC', $charge->amount, $h->satoshiToBtc($charge->amount)); ?></div>
-    <div><?php print $h->__('%s %s', $charge->source_fiat_value, $charge->currency); ?></div>
+    <div><?php print $h->__('%s Satoshis ~ %s BTC', $charge->getAmount(), $charge->getAmountBtc()); ?></div>
+    <div><?php print $h->__('%s %s', $charge->getSourceFiatValue(), $charge->getCurrency()); ?></div>
 
-    <?php if($charge->status === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID) : ?>
+    <?php if($charge->isUnpaid()) : ?>
         <div class="box-content">
-            <div><span data-timer>?</span>&nbsp;<?php print $h->__('Remaining'); ?></div>
-            <div class="qr-code" data-qrcode data-address="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"></div>
+            <div class="qr-code" data-qrcode data-address="<?php print $block->escapeHtml($invoice->formatUri()); ?>"></div>
             <div data-wallet>
-                <a data-wallet-link class="button" href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>" rel="noopener noreferrer">
+                <a data-wallet-link class="button" href="<?php print $block->escapeHtml($invoice->formatUri()); ?>" rel="noopener noreferrer">
                     <?php print $h->__('Open in wallet'); ?>
                 </a>
-                <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>">
+                <button class="button" type="button" data-clipboard-text="<?php print $block->escapeHtml($invoice->getAddress()); ?>">
                     <?php print $h->__('Copy'); ?>
                 </button>
             </div>

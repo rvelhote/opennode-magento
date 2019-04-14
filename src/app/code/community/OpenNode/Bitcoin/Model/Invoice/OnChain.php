@@ -22,33 +22,56 @@
  */
 
 /**
- * Class Mage_Core_Block_Template
+ * Class OpenNode_Bitcoin_Model_Invoice_OnChain
+ * @method string getSettledAt()
  */
-class OpenNode_Bitcoin_Block_Method_Lightning extends Mage_Core_Block_Template
+class OpenNode_Bitcoin_Model_Invoice_OnChain extends Varien_Object
 {
     /**
-     * OpenNode_Bitcoin_Block_Method_Lightning constructor.
+     * OpenNode_Bitcoin_Model_Invoice_OnChain constructor.
      * @param array $args
      */
-    public function __construct(array $args = array())
+    public function __construct($args = [])
     {
         parent::__construct($args);
-        $this->setTemplate('opennode/bitcoin/method/lightning.phtml');
     }
 
     /**
-     * @return OpenNode_Bitcoin_Model_Charge
+     * @return string
      */
-    public function getCharge()
+    public function getAddress()
     {
-        return $this->getData('charge');
+        if (is_null($this->getData('address'))) {
+            return '';
+        }
+        return (string)$this->getData('address');
     }
 
     /**
-     * @return OpenNode_Bitcoin_Model_Invoice_OnChain
+     * @param string $amount
+     * @param string $message
+     * @return string
      */
-    public function getInvoice()
+    public function formatUri($amount, $message)
     {
-        return $this->getCharge()->getLightningInvoice();
+        $query = [
+            'amount' => $amount,
+            'label' => $message,
+        ];
+
+        return sprintf('bitcoin:%s?%s', $this->getAddress(), http_build_query($query));
+    }
+
+    /**
+     * @return Zend_Date
+     */
+    public function getSettledAtDate()
+    {
+        return Mage::app()->getLocale()->date(
+            Varien_Date::toTimestamp(date('Y-m-d H:i:s', $this->getSettledAt())),
+            null,
+            null,
+            true
+        );
     }
 }

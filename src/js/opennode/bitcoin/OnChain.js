@@ -24,11 +24,14 @@
 import QrCode from './QrCode';
 import Wallet from './Wallet';
 
+/**
+ * Handle the OnChain Payment Method
+ */
 export default class OnChain {
   /**
    *
-   * @param element
-   * @param status
+   * @param {Element} element
+   * @param {Status} status
    */
   constructor(element, status) {
     const qre = element.querySelector('[data-qrcode]');
@@ -41,16 +44,15 @@ export default class OnChain {
     this.qrcode = new QrCode(qre);
     this.wallet = new Wallet(we);
 
-
-
     status.registerObserver(this.observe.bind(this));
   }
 
+  /**
+   * Handle the response returned by the server for an OnChain payment
+   * @param {Object} r
+   */
   observe(r) {
-
-
-
-    if (r.status !== 'unpaid' || r.address.onchain === null) {
+    if (!r.status.unpaid || r.onchain.address === null) {
       this.qrcode.hide();
       this.wallet.hide();
       return;
@@ -59,12 +61,12 @@ export default class OnChain {
     this.qrcode.show();
     this.wallet.show();
 
-    if (this.wallet.shouldUpdate(r.address.onchain, r.wallet.onchain)) {
-      this.wallet.update(r.address.onchain, r.wallet.onchain);
+    if (this.wallet.shouldUpdate(r.onchain.address, r.onchain.uri)) {
+      this.wallet.update(r.onchain.address, r.onchain.uri);
     }
 
-    if (this.qrcode.shouldUpdate(r.wallet.onchain)) {
-      this.qrcode.update(r.wallet.onchain);
+    if (this.qrcode.shouldUpdate(r.onchain.uri)) {
+      this.qrcode.update(r.onchain.uri);
     }
   }
 }

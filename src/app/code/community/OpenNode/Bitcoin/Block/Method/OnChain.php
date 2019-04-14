@@ -23,6 +23,7 @@
 
 /**
  * Class Mage_Core_Block_Template
+ * @method string getStoreName()
  */
 class OpenNode_Bitcoin_Block_Method_OnChain extends Mage_Core_Block_Template
 {
@@ -37,10 +38,18 @@ class OpenNode_Bitcoin_Block_Method_OnChain extends Mage_Core_Block_Template
     }
 
     /**
-     * @return \OpenNode\Merchant\Charge
+     * @return OpenNode_Bitcoin_Model_Charge
      */
     public function getCharge()
     {
         return $this->getData('charge');
+    }
+
+    /**
+     * @return OpenNode_Bitcoin_Model_Invoice_OnChain
+     */
+    public function getInvoice()
+    {
+        return $this->getCharge()->getChainInvoice();
     }
 }

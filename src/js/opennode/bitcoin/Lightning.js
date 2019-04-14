@@ -24,11 +24,14 @@
 import QrCode from './QrCode';
 import Wallet from './Wallet';
 
+/**
+ * Handle the Lightning Network Payment Method
+ */
 export default class Lightning {
   /**
    *
-   * @param element
-   * @param status
+   * @param {Element} element
+   * @param {Status} status
    */
   constructor(element, status) {
     const qre = element.querySelector('[data-qrcode]');
@@ -41,31 +44,29 @@ export default class Lightning {
     this.qrcode = new QrCode(qre);
     this.wallet = new Wallet(we);
 
-    if (!this.qrcode || !this.wallet) {
+    status.registerObserver(this.observe.bind(this));
+  }
+
+  /**
+   * Handle the response returned by the server for a Lightning Network payment
+   * @param {Object} r
+   */
+  observe(r) {
+    if (!r.status.unpaid || r.lightning.address === null) {
+      this.qrcode.hide();
+      this.wallet.hide();
       return;
     }
 
-    this.timer = element.querySelector('[data-timer]');
+    this.qrcode.show();
+    this.wallet.show();
 
-    status.registerObserver((r) => {
-      if (r.status !== 'unpaid' || r.address.lightning === null) {
-        this.qrcode.hide();
-        this.wallet.hide();
-        return;
-      }
+    if (this.wallet.shouldUpdate(r.lightning.address, r.lightning.uri)) {
+      this.wallet.update(r.lightning.address, r.lightning.uri);
+    }
 
-      this.qrcode.show();
-      this.wallet.show();
-
-      if (this.wallet.shouldUpdate(r.address.lightning, r.wallet.lightning)) {
-        this.wallet.update(r.address.lightning, r.wallet.lightning);
-      }
-
-      if (this.qrcode.shouldUpdate(r.wallet.lightning)) {
-        this.qrcode.update(r.wallet.lightning);
-      }
-
-      this.timer.innerHTML = Date.now();
-    });
+    if (this.qrcode.shouldUpdate(r.lightning.uri)) {
+      this.qrcode.update(r.lightning.uri);
+    }
   }
 }
