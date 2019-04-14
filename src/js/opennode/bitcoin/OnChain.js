@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,40 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-"use strict";
+'use strict';
 
-import QrCode from "./QrCode";
-import Wallet from "./Wallet";
+import QrCode from './QrCode';
+import Wallet from './Wallet';
 
 export default class OnChain {
-    /**
-     *
-     * @param element
-     * @param status
-     */
-    constructor(element, status) {
-        const qre = element.querySelector('[data-qrcode]');
-        const we = element.querySelector('[data-wallet]');
+  /**
+   *
+   * @param element
+   * @param status
+   */
+  constructor(element, status) {
+    const qre = element.querySelector('[data-qrcode]');
+    const we = element.querySelector('[data-wallet]');
 
-        if (qre === null || we === null) {
-            return;
-        }
-
-        this.qrcode = new QrCode(qre);
-        this.wallet = new Wallet(we);
-
-        status.registerObserver(r => {
-            if (r.address.onchain === null) {
-                return;
-            }
-
-            if (this.wallet.shouldUpdate(r.address.onchain, r.wallet.onchain)) {
-                this.wallet.update(r.address.onchain, r.wallet.onchain);
-            }
-
-            if (this.qrcode.shouldUpdate(r.wallet.onchain)) {
-                this.qrcode.update(r.wallet.onchain);
-            }
-        });
+    if (qre === null || we === null) {
+      return;
     }
+
+    this.qrcode = new QrCode(qre);
+    this.wallet = new Wallet(we);
+
+    status.registerObserver(r => {
+      if (r.address.onchain === null) {
+        return;
+      }
+
+      if (this.wallet.shouldUpdate(r.address.onchain, r.wallet.onchain)) {
+        this.wallet.update(r.address.onchain, r.wallet.onchain);
+      }
+
+      if (this.qrcode.shouldUpdate(r.wallet.onchain)) {
+        this.qrcode.update(r.wallet.onchain);
+      }
+    });
+  }
 }

@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,49 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+'use strict';
 
-"use strict";
-
-import QrCode from "./QrCode";
-import Wallet from "./Wallet";
+import QrCode from './QrCode';
+import Wallet from './Wallet';
 
 export default class Lightning {
-    /**
-     *
-     * @param element
-     * @param status
-     */
-    constructor(element, status) {
-        const qre = element.querySelector('[data-qrcode]');
-        const we = element.querySelector('[data-wallet]');
+  /**
+   *
+   * @param element
+   * @param status
+   */
+  constructor(element, status) {
+    const qre = element.querySelector('[data-qrcode]');
+    const we = element.querySelector('[data-wallet]');
 
-        if (qre === null || we === null) {
-            return;
-        }
-
-        this.qrcode = new QrCode(qre);
-        this.wallet = new Wallet(we);
-
-        if (!this.qrcode || !this.wallet) {
-            return;
-        }
-
-        this.timer = element.querySelector('[data-timer]');
-
-        status.registerObserver(r => {
-            if (r.address.lightning === null) {
-                return;
-            }
-
-            if (this.wallet.shouldUpdate(r.address.lightning, r.wallet.lightning)) {
-                this.wallet.update(r.address.lightning, r.wallet.lightning);
-            }
-
-            if (this.qrcode.shouldUpdate(r.wallet.lightning)) {
-                this.qrcode.update(r.wallet.lightning);
-            }
-
-            this.timer.innerHTML = Date.now();
-        });
+    if (qre === null || we === null) {
+      return;
     }
+
+    this.qrcode = new QrCode(qre);
+    this.wallet = new Wallet(we);
+
+    if (!this.qrcode || !this.wallet) {
+      return;
+    }
+
+    this.timer = element.querySelector('[data-timer]');
+
+    status.registerObserver(r => {
+      if (r.address.lightning === null) {
+        return;
+      }
+
+      if (this.wallet.shouldUpdate(r.address.lightning, r.wallet.lightning)) {
+        this.wallet.update(r.address.lightning, r.wallet.lightning);
+      }
+
+      if (this.qrcode.shouldUpdate(r.wallet.lightning)) {
+        this.qrcode.update(r.wallet.lightning);
+      }
+
+      this.timer.innerHTML = Date.now();
+    });
+  }
 }

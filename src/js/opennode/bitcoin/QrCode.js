@@ -8,8 +8,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,42 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-"use strict";
+'use strict';
 
 export default class QrCode {
-    /**
-     *
-     * @param {Element} item
-     */
-    constructor(item) {
-        this.item = item;
-        this.update(item.dataset.address);
-    }
+  /**
+   *
+   * @param {Element} item
+   */
+  constructor(item) {
+    this.item = item;
+    this.update(item.dataset.address);
+  }
 
-    /**
-     *
-     * @param {string} address
-     * @returns {boolean}
-     */
-    shouldUpdate(address) {
-        return this.address.toString() !== address.toString();
-    }
+  /**
+   *
+   * @param {string} address
+   * @returns {boolean}
+   */
+  shouldUpdate(address) {
+    return this.address.toString() !== address.toString();
+  }
 
-    /**
-     *
-     * @param {string} address
-     */
-    update(address) {
-        this.address = address;
-        this.qrcode = qrcodegen.QrCode.encodeText(address, qrcodegen.QrCode.Ecc.HIGH);
-        this.item.innerHTML = this.getQrCodeAsSvg();
-    }
+  /**
+   *
+   * @param {string} address
+   */
+  update(address) {
+    this.address = address;
+    this.qrcode = qrcodegen.QrCode.encodeText(address,
+        qrcodegen.QrCode.Ecc.HIGH);
+    this.item.innerHTML = this.getQrCodeAsSvg();
+  }
 
-    /**
-     *
-     * @returns {string}
-     */
-    getQrCodeAsSvg() {
-        return this.qrcode.toSvgString(4);
-    }
+  /**
+   *
+   * @returns {string}
+   */
+  getQrCodeAsSvg() {
+    return this.qrcode.toSvgString(4);
+  }
 }
