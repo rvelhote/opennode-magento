@@ -38,33 +38,6 @@ class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * @param int $sats
-     * @return string
-     */
-    public function satoshiToBtc($sats)
-    {
-        if (function_exists('bcdiv')) {
-            return bcdiv($sats, 100000000, 8);
-        }
-
-        return number_format($sats / 100000000, 8, '.', '');
-    }
-
-    /**
-     * @param string $address
-     * @param float $amount
-     * @param string $message
-     */
-    public function formatBitcoinUri($address, $amount, $message) {
-        $query = [
-            'amount' => $amount,
-            'label' => $message,
-        ];
-
-        return sprintf('bitcoin:%s?%s', $address, http_build_query($query));
-    }
-
-    /**
      * @param $tx
      * @return string
      */
