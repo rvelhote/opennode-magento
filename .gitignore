@@ -1,7 +1,25 @@
+# Docker / IDE
 .idea
 .database
+.cache
+
+# Composer / NPM
 /vendor
 /node_modules
-/src/.gitignore
+
+# Magento 1.9 Base
 /src/var
+/src/media
+/src/.gitignore
+/src/app/etc/local.xml
+/src/skin/frontend/rwd/default/images/media/logo.png
+/src/skin/frontend/rwd/default/images/media/logo_small.png
+
+# Magento 1.9 Sample Data
 /data/magento-sample-data
+
+# SMTPPro
+/src/app/code/local/Aschroder/SMTPPro
+/src/app/locale/en_US/Aschroder_SMTPPro.csv
+/src/app/etc/modules/Aschroder_SMTPPro.xml
+/src/app/design/adminhtml/default/default/template/smtppro
