@@ -53,7 +53,7 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $order = Mage::getModel('sales/order');
         $order->loadByIncrementId($callback->getIncrementId());
 
-        if (!$order->getId()) {
+        if (!$order->getEntityId()) {
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
@@ -61,6 +61,11 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $id = $order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
         if ($callback->getId() != $id) {
             $this->getResponse()->setHttpResponseCode(404);
+            return;
+        }
+
+        if ($callback->getStatus() !== OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PAID) {
+            $this->getResponse()->setHttpResponseCode(402);
             return;
         }
 
