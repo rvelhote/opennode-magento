@@ -29,7 +29,7 @@ const INTERVAL = 1000;
 export default class Status {
   /**
    *
-   * @param endpoint
+   * @param {String} endpoint
    */
   constructor(endpoint) {
     this.lock = false;
@@ -47,7 +47,7 @@ export default class Status {
 
   /**
    *
-   * @param observer
+   * @param {Function} observer
    * @return {Status}
    */
   registerObserver(observer) {
@@ -75,7 +75,7 @@ export default class Status {
 
   /**
    *
-   * @param response
+   * @param {Object} response
    */
   onSuccess(response) {
     const r = response.responseJSON;
@@ -105,7 +105,7 @@ export default class Status {
 
   /**
    *
-   * @param response
+   * @param {Object} response
    */
   onFailure(response) {
     console.log(response);
@@ -113,8 +113,8 @@ export default class Status {
 
   /**
    *
-   * @param r
-   * @param e
+   * @param {Object} r
+   * @param {Object} e
    */
   onException(r, e) {
     throw e;

@@ -30,7 +30,7 @@ import Wallet from './Wallet';
 export default class OnChain {
   /**
    *
-   * @param {Element} element
+   * @param {HTMLElement} element
    * @param {Status} status
    */
   constructor(element, status) {

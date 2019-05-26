@@ -21,10 +21,13 @@
  */
 'use strict';
 
+/**
+ * Handles QRCode generation and updating
+ */
 export default class QrCode {
   /**
    *
-   * @param {Element} item
+   * @param {HTMLElement} item
    */
   constructor(item) {
     this.item = item;
@@ -33,8 +36,8 @@ export default class QrCode {
 
   /**
    *
-   * @param {string} address
-   * @return {boolean}
+   * @param {String} address
+   * @return {Boolean}
    */
   shouldUpdate(address) {
     return address === null || this.address.toString() !== address.toString();
@@ -42,7 +45,7 @@ export default class QrCode {
 
   /**
    *
-   * @param {string} address
+   * @param {String} address
    */
   update(address) {
     if (address === null) {
@@ -59,7 +62,7 @@ export default class QrCode {
 
   /**
    *
-   * @return {string}
+   * @return {String}
    */
   getQrCodeAsSvg() {
     return this.qrcode.toSvgString(4);

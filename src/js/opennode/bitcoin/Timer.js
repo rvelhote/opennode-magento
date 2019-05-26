@@ -21,10 +21,13 @@
  */
 'use strict';
 
+/**
+ * Handles all Time calculation tasks
+ */
 export default class Timer {
   /**
    *
-   * @returns {number}
+   * @return {Number}
    */
   static now() {
     const date = new Date();
@@ -32,11 +35,12 @@ export default class Timer {
   }
 
   /**
-   *
-   * @param timestamp
-   * @returns {string}
+   * Calculate the time remaining in the Hours:Minutes:Seconds format from a
+   * timestamp value
+   * @param {Number} timestamp The timestamp to convert to the H:M:S format
+   * @return {String} A timestamp converted into the H:M:S format
    */
-  getTimeRemaining(timestamp) {
+  static getTimeRemaining(timestamp) {
     const timeRemaining = timestamp - Timer.now();
 
     const hours = Math.round(timeRemaining / 60).toFixed(0);

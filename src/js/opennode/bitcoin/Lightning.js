@@ -29,9 +29,10 @@ import Wallet from './Wallet';
  */
 export default class Lightning {
   /**
-   *
-   * @param {Element} element
-   * @param {Status} status
+   * Creates a new Lightning Payment Method instance with its own QRCode and
+   * Wallet instances
+   * @param {HTMLElement} element The base HTML element for this payment method
+   * @param {Status} status The Status class that verifies the payment
    */
   constructor(element, status) {
     const qre = element.querySelector('[data-qrcode]');

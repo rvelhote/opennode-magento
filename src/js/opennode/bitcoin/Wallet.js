@@ -28,7 +28,7 @@
 export default class Wallet {
   /**
    *
-   * @param {Node} element
+   * @param {HTMLElement} element
    */
   constructor(element) {
     this.element = element;
