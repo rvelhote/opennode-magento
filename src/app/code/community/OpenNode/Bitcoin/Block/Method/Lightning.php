@@ -45,7 +45,7 @@ class OpenNode_Bitcoin_Block_Method_Lightning extends Mage_Core_Block_Template
     }
 
     /**
-     * @return OpenNode_Bitcoin_Model_Invoice_OnChain
+     * @return OpenNode_Bitcoin_Model_Invoice_Ligthning
      */
     public function getInvoice()
     {

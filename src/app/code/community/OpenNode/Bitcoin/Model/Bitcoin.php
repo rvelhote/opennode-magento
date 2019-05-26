@@ -68,18 +68,16 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     /** @var bool */
     protected $_isInitializeNeeded = true;
 
-//    /** @var bool */
-//    protected $_isGateway = true;
-
     /**
      * OpenNode_Bitcoin_Model_Bitcoin constructor.
      */
     public function __construct()
     {
+        parent::__construct();
+
         // FIXME Perhaps use getConfigData instead of this helper?
         $this->_config = Mage::helper('opennode_bitcoin/config');
         $this->_logger = Mage::helper('opennode_bitcoin/logger');
-        parent::__construct();
     }
 
     /**
@@ -103,8 +101,11 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function getDescription()
     {
+        /** @var Mage_Core_Helper_Data $core */
+        $core = Mage::helper('core');
+
         $store = $this->getOrder()->getStore()->getFrontendName();
-        $amount = Mage::helper('core')->currency($this->getOrder()->getGrandTotal(), true, false);
+        $amount = $core->currency($this->getOrder()->getGrandTotal(), true, false);
 
         return sprintf('Pay %s to %s', $amount, $store);
     }
@@ -117,8 +118,8 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      * @param string $paymentAction
      * @param object $stateObject
      *
-     * @return Mage_Payment_Model_Abstract
-     * @throws Mage_Core_Exception
+     * @return Mage_Payment_Model_Method_Abstract
+     * @throws Exception
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -132,13 +133,13 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
         $stateObject->setStatus(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
         $stateObject->setIsNotified(false);
 
-        $authentication = array(
+        $authentication = [
             'environment' => $this->_config->getEnvironment(),
             'auth_token' => $this->_config->getAuthToken(),
             'curlopt_ssl_verifypeer' => true,
-        );
+        ];
 
-        $params = array(
+        $params = [
             'description' => $this->getDescription(),
             'amount' => $order->getGrandTotal(),
             'currency' => $order->getOrderCurrencyCode(),
@@ -147,41 +148,19 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
             'name' => $order->getCustomerName(),
             'callback_url' => Mage::getUrl('opennode_bitcoin/callback/index'),
             'auto_settle' => $this->_config->isAutoSettle(),
-        );
+        ];
 
+        /** @var OpenNode_Bitcoin_Model_Charge _charge */
         $this->_charge = Mage::getModel('opennode_bitcoin/charge', [
             'auth' => $authentication,
             'params' => $params,
-        ])->create();
+        ]);
+        $this->_charge->create();
 
         $payment->setAdditionalInformation(self::OPENNODE_TXN_ID_KEY, $this->_charge->getTransactionId());
         $payment->setAdditionalInformation(self::OPENNODE_PARAMS_KEY, $core->jsonEncode($params));
 
         return parent::initialize($paymentAction, $stateObject);
-    }
-
-    /**
-     * Refund specified amount for payment
-     *
-     * @param Varien_Object $payment
-     * @param float $amount
-     *
-     * @return Mage_Payment_Model_Abstract
-     */
-    public function refund(Varien_Object $payment, $amount)
-    {
-        echo "refund";
-        return parent::refund($payment, $amount);
-    }
-
-    /**
-     * Validate payment method information object
-     *
-     * @return Mage_Payment_Model_Abstract
-     */
-    public function validate()
-    {
-        return parent::validate();
     }
 
     /**
@@ -243,18 +222,20 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
         }
 
         $payment = $this->getOrder()->getPayment();
-        $transactionId = $payment->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
+        $transactionId = $payment->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
 
-        $authentication = array(
+        $authentication = [
             'environment' => $this->_config->getEnvironment(),
             'auth_token' => $this->_config->getAuthToken(),
             'curlopt_ssl_verifypeer' => true,
-        );
+        ];
 
+        /** @var OpenNode_Bitcoin_Model_Charge _charge */
         $this->_charge = Mage::getModel('opennode_bitcoin/charge', [
             'auth' => $authentication,
-            'transaction_id' => $transactionId
-        ])->getCharge();
+            'transaction_id' => $transactionId,
+        ]);
+        $this->_charge->getCharge();
 
         return $this->_charge;
     }

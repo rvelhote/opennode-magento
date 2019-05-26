@@ -34,7 +34,7 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
     /** @var Mage_Sales_Model_Order */
     protected $_order;
 
-    /** @var \OpenNode\Merchant\Charge */
+    /** @var OpenNode\Merchant\Charge */
     protected $_charge = null;
 
     /**
