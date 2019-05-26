@@ -60,13 +60,5 @@ export default class OnChain {
 
     this.qrcode.show();
     this.wallet.show();
-
-    if (this.wallet.shouldUpdate(r.onchain.address, r.onchain.uri)) {
-      this.wallet.update(r.onchain.address, r.onchain.uri);
-    }
-
-    if (this.qrcode.shouldUpdate(r.onchain.uri)) {
-      this.qrcode.update(r.onchain.uri);
-    }
   }
 }
