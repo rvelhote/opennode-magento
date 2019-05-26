@@ -1,17 +1,24 @@
 {
-    "require-dev": {
-        "aydin-hassan/magento-core-composer-installer": "*",
-        "openmage/magento-lts": "1.9.4.x-dev",
-        "phpunit/phpunit": "^6"
-    },
-    "extra": {
-        "magento-root-dir": "src",
-        "magento-core-package-type": "magento-source"
-    },
-    "require": {
-        "opennode/opennode-php": "^1.0"
-    },
-    "suggest": {
-        "ext-bcmath": "Make sure Sats to BTC is converted with good division methods"
+  "require-dev": {
+    "aydin-hassan/magento-core-composer-installer": "*",
+    "openmage/magento-lts": "1.9.4.x-dev",
+    "phpunit/phpunit": "^6",
+    "aschroder/smtp_pro": "^2.0"
+  },
+  "extra": {
+    "magento-root-dir": "src",
+    "magento-core-package-type": "magento-source"
+  },
+  "require": {
+    "opennode/opennode-php": "^1.0"
+  },
+  "suggest": {
+    "ext-bcmath": "Make sure Sats to BTC is converted with good division methods"
+  },
+  "repositories": {
+    "firegento": {
+      "type": "composer",
+      "url": "https://packages.firegento.com"
     }
+  }
 }
