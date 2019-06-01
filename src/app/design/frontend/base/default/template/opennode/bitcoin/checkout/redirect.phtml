@@ -57,17 +57,16 @@ $charge = $block->getCharge(); ?>
                 <div class="box-content">
                     <form id="payment-status-unpaid" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
                         <ul class="form-list">
-                            <li style="margin-bottom: 20px;"><?php print $h->__('Your payment has not been seen in the mempool (if using on-chain payment) or settled in the Ligthning Network. If still decide to continue your order will be placed in a <i>Pending Payment</i> status and will be cancelled in 1 hour.'); ?></li>
+                            <li><?php print $h->__('Waiting for you payment to reach the Lightning Network or the Bitcoin Network. Please use one of the QRCodes above to pay for your order.'); ?></li>
 
-
-                            <li class="a-right">
-                                <label for="confirm"><?php print $h->__('I understand. I will continue now instead of waiting for confirmation.'); ?></label>
-                                <input style="vertical-align: middle;" id="confirm" required class="checkbox" type="checkbox">
-                            </li>
-
-                            <li class="a-right">
-                                <button class="button" type="submit"><?php print $h->__('I\'ll pay later'); ?></button>
-                            </li>
+<!--                            <li class="a-right">-->
+<!--                                <label for="confirm">--><?php //print $h->__('I understand. I will continue now instead of waiting for confirmation.'); ?><!--</label>-->
+<!--                                <input style="vertical-align: middle;" id="confirm" required class="checkbox" type="checkbox">-->
+<!--                            </li>-->
+<!---->
+<!--                            <li class="a-right">-->
+<!--                                <button class="button" type="submit">--><?php //print $h->__('I\'ll pay later'); ?><!--</button>-->
+<!--                            </li>-->
                         </ul>
                     </form>
 

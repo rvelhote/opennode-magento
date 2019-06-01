@@ -29,8 +29,7 @@ $helper = Mage::helper('opennode_bitcoin'); ?>
 
 <ul class="form-list" id="payment_form_<?php echo $form->escapeHtml($form->getMethodCode()); ?>" style="display:none;">
     <li>
-        <?php echo $helper->__('After you confirm the order you will be presented with a QR code that contains a unique Bitcoin address.') ?>
-        <?php echo $helper->__('You must send the payment to this address within 1-hour for the order to be confirmed.'); ?>
-        <?php echo $helper->__('If you do not send the payment the order will be automatically cancelled'); ?>
+        <?php echo $helper->__('After you place your order you will be presented with the payment details.') ?>
+        <?php echo $helper->__('Your order will be canceled automatically if you do not pay with an 1-hour period after placing the order.'); ?>
     </li>
 </ul>
