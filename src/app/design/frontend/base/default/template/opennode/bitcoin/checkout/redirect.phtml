@@ -55,7 +55,7 @@ $charge = $block->getCharge(); ?>
         <div class="col-2">
             <div class="box action action-pay">
                 <div class="box-content">
-                    <form id="payment-status-unpaid" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get">
+                    <form id="payment-status-unpaid" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get">
                         <ul class="form-list">
                             <li><?php print $h->__('Waiting for you payment to reach the Lightning Network or the Bitcoin Network. Please use one of the QRCodes above to pay for your order.'); ?></li>
 
@@ -70,7 +70,7 @@ $charge = $block->getCharge(); ?>
                         </ul>
                     </form>
 
-                    <form id="payment-status-processing" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get" style="display: none;">
+                    <form id="payment-status-processing" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get" style="display: none;">
                         <ul class="form-list">
                             <li style="margin-bottom: 20px;">
                                 <p><?php print $h->__('Your payment was seen in the mempool and is now waiting to be included in a block.'); ?></p>
@@ -81,7 +81,7 @@ $charge = $block->getCharge(); ?>
                         </ul>
                     </form>
 
-                    <form id="payment-status-paid" action="<?php print Mage::getUrl('opennode_bitcoin/payment/success'); ?>" method="get" style="display: none;">
+                    <form id="payment-status-paid" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get" style="display: none;">
                         <ul  class="form-list">
                             <li>
                                 <p><?php print $h->__('Your order was paid successfully.'); ?></p>

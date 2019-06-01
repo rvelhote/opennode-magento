@@ -42,7 +42,7 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
      * @param array $args
      * @throws Mage_Core_Exception
      */
-    public function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
 
@@ -118,5 +118,15 @@ class OpenNode_Bitcoin_Block_Payment extends Mage_Core_Block_Template
         /** @var Mage_Core_Model_Session $session */
         $session = Mage::getSingleton('core/session');
         return Mage::getUrl('opennode_bitcoin/payment/cancel', ['form_key' => $session->getFormKey()]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSuccessUrl()
+    {
+        /** @var Mage_Core_Model_Session $session */
+        $session = Mage::getSingleton('core/session');
+        return Mage::getUrl('opennode_bitcoin/payment/success', ['form_key' => $session->getFormKey()]);
     }
 }
