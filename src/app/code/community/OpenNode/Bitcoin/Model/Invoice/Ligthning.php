@@ -64,7 +64,7 @@ class OpenNode_Bitcoin_Model_Invoice_Ligthning extends Varien_Object
     public function getCreatedAtDate()
     {
         return Mage::app()->getLocale()->date(
-            Varien_Date::toTimestamp(date('Y-m-d H:i:s', $this->getCreatedAt())),
+            Varien_Date::toTimestamp($this->getCreatedAt()),
             null,
             null,
             true
@@ -77,7 +77,7 @@ class OpenNode_Bitcoin_Model_Invoice_Ligthning extends Varien_Object
     public function getExpiresAtDate()
     {
         return Mage::app()->getLocale()->date(
-            Varien_Date::toTimestamp(date('Y-m-d H:i:s', $this->getExpiresAt())),
+            Varien_Date::toTimestamp($this->getExpiresAt()),
             null,
             null,
             true
@@ -90,7 +90,7 @@ class OpenNode_Bitcoin_Model_Invoice_Ligthning extends Varien_Object
     public function getSettledAtDate()
     {
         return Mage::app()->getLocale()->date(
-            Varien_Date::toTimestamp(date('Y-m-d H:i:s', $this->getSettledAt())),
+            Varien_Date::toTimestamp($this->getSettledAt()),
             null,
             null,
             true
