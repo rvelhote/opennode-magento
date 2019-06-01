@@ -38,8 +38,7 @@ class OpenNode_Bitcoin_Model_Cron
     }
 
     /**
-     * TODO Add a configuration to determine if the order should still remain after the lightning payreq expires
-     * TODO Add a configuration to specify when orders should be canceled for lack of payment (on-chain)
+     * TODO Add a configuration to specify when orders should be canceled
      */
     public function cancel()
     {
@@ -55,10 +54,11 @@ class OpenNode_Bitcoin_Model_Cron
             ['payment_method' => 'payment.method']
         );
 
-        $orders->addFieldToFilter('payment.method', 'opennode_bitcoin');
         $orders->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+        $orders->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
+        $orders->addFieldToFilter('payment.method', 'opennode_bitcoin');
 
-        if ($orders->getSize()) {
+        if ($orders->getSize() === 0) {
             $this->_logger->info('No orders with the opennode_bitcoin payment method were found!');
             return;
         }
@@ -80,8 +80,14 @@ class OpenNode_Bitcoin_Model_Cron
                 continue;
             }
 
-            // TODO Type hint this entire line
-            $charge = $order->getPayment()->getMethodInstance()->getCharge();
+            /** @var Mage_Sales_Model_Order_Payment $payment */
+            $payment = $order->getPayment();
+
+            /** @var OpenNode_Bitcoin_Model_Bitcoin $method */
+            $method = $payment->getMethodInstance();
+
+            /** @var OpenNode_Bitcoin_Model_Charge $charge */
+            $charge = $method->getCharge();
 
             if (!$charge) {
                 $result->errors++;
@@ -89,27 +95,32 @@ class OpenNode_Bitcoin_Model_Cron
                 continue;
             }
 
-            $expiresAt = $charge->lightning_invoice['expires_at'];
-
-            if ($now < $expiresAt) {
+            if (!$charge->isUnpaid()) {
                 $result->skipped++;
+
+                $format = 'The CHARGE for ORDER %s is already in the %s STATUS';
+                $this->_logger->warn(sprintf($format, $order->getIncrementId(), $charge->getStatus()));
                 continue;
             }
 
-            $comment = $helper->__('Order automatically canceled after the lightning invoice expired');
+            $createdAtTimestamp = $order->getCreatedAtDate()->toString('U');
+            $timeRemaining = ($now - $createdAtTimestamp);
+            if ($timeRemaining < 3600) {
+                $result->skipped++;
+
+                $format = 'ORDER %s still has %s seconds left before cancelation';
+                $this->_logger->warn(sprintf($format, $order->getIncrementId(), $timeRemaining));
+                continue;
+            }
+
+            $comment = $helper->__('Order automatically CANCELED after 1 hour without PAYMENT');
             $order->addStatusHistoryComment($comment);
             $order->cancel();
 
-            try {
-                // TODO Send an email to the user? Perhaps catch the event with the order is canceled including a reason
-                $order->save();
-                $result->canceled++;
-            } catch (Exception $e) {
-                $result->errors++;
-                Mage::logException($e);
-                $this->_logger->error($e->getMessage());
-            }
+            $result->canceled++;
         }
+
+        $orders->save();
 
         $format = 'Finished with %d SKIPPED, %d CANCELED and %s ERRORS';
         $this->_logger->info(sprintf($format, $result->skipped, $result->canceled, $result->errors));
