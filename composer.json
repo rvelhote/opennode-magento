@@ -3,7 +3,8 @@
     "aydin-hassan/magento-core-composer-installer": "*",
     "openmage/magento-lts": "1.9.4.x-dev",
     "phpunit/phpunit": "^6",
-    "aschroder/smtp_pro": "^2.0"
+    "aschroder/smtp_pro": "^2.0",
+    "magento-ecg/coding-standard": "^3.1"
   },
   "extra": {
     "magento-root-dir": "src",
