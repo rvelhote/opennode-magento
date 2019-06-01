@@ -1,8 +1,7 @@
 # OpenNode Magento 1.9 Module
 Magento 1.9 Plugin for OpenNode Bitcoin Payment Gateway
 
-This module is still in development. A basic version of the module is now working which will 
-allow you to:
+This module is still in development little by little
 
 1. Configure API keys in the backoffice
 2. Select the *Bitcoin* payment method during checkout
@@ -16,46 +15,15 @@ The module was only tested with the default theme and Onepage Checkout.
 
 # Missing
 
-- Testing the callbacks (need to install a Ligthning node and get some testnet coins)
-- Handling refunds
-- Handling expired Lightning Network payment requests
 - Configure time-frames for automatic order cancellation
 - Send a cancellation email when an order is canceled automatically via cronjob
 - What to do if the user navigates away from the payment page
 - Validate payment currency during checkout
 - Unit Tests
-- Encapsulate Charges and other stuff on the API (e.g. don't use lightning_invoice['payreq'] directly - use a method for mat)
-- Testing various scenarios and make sure all possibilities are covered
-- More stuff that I forgot to include
 - Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
 - Use an autoloader for the module because for sure most Magento installs don't use firegento/magento with composer
 - Add the OpenNode PHP library to the lib dir
 - Add modman files
-- Move the module content to the root of the repository so it can be drag-and-dropped into Magento
+- Create a build script to generate a release worthy package rather than the source code
 - Include Docker related configurations and allow a full environment to the created with docker-compose
 - Test various PHP versions
-
-# Screenshots
-
-Here are some screenshots of the main sections for this payment method.
-
-## Checkout
-After the customer confirms the order he will be redirected to the payment page.
-
-![https://i.imgur.com/fziVnDw.png](https://i.imgur.com/fziVnDw.png)
-
-## Payment Page
-I have some concerns about this page. Should we let the user navigate away to the success page without 
-payment confirmation? Even though there is a confirmation message some people might be confused and think 
-they have paid (perhaps add an email with payment details?). The asynchronous nature of the payment method 
-allows for the user to pay whenever he wants (at least on-chain). Timeouts must be specified in the backoffice 
-and the interface must make them clear.  
-
-### Waiting for Payment
-![https://i.imgur.com/Z1UOHQo.png](https://i.imgur.com/Z1UOHQo.png)
-
-### Payment Received
-![https://i.imgur.com/p95vHdI.png](https://i.imgur.com/p95vHdI.png)
-
-## Backoffice
-![https://i.imgur.com/bpDVij2.png](https://i.imgur.com/bpDVij2.png)
