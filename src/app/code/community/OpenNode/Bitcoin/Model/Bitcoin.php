@@ -116,6 +116,18 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     /**
      * @return string
      */
+    public function getCurrencyCode()
+    {
+        if (!$this->getOrder()) {
+            return $this->getQuote()->getQuoteCurrencyCode();
+        }
+
+        return $this->getOrder()->getOrderCurrencyCode();
+    }
+
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         /** @var Mage_Core_Helper_Data $core */
@@ -241,7 +253,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
 
         $currencies = $core->jsonDecode($currencies);
 
-        if (!in_array($this->getQuote()->getQuoteCurrencyCode(), $currencies)) {
+        if (!in_array($this->getCurrencyCode(), $currencies)) {
             $message = 'The selected currency is not accepted by the payment gateway';
             Mage::throwException(Mage::helper('opennode_bitcoin')->__($message));
         }
