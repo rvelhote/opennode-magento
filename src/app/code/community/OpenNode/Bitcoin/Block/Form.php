@@ -26,12 +26,25 @@
  */
 class OpenNode_Bitcoin_Block_Form extends Mage_Payment_Block_Form
 {
+    /** @var OpenNode_Bitcoin_Helper_Config */
+    protected $_config;
+
     /**
-     * 
+     *
      */
     public function _construct()
     {
         parent::_construct();
+
+        $this->_config = Mage::helper('opennode_bitcoin/config');
         $this->setTemplate('opennode/bitcoin/form.phtml');
+    }
+
+    /**
+     * @return OpenNode_Bitcoin_Helper_Config
+     */
+    public function getConfig()
+    {
+        return $this->_config;
     }
 }

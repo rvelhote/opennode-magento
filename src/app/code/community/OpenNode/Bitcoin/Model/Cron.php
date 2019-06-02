@@ -29,12 +29,16 @@ class OpenNode_Bitcoin_Model_Cron
     /** @var OpenNode_Bitcoin_Helper_Logger */
     protected $_logger;
 
+    /** @var OpenNode_Bitcoin_Helper_Config */
+    protected $_config;
+
     /**
      * OpenNode_Bitcoin_Model_Cron constructor.
      */
     public function __construct()
     {
         $this->_logger = Mage::helper('opennode_bitcoin/logger');
+        $this->_config = Mage::helper('opennode_bitcoin/config');
     }
 
     /**
@@ -105,19 +109,34 @@ class OpenNode_Bitcoin_Model_Cron
 
             $createdAtTimestamp = $order->getCreatedAtDate()->toString('U');
             $timeRemaining = ($now - $createdAtTimestamp);
-            if ($timeRemaining < 3600) {
+
+            if ($timeRemaining < $this->_config->getCancelationTimeframeInSeconds()) {
                 $result->skipped++;
 
-                $format = 'ORDER %s still has %s seconds left before cancelation';
-                $this->_logger->warn(sprintf($format, $order->getIncrementId(), $timeRemaining));
+                $format = 'ORDER %s is still within the %d hour period before cancelation';
+                $this->_logger->warn(sprintf($format, $order->getIncrementId(),
+                    $this->_config->getCancelationTimeframe()));
                 continue;
             }
 
-            $comment = $helper->__('Order automatically CANCELED after 1 hour without PAYMENT');
-            $order->addStatusHistoryComment($comment);
-            $order->cancel();
+            $format = 'Order automatically CANCELED after %d hour(s) without PAYMENT';
+            $comment = $helper->__($format, $this->_config->getCancelationTimeframe());
 
-            $result->canceled++;
+            $order->cancel();
+            $order->addStatusHistoryComment($comment);
+
+            if ($order->isCanceled()) {
+                $result->canceled++;
+
+                $format = 'ORDER %s is now canceled after being %d hours without payment';
+                $this->_logger->error(sprintf($format, $order->getIncrementId(),
+                    $this->_config->getCancelationTimeframe()));
+            } else {
+                $result->errors++;
+
+                $format = 'Something wrong with ORDER %s. It was not canceled when it should have been';
+                $this->_logger->error(sprintf($format, $order->getIncrementId()));
+            }
         }
 
         $orders->save();

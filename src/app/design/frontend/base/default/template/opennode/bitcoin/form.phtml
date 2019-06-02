@@ -27,9 +27,10 @@ $form = $this;
 /** @var OpenNode_Bitcoin_Helper_Data $helper */
 $helper = Mage::helper('opennode_bitcoin'); ?>
 
-<ul class="form-list" id="payment_form_<?php echo $form->escapeHtml($form->getMethodCode()); ?>" style="display:none;">
+<ul class="form-list" id="payment_form_<?php echo $form->escapeHtml($form->getMethodCode()); ?>">
     <li>
         <?php echo $helper->__('After you place your order you will be presented with the payment details.') ?>
-        <?php echo $helper->__('Your order will be canceled automatically if you do not pay with an 1-hour period after placing the order.'); ?>
+        <?php echo $helper->__('Your order will be canceled automatically if you do not pay within a %d hour ' .
+            'period after placing the order.', $form->getConfig()->getCancelationTimeframe()); ?>
     </li>
 </ul>

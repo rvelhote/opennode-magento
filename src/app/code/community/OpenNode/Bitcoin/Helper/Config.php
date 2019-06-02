@@ -103,4 +103,12 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
 
         return $timeframe;
     }
+
+    /**
+     * @return int
+     */
+    public function getCancelationTimeframeInSeconds()
+    {
+        return $this->getCancelationTimeframe() * 3600;
+    }
 }
