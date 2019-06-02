@@ -35,11 +35,16 @@ $block = $this; ?>
 <?php $charge = $block->getCharge(); ?>
 <?php print $helper->__('Bitcoin'); ?>
 
+<?php if (is_null($charge)) : ?>
+    <?php print $helper->__('A valid CHARGE was found for this order. Please contact customer support.'); ?>
+    <?php return; ?>
+<?php endif; ?>
+
 <table>
     <tbody>
     <tr>
         <td><?php print $helper->__('Status'); ?>:</td>
-        <td><?php print $block->escapeHtml($charge->status); ?></td>
+        <td><?php print $block->escapeHtml($charge->getStatusLabel()); ?></td>
     </tr>
 
     <?php if ($charge->isUnpaid()) : ?>

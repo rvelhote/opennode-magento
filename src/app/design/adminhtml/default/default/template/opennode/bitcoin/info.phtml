@@ -45,7 +45,7 @@ $charge = $block->getCharge(); ?>
     </tr>
     <tr>
         <td><?php print $helper->__('Status'); ?></td>
-        <td><?php print $block->escapeHtml($charge->getStatus()); ?></td>
+        <td><?php print $block->escapeHtml($charge->getStatusLabel()); ?></td>
     </tr>
     <tr>
         <td><?php print $helper->__('Auto-Settle'); ?></td>

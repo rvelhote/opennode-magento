@@ -46,6 +46,9 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     /** @var Mage_Sales_Model_Order */
     protected $_order = null;
 
+    /** @var OpenNode_Bitcoin_Helper_Data */
+    protected $_helper = null;
+
     /**
      * OpenNode_Bitcoin_Model_Charge constructor.
      * @param $args
@@ -53,6 +56,7 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     public function __construct($args)
     {
         parent::__construct($args);
+        $this->_helper = Mage::helper('opennode_bitcoin');
     }
 
     /**
@@ -149,6 +153,22 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     public function isUnpaid()
     {
         return $this->getStatus() === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusLabel()
+    {
+        if ($this->isPaid()) {
+            return $this->_helper->__('Paid');
+        }
+
+        if ($this->isProcessing()) {
+            return $this->_helper->__('Processing');
+        }
+
+        return $this->_helper->__('Unpaid');
     }
 
     /**
