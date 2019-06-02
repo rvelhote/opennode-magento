@@ -10,9 +10,6 @@
     "magento-root-dir": "src",
     "magento-core-package-type": "magento-source"
   },
-  "require": {
-    "opennode/opennode-php": "^1.0"
-  },
   "suggest": {
     "ext-bcmath": "Make sure Sats to BTC is converted with good division methods"
   },
