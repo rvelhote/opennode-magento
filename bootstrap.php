@@ -22,6 +22,6 @@
  */
 ini_set('memory_limit', '512M');
 
-require_once('./src/app/Mage.php');
+require_once('src/app/Mage.php');
 
 Mage::app();

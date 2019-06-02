@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ChargeTest extends TestCase
 {
+    use OpenNode_Bitcoin_Test_Trait_Order;
+
     /** @var OpenNode_Bitcoin_Helper_Config */
     protected $config;
 
@@ -93,70 +95,5 @@ class ChargeTest extends TestCase
         $this->getConnection()->rollBack();
     }
 
-    /**
-     * @return Mage_Sales_Model_Order
-     * @throws Exception
-     */
-    protected function createNewOrder()
-    {
-        $store = Mage::app()->getStore(1);
 
-        $paymentMethod = 'opennode_bitcoin';
-        $shippingMethod = 'flatrate_flatrate';
-
-        $address = [
-            'customer_address_id' => '',
-            'prefix' => '',
-            'firstname' => 'Satoshi',
-            'middlename' => '',
-            'lastname' => 'Nakamoto',
-            'suffix' => '',
-            'company' => '',
-            'street' => [
-                '0' => 'Bitcoin Avenue',
-                '1' => '9th of January 2009',
-            ],
-            'city' => 'Culver City',
-            'country_id' => 'US',
-            'region' => 'California',
-            'region_id' => '12',
-            'postcode' => '90232',
-            'telephone' => '888-888-8888',
-            'fax' => '',
-            'save_in_address_book' => 1,
-        ];
-
-        /** @var Mage_Sales_Model_Quote $quote */
-        $quote = Mage::getModel('sales/quote');
-        $quote->setStore($store);
-
-        $quote->setQuoteCurrencyCode($store->getBaseCurrencyCode());
-        $quote->setBaseCurrencyCode($store->getBaseCurrencyCode());
-
-        $quote->getBillingAddress()->addData($address);
-        $quote->getShippingAddress()->addData($address);
-
-        $quote->setCustomerFirstname('Satoshi');
-        $quote->setCustomerLastname('Satoshi');
-        $quote->setCustomerEmail('satoshi@nakamoto.io');
-
-        /** @var Mage_Catalog_Model_Product $product */
-        foreach ([395, 380] as $productId) {
-            $product = Mage::getModel('catalog/product')->load($productId);
-            $quote->addProduct($product, 1);
-        }
-
-        $quote->getShippingAddress()->setCollectShippingRates(true)->collectShippingRates();
-        $quote->getShippingAddress()->setShippingMethod($shippingMethod)->setData('payment_method', $paymentMethod);
-
-        $quote->getPayment()->importData(['method' => $paymentMethod]);
-        $quote->collectTotals();
-        $quote->save();
-
-        /** @var Mage_Sales_Model_Service_Quote $service */
-        $service = Mage::getModel('sales/service_quote', $quote);
-        $service->submitAll();
-
-        return $service->getOrder();
-    }
 }
