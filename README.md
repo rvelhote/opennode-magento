@@ -13,6 +13,12 @@ a couple of QR Codes with the payment addresses (or links to pay with the wallet
 
 The module was only tested with the default theme and Onepage Checkout.
 
+# Check it Out (Only for test purposes!)
+
+1. Download the Magento Sample Data from *Missing Link* extract it and copy to the DATA folder
+2. Run `bash shell/install.bash` from the root directory of the project
+3. Read the information in the end on how to add your DEVELOPMENT key 
+
 # Missing
 
 - Send a cancellation email when an order is canceled automatically via cronjob
@@ -23,4 +29,3 @@ The module was only tested with the default theme and Onepage Checkout.
 - Create a build script to generate a release worthy package rather than the source code
 - Include Docker related configurations and allow a full environment to the created with docker-compose
 - Test various PHP versions
-- Handle the PROCESSING state correctly. As it is now orders in the PROCESSING state might still be canceled
