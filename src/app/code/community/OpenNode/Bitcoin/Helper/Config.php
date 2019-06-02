@@ -89,4 +89,18 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
     {
         return (string)Mage::getStoreConfig('payment/opennode_bitcoin/auto_settle');
     }
+
+    /**
+     * @return int
+     */
+    public function getCancelationTimeframe()
+    {
+        $timeframe = intval(Mage::getStoreConfig('payment/opennode_bitcoin/cancelation_timeframe'));
+
+        if ($timeframe <= 0) {
+            $timeframe = 1;
+        }
+
+        return $timeframe;
+    }
 }
