@@ -42,7 +42,7 @@ $block = $this; ?>
         <td><?php print $block->escapeHtml($charge->status); ?></td>
     </tr>
 
-    <?php if ($charge->status === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNPAID) : ?>
+    <?php if ($charge->isUnpaid()) : ?>
     <tr>
         <td colspan="2">
             <strong><?php print $helper->__('Your order is still unpaid. ') ?></strong>
@@ -50,25 +50,14 @@ $block = $this; ?>
     </tr>
     <tr>
         <td>
-            <a href="lightning:<?php print $block->escapeHtml($charge->lightning_invoice['payreq']); ?>"><?php print $h->__('Pay with Lightning'); ?></a>
-            <a href="bitcoin:<?php print $block->escapeHtml($charge->chain_invoice['address']); ?>"><?php print $h->__('Pay On-Chain'); ?></a>
+            <a href="<?php print $block->escapeHtml($charge->getLightningInvoice()->formatUri()); ?>">
+                <?php print $helper->__('Pay via Lightning Network'); ?>
+            </a>
+            <a href="<?php print $block->escapeHtml($charge->getChainInvoice()->formatUri($charge->getAmountBtc(), 'Pay')); ?>">
+                <?php print $helper->__('Pay On-Chain'); ?>
+            </a>
         </td>
     </tr>
-    <?php endif; ?>
-
-    <?php if (isset($charge->chain_invoice['tx'])) : ?>
-        <tr>
-            <td><?php print $helper->__('Transaction ID'); ?></td>
-            <td>
-                <?php if (isset($charge->chain_invoice['tx'])) : ?>
-                    <a target="_blank" rel="noopener noreferrer" href="https://blockstream.info/tx/<?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>">
-                        <?php print $block->escapeHtml($charge->chain_invoice['tx']); ?>
-                    </a>
-                <?php else: ?>
-                    <?php print $helper->__('No transaction seen on the blockchain yet'); ?>
-                <?php endif; ?>
-            </td>
-        </tr>
     <?php endif; ?>
     </tbody>
 </table>
