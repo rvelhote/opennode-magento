@@ -63,7 +63,9 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
      */
     public function getProductionApiKey()
     {
-        return Mage::getStoreConfig('payment/opennode_bitcoin/production_api_key');
+        /** @var Mage_Core_Helper_Data $core */
+        $core = Mage::helper('core');
+        return $core->decrypt(Mage::getStoreConfig('payment/opennode_bitcoin/production_api_key'));
     }
 
     /**
@@ -71,7 +73,9 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
      */
     public function getDevelopmentApiKey()
     {
-        return Mage::getStoreConfig('payment/opennode_bitcoin/development_api_key');
+        /** @var Mage_Core_Helper_Data $core */
+        $core = Mage::helper('core');
+        return $core->decrypt(Mage::getStoreConfig('payment/opennode_bitcoin/development_api_key'));
     }
 
     /**
