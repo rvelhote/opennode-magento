@@ -36,28 +36,6 @@ trait OpenNode_Bitcoin_Test_Trait_Order {
         $paymentMethod = 'opennode_bitcoin';
         $shippingMethod = 'flatrate_flatrate';
 
-        $address = [
-            'customer_address_id' => '',
-            'prefix' => '',
-            'firstname' => 'Satoshi',
-            'middlename' => '',
-            'lastname' => 'Nakamoto',
-            'suffix' => '',
-            'company' => '',
-            'street' => [
-                '0' => 'Bitcoin Avenue',
-                '1' => '9th of January 2009',
-            ],
-            'city' => 'Culver City',
-            'country_id' => 'US',
-            'region' => 'California',
-            'region_id' => '12',
-            'postcode' => '90232',
-            'telephone' => '888-888-8888',
-            'fax' => '',
-            'save_in_address_book' => 1,
-        ];
-
         /** @var Mage_Sales_Model_Quote $quote */
         $quote = Mage::getModel('sales/quote');
         $quote->setStore($store);
@@ -65,12 +43,9 @@ trait OpenNode_Bitcoin_Test_Trait_Order {
         $quote->setQuoteCurrencyCode($store->getBaseCurrencyCode());
         $quote->setBaseCurrencyCode($store->getBaseCurrencyCode());
 
-        $quote->getBillingAddress()->addData($address);
-        $quote->getShippingAddress()->addData($address);
-
-        $quote->setCustomerFirstname('Satoshi');
-        $quote->setCustomerLastname('Satoshi');
-        $quote->setCustomerEmail('satoshi@nakamoto.io');
+        /** @var Mage_Customer_Model_Customer $customer */
+        $customer = Mage::getModel('customer/customer')->load(60);
+        $quote->assignCustomer($customer);
 
         /** @var Mage_Catalog_Model_Product $product */
         foreach ([395, 380] as $productId) {
