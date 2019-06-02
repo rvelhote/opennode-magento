@@ -14,7 +14,9 @@ echo "INSTALLED n98-magerun to the BIN directory"
 
 rm -f src/app/etc/local.xml
 
-mysql -u$USER -p$PASS -h$HOST -e "drop database ${DATABASE}; create database ${DATABASE}"
+mysql -u$USER -p$PASS -h$HOST -e "drop database ${DATABASE};"
+mysql -u$USER -p$PASS -h$HOST -e "create database ${DATABASE};"
+
 mysql -u$USER -p$PASS -h$HOST $DATABASE < data/magento-sample-data/magento_sample_data_for_1.9.2.4.sql
 echo "IMPORTED the SAMPLE DATABASE"
 
