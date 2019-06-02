@@ -15,15 +15,12 @@ The module was only tested with the default theme and Onepage Checkout.
 
 # Missing
 
-- Configure time-frames for automatic order cancellation
 - Send a cancellation email when an order is canceled automatically via cronjob
 - What to do if the user navigates away from the payment page
-- Validate payment currency during checkout
 - Unit Tests
 - Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
-- Use an autoloader for the module because for sure most Magento installs don't use firegento/magento with composer
-- Add the OpenNode PHP library to the lib dir
 - Add modman files
 - Create a build script to generate a release worthy package rather than the source code
 - Include Docker related configurations and allow a full environment to the created with docker-compose
 - Test various PHP versions
+- Handle the PROCESSING state correctly. As it is now orders in the PROCESSING state might still be canceled
