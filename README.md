@@ -7,25 +7,57 @@ This module is still in development little by little
 2. Select the *Bitcoin* payment method during checkout
 3. When placing the order you will be redirected to a page where customers are presented with 
 a couple of QR Codes with the payment addresses (or links to pay with the wallet)
-4. Customers can pay and then move to the default Magento success page. A task is continuously checking for the payment status in the background.
-5. The callback will send the confirmation email once the *paid* status has been received
-6. A cronjob will cancel *Pending Payment* orders automatically
+4. Customers can pay and then move to the default Magento success page. A task is continuously checking for the payment 
+status in the background and informs the user of the progress
+5. A cronjob will cancel *Pending Payment* orders automatically
 
 The module was only tested with the default theme and Onepage Checkout.
 
-# Check it Out (Only for test purposes!)
+# Requirements
 
-1. Download the Magento Sample Data from *Missing Link* extract it and copy to the DATA folder
-2. Run `bash shell/install.bash` from the root directory of the project
-3. Read the information in the end on how to add your DEVELOPMENT key 
+- Magento 1.9 (all all the basic requirements that go with it)
+- Only PHP 7.0+ is supported
+
+# Check it Out (For TEST environments only)
+
+1. Run `docker-compose up` to setup an environment
+2. You should add the following lines to your hosts file `127.0.0.1 development.opennode.co db mailhog`
+3. [Download](magento-sample-data.zip) the Magento Sample Data. You don't have to use the sample data of course but 
+that means you wil have to create products and categories yourself
+4. Extract the sample data and copy the resulting folder to the *data* folder 
+4. Run `bash shell/install.bash` from the root directory of the project. This will setup a default Magento store with 
+actual products and categories. All products will be discounted by 99% to make sure you don't spend all your testnet 
+coins
+5. Add your OpenNode Development Key in `System » Configuration » Payment Methods » OpenNode Bitcoin` and configure 
+anything else you need
+
+# Sample Environment
+
+Backend: `http://development.opennode.co/admin/`
+
+User: `admin`
+
+Pass: `password123`
+
+---------------------------------------
+
+Frontend: `http://development.opennode.co/`
+
+User: `janedoe@example.com`
+
+Pass: `password123`
+
+# Cronjob
+
+To test the Crojob that handles the cancelation of pending order run the following command from the project root
+`./bin/n98-magerun.phar sys:cron:run opennode_bitcoin`
 
 # Missing
 
-- Send a cancellation email when an order is canceled automatically via cronjob
-- What to do if the user navigates away from the payment page
-- Unit Tests
-- Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
 - Add modman files
+- Add translation files
+- What to do if the user navigates away from the payment page (perhaps create a link in the confirmation email)
+- Send a cancellation email when an order is canceled automatically via cronjob
+- Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
 - Create a build script to generate a release worthy package rather than the source code
-- Include Docker related configurations and allow a full environment to the created with docker-compose
-- Test various PHP versions
+- Better Unit Test coverage (PHP and Javascript)
