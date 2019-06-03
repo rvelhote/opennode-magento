@@ -70,6 +70,21 @@ $charge = $block->getCharge(); ?>
                         </ul>
                     </form>
 
+                    <form id="payment-status-underpaid" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get">
+                        <ul class="form-list">
+                            <li><?php print $h->__('A transaction has been seen regarding your payment but the amount was not the full amount required by this order. Please send the remaining amount.'); ?></li>
+
+                            <!--                            <li class="a-right">-->
+                            <!--                                <label for="confirm">--><?php //print $h->__('I understand. I will continue now instead of waiting for confirmation.'); ?><!--</label>-->
+                            <!--                                <input style="vertical-align: middle;" id="confirm" required class="checkbox" type="checkbox">-->
+                            <!--                            </li>-->
+                            <!---->
+                            <!--                            <li class="a-right">-->
+                            <!--                                <button class="button" type="submit">--><?php //print $h->__('I\'ll pay later'); ?><!--</button>-->
+                            <!--                            </li>-->
+                        </ul>
+                    </form>
+
                     <form id="payment-status-processing" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get" style="display: none;">
                         <ul class="form-list">
                             <li style="margin-bottom: 20px;">

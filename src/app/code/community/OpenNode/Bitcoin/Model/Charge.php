@@ -156,6 +156,14 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * @return bool
+     */
+    public function isUnderpaid()
+    {
+        return $this->getStatus() === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNDERPAID;
+    }
+
+    /**
      * @return string
      */
     public function getStatusLabel()
@@ -166,6 +174,10 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
 
         if ($this->isProcessing()) {
             return $this->_helper->__('Processing');
+        }
+
+        if ($this->isUnderpaid()) {
+            return $this->_helper->__('Underpaid');
         }
 
         return $this->_helper->__('Unpaid');
@@ -211,6 +223,7 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
                 'paid' => $this->isPaid(),
                 'unpaid' => $this->isUnpaid(),
                 'processing' => $this->isProcessing(),
+                'underpaid' => $this->isUnderpaid(),
             ],
             'lightning' => [
                 'address' => $this->getLightningInvoice()->getAddress(),

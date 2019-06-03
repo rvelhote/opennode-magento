@@ -40,6 +40,7 @@ export default class Status {
       unpaid: document.getElementById('payment-status-unpaid'),
       processing: document.getElementById('payment-status-processing'),
       paid: document.getElementById('payment-status-paid'),
+      underpaid: document.getElementById('payment-status-underpaid'),
     };
 
     setInterval(this.onInterval.bind(this), INTERVAL);
@@ -88,18 +89,28 @@ export default class Status {
       this.elements.unpaid.style.display = 'block';
       this.elements.processing.style.display = 'none';
       this.elements.paid.style.display = 'none';
+      this.elements.underpaid.style.display = 'none';
     }
 
     if (r.status.processing) {
       this.elements.unpaid.style.display = 'none';
       this.elements.processing.style.display = 'block';
       this.elements.paid.style.display = 'none';
+      this.elements.underpaid.style.display = 'none';
     }
 
     if (r.status.paid) {
       this.elements.unpaid.style.display = 'none';
       this.elements.processing.style.display = 'none';
       this.elements.paid.style.display = 'block';
+      this.elements.underpaid.style.display = 'none';
+    }
+
+    if (r.status.underpaid) {
+      this.elements.unpaid.style.display = 'none';
+      this.elements.processing.style.display = 'none';
+      this.elements.paid.style.display = 'none';
+      this.elements.underpaid.style.display = 'block';
     }
   }
 
