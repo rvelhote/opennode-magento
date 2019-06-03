@@ -24,7 +24,7 @@ The module was only tested with the default theme and Onepage Checkout.
 2. Run `npm install` and then `npm run watch`
 3. Run `docker-compose up` to setup an environment
 4. You should add the following lines to your hosts file `127.0.0.1 development.opennode.co db mailhog`
-5. [Download](magento-sample-data.zip) the Magento Sample Data. You don't have to use the sample data of course but 
+5. [Download](https://anonymousfiles.io/f/magento-sample-data.zip) the Magento Sample Data. You don't have to use the sample data of course but 
 that means you wil have to create products and categories yourself
 6. Extract the sample data and copy the resulting folder to the *data* folder 
 7. Run `bash shell/install.bash` from the root directory of the project. This will setup a default Magento store with 
