@@ -20,31 +20,29 @@ The module was only tested with the default theme and Onepage Checkout.
 
 # Check it Out (For TEST environments only)
 
-1. Run `docker-compose up` to setup an environment
-2. You should add the following lines to your hosts file `127.0.0.1 development.opennode.co db mailhog`
-3. [Download](magento-sample-data.zip) the Magento Sample Data. You don't have to use the sample data of course but 
+1. Run `composer install`
+2. Run `npm install` and then `npm run watch`
+3. Run `docker-compose up` to setup an environment
+4. You should add the following lines to your hosts file `127.0.0.1 development.opennode.co db mailhog`
+5. [Download](magento-sample-data.zip) the Magento Sample Data. You don't have to use the sample data of course but 
 that means you wil have to create products and categories yourself
-4. Extract the sample data and copy the resulting folder to the *data* folder 
-4. Run `bash shell/install.bash` from the root directory of the project. This will setup a default Magento store with 
+6. Extract the sample data and copy the resulting folder to the *data* folder 
+7. Run `bash shell/install.bash` from the root directory of the project. This will setup a default Magento store with 
 actual products and categories. All products will be discounted by 99% to make sure you don't spend all your testnet 
 coins
-5. Add your OpenNode Development Key in `System » Configuration » Payment Methods » OpenNode Bitcoin` and configure 
+8. Add your OpenNode Development Key in `System » Configuration » Payment Methods » OpenNode Bitcoin` and configure 
 anything else you need
 
 # Sample Environment
 
 Backend: `http://development.opennode.co/admin/`
-
 User: `admin`
-
 Pass: `password123`
 
 ---------------------------------------
 
 Frontend: `http://development.opennode.co/`
-
 User: `janedoe@example.com`
-
 Pass: `password123`
 
 # Cronjob
@@ -61,3 +59,4 @@ To test the Crojob that handles the cancelation of pending order run the followi
 - Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
 - Create a build script to generate a release worthy package rather than the source code
 - Better Unit Test coverage (PHP and Javascript)
+- Convert the Javascript part to Typescript
