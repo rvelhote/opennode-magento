@@ -38,6 +38,9 @@ class OpenNode_Bitcoin_Model_Cron
     /** @var OpenNode_Bitcoin_Helper_Database */
     protected $_database;
 
+    /** @var OpenNode_Bitcoin_Helper_Mailer */
+    protected $_mailer;
+
     /**
      * OpenNode_Bitcoin_Model_Cron constructor.
      */
@@ -47,6 +50,7 @@ class OpenNode_Bitcoin_Model_Cron
         $this->_logger = Mage::helper('opennode_bitcoin/logger');
         $this->_config = Mage::helper('opennode_bitcoin/config');
         $this->_database = Mage::helper('opennode_bitcoin/database');
+        $this->_mailer = Mage::helper('opennode_bitcoin/mailer');
     }
 
     /**
@@ -54,8 +58,10 @@ class OpenNode_Bitcoin_Model_Cron
      */
     public function cancel()
     {
-        $orders = $this->_database->getPendingPaymentOrders();
+        $defaultEmailComment = 'Your order has been automatically canceled because it was not paid within %d hour(s) ' .
+            'of being placed.';
 
+        $orders = $this->_database->getPendingPaymentOrders();
         if ($orders->getSize() === 0) {
             $this->_logger->info('No orders with the opennode_bitcoin payment method were found!');
             return;
@@ -118,6 +124,19 @@ class OpenNode_Bitcoin_Model_Cron
 
             $order->cancel();
             $order->addStatusHistoryComment($comment);
+
+            try {
+                $this->_mailer->sendCancellationEmail([
+                    'customer_email' => $order->getCustomerEmail(),
+                    'customer_name' => $order->getCustomerName(),
+                    'store_id' => $order->getStoreId(),
+                    'order' => $order,
+                    'comment' => $this->_helper->__($defaultEmailComment, $this->_config->getCancelationTimeframe()),
+                ]);
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->_logger->error($e->getMessage());
+            }
 
             if ($order->isCanceled()) {
                 $result->canceled++;
