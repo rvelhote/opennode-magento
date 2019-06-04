@@ -71,6 +71,12 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
 
         try {
             $order->getPayment()->capture(null);
+
+            if (!$order->getEmailSent()) {
+                $order->queueNewOrderEmail();
+                $order->setEmailSent(true);
+            }
+
             $order->save();
         } catch (Exception $e) {
             Mage::logException($e);
