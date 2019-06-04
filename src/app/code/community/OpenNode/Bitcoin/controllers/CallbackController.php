@@ -76,7 +76,5 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
             Mage::logException($e);
             $this->getResponse()->setHttpResponseCode(500);
         }
-
-        return;
     }
 }
