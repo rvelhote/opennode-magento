@@ -52,10 +52,8 @@ To test the Crojob that handles the cancelation of pending order run the followi
 
 # Missing
 
-- Add modman files
 - Add translation files
 - What to do if the user navigates away from the payment page (perhaps create a link in the confirmation email)
-- Send a cancellation email when an order is canceled automatically via cronjob
 - Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
 - Create a build script to generate a release worthy package rather than the source code
 - Better Unit Test coverage (PHP and Javascript)
