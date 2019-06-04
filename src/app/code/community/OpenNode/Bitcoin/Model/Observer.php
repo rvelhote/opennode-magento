@@ -31,6 +31,12 @@ class OpenNode_Bitcoin_Model_Observer extends Mage_Core_Helper_Abstract
      */
     public function systemConfigSectionChangeAfter($observer)
     {
+        /** @var Varien_Event $event */
+        $event = $observer->getData('event');
+        if ($event->getData('name') !== 'admin_system_config_changed_section_payment') {
+            return;
+        }
+
         /** @var Mage_Admin_Model_Session $session */
         $session = Mage::getSingleton('adminhtml/session');
 
