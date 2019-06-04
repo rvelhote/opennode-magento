@@ -60,8 +60,9 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
 
             $this->loadLayout();
 
-            $title = $helper->__('Pay your order with Bitcoin', $order->getIncrementId());
-            $this->getLayout()->getBlock('head')->setTitle($title);
+            /** @var Mage_Page_Block_Html_Head $head */
+            $head = $this->getLayout()->getBlock('head');
+            $head->setTitle($helper->__('Pay your order with Bitcoin', $order->getIncrementId()));
 
             $this->getLayout()->getBlock('content')->append($block);
             $this->renderLayout();
@@ -81,13 +82,12 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
 
         try {
             $order = $session->getLastRealOrder();
-            $session->setLastSuccessQuoteId($order->getQuoteId());
+            $session->setData('last_success_quote_id', $order->getQuoteId());
             $this->_redirect('checkout/onepage/success');
             return;
-        } catch (Mage_Core_Exception $e) {
-            $this->_getCheckout()->addError($e->getMessage());
         } catch (Exception $e) {
             Mage::logException($e);
+            $session->addError($e->getMessage());
         }
 
         $this->_redirect('checkout/cart');
@@ -170,6 +170,5 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
 
         $this->getResponse()->setHeader('Content-Type', 'application/json');
         $this->getResponse()->setBody($method->getCharge()->asJson());
-        return;
     }
 }

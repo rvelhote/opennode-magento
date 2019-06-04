@@ -31,15 +31,6 @@
 class OpenNode_Bitcoin_Model_Invoice_Ligthning extends Varien_Object
 {
     /**
-     * OpenNode_Bitcoin_Model_Invoice_Ligthning constructor.
-     * @param array $args
-     */
-    public function __construct($args = [])
-    {
-        parent::__construct($args);
-    }
-
-    /**
      * @return string
      */
     public function getAddress()

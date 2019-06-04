@@ -108,7 +108,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     public function getQuote()
     {
         if (!$this->_quote) {
-            /** @var \Mage_Sales_Model_Quote_Payment $payment */
+            /** @var Mage_Sales_Model_Quote_Payment $payment */
             $payment = $this->getInfoInstance();
             $this->_quote = $payment->getQuote();
         }

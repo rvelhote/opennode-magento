@@ -69,7 +69,7 @@ class ChargeTest extends TestCase
     }
 
     /**
-     * @return \Varien_Db_Adapter_Interface
+     * @return Varien_Db_Adapter_Interface
      */
     protected function getConnection()
     {

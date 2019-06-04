@@ -29,15 +29,6 @@
 class OpenNode_Bitcoin_Model_Invoice_OnChain extends Varien_Object
 {
     /**
-     * OpenNode_Bitcoin_Model_Invoice_OnChain constructor.
-     * @param array $args
-     */
-    public function __construct($args = [])
-    {
-        parent::__construct($args);
-    }
-
-    /**
      * @return string
      */
     public function getAddress()

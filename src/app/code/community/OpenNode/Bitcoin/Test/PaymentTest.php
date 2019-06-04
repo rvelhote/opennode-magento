@@ -30,7 +30,7 @@ class PaymentTest extends TestCase
     use OpenNode_Bitcoin_Test_Trait_Order;
 
     /**
-     * @return \Varien_Db_Adapter_Interface
+     * @return Varien_Db_Adapter_Interface
      */
     protected function getConnection()
     {
