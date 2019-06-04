@@ -44,11 +44,35 @@ class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getTransactionExplorerUrl($tx)
     {
-        if($this->_config->isTestMode()) {
+        if ($this->_config->isTestMode()) {
             return sprintf('https://blockstream.info/testnet/tx/%s', $tx);
         }
 
         return sprintf('https://blockstream.info/tx/%s', $tx);
+    }
+
+    /**
+     * @throws Zend_Cache_Exception
+     * @throws Zend_Http_Client_Exception
+     */
+    public function getAcceptedCurrencies()
+    {
+        /** @var Mage_Core_Helper_Data $core */
+        $core = Mage::helper('core');
+        $cache = Mage::app()->getCache();
+
+        $currencies = $cache->load('opennode_bitcoin_currencies');
+        if (!$currencies) {
+            $http = new Varien_Http_Client('https://api.opennode.co/v1/currencies');
+
+            $response = $http->request(Varien_Http_Client::GET)->getBody();
+            $response = $core->jsonDecode($response);
+
+            $currencies = $core->jsonEncode($response['data']);
+            $cache->save($currencies, 'opennode_bitcoin_currencies', ['OPENNODE']);
+        }
+
+        return $core->jsonDecode($currencies);
     }
 
     /**
@@ -57,7 +81,7 @@ class OpenNode_Bitcoin_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getAddressExplorerUrl($address)
     {
-        if($this->_config->isTestMode()) {
+        if ($this->_config->isTestMode()) {
             return sprintf('https://blockstream.info/testnet/address/%s', $address);
         }
 

@@ -68,6 +68,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     /** @var OpenNode_Bitcoin_Helper_Logger */
     protected $_logger;
 
+    /** @var OpenNode_Bitcoin_Helper_Data */
+    protected $_helper;
+
     /** @var bool */
     protected $_canCapture = true;
 
@@ -84,6 +87,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
         // FIXME Perhaps use getConfigData instead of this helper?
         $this->_config = Mage::helper('opennode_bitcoin/config');
         $this->_logger = Mage::helper('opennode_bitcoin/logger');
+        $this->_helper = Mage::helper('opennode_bitcoin');
     }
 
     /**
@@ -239,24 +243,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function validate()
     {
-        /** @var Mage_Core_Helper_Data $core */
-        $core = Mage::helper('core');
-        $cache = Mage::app()->getCache();
-
-        $currencies = $cache->load('opennode_bitcoin_currencies');
-        if (!$currencies) {
-            $http = new Varien_Http_Client('https://api.opennode.co/v1/currencies');
-
-            $response = $http->request(Varien_Http_Client::GET)->getBody();
-            $response = $core->jsonDecode($response);
-
-            $currencies = $core->jsonEncode($response['data']);
-            $cache->save($currencies, 'opennode_bitcoin_currencies', ['OPENNODE']);
-        }
-
-        $currencies = $core->jsonDecode($currencies);
-
-        if (!in_array($this->getCurrencyCode(), $currencies)) {
+        if (!in_array($this->getCurrencyCode(), $this->_helper->getAcceptedCurrencies())) {
             $message = 'The selected currency is not accepted by the payment gateway';
             Mage::throwException(Mage::helper('opennode_bitcoin')->__($message));
         }
