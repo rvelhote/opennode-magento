@@ -32,35 +32,29 @@ class OpenNode_Bitcoin_Model_Cron
     /** @var OpenNode_Bitcoin_Helper_Config */
     protected $_config;
 
+    /** @var OpenNode_Bitcoin_Helper_Data */
+    protected $_helper;
+
+    /** @var OpenNode_Bitcoin_Helper_Database */
+    protected $_database;
+
     /**
      * OpenNode_Bitcoin_Model_Cron constructor.
      */
     public function __construct()
     {
+        $this->_helper = Mage::helper('opennode_bitcoin');
         $this->_logger = Mage::helper('opennode_bitcoin/logger');
         $this->_config = Mage::helper('opennode_bitcoin/config');
+        $this->_database = Mage::helper('opennode_bitcoin/database');
     }
 
     /**
-     * TODO Add a configuration to specify when orders should be canceled
+     * @throws Mage_Core_Exception
      */
     public function cancel()
     {
-        /** @var OpenNode_Bitcoin_Helper_Data $helper */
-        $helper = Mage::helper('opennode_bitcoin');
-
-        /** @var Mage_Sales_Model_Resource_Order_Collection $orders */
-        $orders = Mage::getModel('sales/order')->getCollection();
-
-        $orders->join(
-            ['payment' => 'sales/order_payment'],
-            'main_table.entity_id = payment.parent_id',
-            ['payment_method' => 'payment.method']
-        );
-
-        $orders->addFieldToFilter('state', Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-        $orders->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-        $orders->addFieldToFilter('payment.method', 'opennode_bitcoin');
+        $orders = $this->_database->getPendingPaymentOrders();
 
         if ($orders->getSize() === 0) {
             $this->_logger->info('No orders with the opennode_bitcoin payment method were found!');
@@ -120,7 +114,7 @@ class OpenNode_Bitcoin_Model_Cron
             }
 
             $format = 'Order automatically CANCELED after %d hour(s) without PAYMENT';
-            $comment = $helper->__($format, $this->_config->getCancelationTimeframe());
+            $comment = $this->_helper->__($format, $this->_config->getCancelationTimeframe());
 
             $order->cancel();
             $order->addStatusHistoryComment($comment);
@@ -129,7 +123,7 @@ class OpenNode_Bitcoin_Model_Cron
                 $result->canceled++;
 
                 $format = 'ORDER %s is now canceled after being %d hours without payment';
-                $this->_logger->error(sprintf($format, $order->getIncrementId(),
+                $this->_logger->info(sprintf($format, $order->getIncrementId(),
                     $this->_config->getCancelationTimeframe()));
             } else {
                 $result->errors++;
