@@ -26,12 +26,30 @@
  */
 class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
 {
+    /** @var string */
+    const XML_PATH_OPENNODE_ACTIVE = 'payment/opennode_bitcoin/active';
+
+    /** @var string */
+    const XML_PATH_OPENNODE_TEST_MODE = 'payment/opennode_bitcoin/test_mode';
+
+    /** @var string */
+    const XML_PATH_OPENNODE_PRODUCTION_KEY = 'payment/opennode_bitcoin/production_api_key';
+
+    /** @var string */
+    const XML_PATH_OPENNODE_DEVELOPMENT_KEY = 'payment/opennode_bitcoin/development_api_key';
+
+    /** @var string */
+    const XML_PATH_OPENNODE_AUTO_SETTLE = 'payment/opennode_bitcoin/auto_settle';
+
+    /** @var string */
+    const XML_PATH_OPENNODE_CANCELLATION_TIMEFRAME = 'payment/opennode_bitcoin/cancelation_timeframe';
+
     /**
      * @return bool
      */
     public function isActive()
     {
-        return (bool)Mage::getStoreConfig('payment/opennode_bitcoin/active');
+        return (bool)Mage::getStoreConfig(self::XML_PATH_OPENNODE_ACTIVE);
     }
 
     /**
@@ -39,7 +57,7 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
      */
     public function isTestMode()
     {
-        return (bool)Mage::getStoreConfig('payment/opennode_bitcoin/test_mode');
+        return (bool)Mage::getStoreConfig(self::XML_PATH_OPENNODE_TEST_MODE);
     }
 
     /**
@@ -65,7 +83,7 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
     {
         /** @var Mage_Core_Helper_Data $core */
         $core = Mage::helper('core');
-        return $core->decrypt(Mage::getStoreConfig('payment/opennode_bitcoin/production_api_key'));
+        return $core->decrypt(Mage::getStoreConfig(self::XML_PATH_OPENNODE_PRODUCTION_KEY));
     }
 
     /**
@@ -75,7 +93,7 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
     {
         /** @var Mage_Core_Helper_Data $core */
         $core = Mage::helper('core');
-        return $core->decrypt(Mage::getStoreConfig('payment/opennode_bitcoin/development_api_key'));
+        return $core->decrypt(Mage::getStoreConfig(self::XML_PATH_OPENNODE_DEVELOPMENT_KEY));
     }
 
     /**
@@ -91,7 +109,7 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
      */
     public function isAutoSettle()
     {
-        return (string)Mage::getStoreConfig('payment/opennode_bitcoin/auto_settle');
+        return (string)Mage::getStoreConfig(self::XML_PATH_OPENNODE_AUTO_SETTLE);
     }
 
     /**
@@ -99,7 +117,7 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
      */
     public function getCancelationTimeframe()
     {
-        $timeframe = intval(Mage::getStoreConfig('payment/opennode_bitcoin/cancelation_timeframe'));
+        $timeframe = intval(Mage::getStoreConfig(self::XML_PATH_OPENNODE_CANCELLATION_TIMEFRAME));
 
         if ($timeframe <= 0) {
             $timeframe = 1;
