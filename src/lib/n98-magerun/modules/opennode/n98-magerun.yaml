@@ -1,0 +1,6 @@
+autoloaders:
+  OpenNode: %module%/src
+
+commands:
+  customCommands:
+    - OpenNode\SetupCommand
