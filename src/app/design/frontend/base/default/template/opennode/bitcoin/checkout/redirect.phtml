@@ -70,7 +70,7 @@ $charge = $block->getCharge(); ?>
                         </ul>
                     </form>
 
-                    <form id="payment-status-underpaid" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get">
+                    <form id="payment-status-underpaid" action="<?php print $block->escapeHtml($block->getSuccessUrl()); ?>" method="get" style="display: none;">
                         <ul class="form-list">
                             <li><?php print $h->__('A transaction has been seen regarding your payment but the amount was not the full amount required by this order. Please send the remaining amount.'); ?></li>
 
