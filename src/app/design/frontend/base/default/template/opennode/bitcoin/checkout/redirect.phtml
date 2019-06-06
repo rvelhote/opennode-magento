@@ -72,6 +72,12 @@ $charge = $block->getCharge(); ?>
                             <li style="margin-bottom: 20px;">
                                 <p><?php print $h->__('Your payment was seen in the mempool and is now waiting to be included in a block. You may continue to the order ' .
                                         'summary page but your order will not be considered valid until multiple confirmations are seen.'); ?></p>
+                                <p>
+                                    <strong><?php print $h->__('Tx') ?>:</strong>&nbsp;
+                                    <span data-transaction>
+                                        <?php print $block->escapeHtml($charge->getChainInvoice()->getTx()) ?>
+                                    </span>
+                                </p>
                             </li>
                             <li class="a-right">
                                 <button class="button" type="submit"><?php print $h->__('Continue to order summary'); ?></button>
@@ -83,6 +89,12 @@ $charge = $block->getCharge(); ?>
                         <ul  class="form-list">
                             <li>
                                 <p><?php print $h->__('Your order was paid successfully.'); ?></p>
+                                <p>
+                                    <strong><?php print $h->__('Tx') ?>:</strong>&nbsp;
+                                    <span data-transaction>
+                                        <?php print $block->escapeHtml($charge->getChainInvoice()->getTx()) ?>
+                                    </span>
+                                </p>
                             </li>
                             <li class="a-right">
                                 <button class="button" type="submit"><?php print $h->__('Continue to order summary'); ?></button>

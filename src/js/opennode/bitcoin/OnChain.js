@@ -43,6 +43,7 @@ export default class OnChain {
 
     this.qrcode = new QrCode(qre);
     this.wallet = new Wallet(we);
+    this.tx = document.querySelectorAll('[data-transaction]');
 
     status.registerObserver(this.observe.bind(this));
   }
@@ -53,6 +54,12 @@ export default class OnChain {
    */
   observe(r) {
     if (!r.status.unpaid || r.onchain.address === null) {
+      if (r.onchain.tx) {
+        this.tx.forEach((t) => {
+          t.innerHTML = r.onchain.tx;
+        });
+      }
+
       this.qrcode.hide();
       this.wallet.hide();
       return;

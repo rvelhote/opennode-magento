@@ -232,6 +232,7 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
             'onchain' => [
                 'address' => $this->getChainInvoice()->getAddress(),
                 'uri' => $this->getChainInvoice()->formatUri($this->getAmountBtc(), $store->getFrontendName()),
+                'tx' => $this->getChainInvoice()->getTx(),
             ],
         ];
 
