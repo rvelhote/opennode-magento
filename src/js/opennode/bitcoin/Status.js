@@ -81,6 +81,10 @@ export default class Status {
   onSuccess(response) {
     const r = response.responseJSON;
 
+    if (!r) {
+      return;
+    }
+
     this.observers.forEach((o) => {
       o(r);
     });
