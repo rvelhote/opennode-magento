@@ -29,7 +29,7 @@ echo -e "${YELLOW}Bulding Nginx...${NONE}"
 docker build -t magento-nginx docker/nginx/ > /dev/null
 
 echo -e "${YELLOW}Building PHP...${NONE}"
-docker build -t magento-php docker/nginx/ > /dev/null
+docker build -t magento-php docker/php/ > /dev/null
 
 echo -e "${YELLOW}Downloading n98-magerun...${NONE}"
 php -r "copy('https://files.magerun.net/n98-magerun.phar', 'bin/n98-magerun.phar');"
