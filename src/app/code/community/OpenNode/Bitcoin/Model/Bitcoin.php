@@ -182,6 +182,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
             'order_id' => $order->getIncrementId(),
             'email' => $order->getCustomerEmail(),
             'name' => $order->getCustomerName(),
+            'success_url' => Mage::getUrl('opennode_bitcoin/payment/success'),
             'callback_url' => Mage::getUrl('opennode_bitcoin/callback/index'),
             'auto_settle' => $this->_config->isAutoSettle(),
         ];
@@ -252,16 +253,19 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     }
 
     /**
-     * Return url for redirection after order placed
+     * Return url for redirection after order placed. This will redirect the user to the OpenNode portal to perform
+     * the actual payment. At this moment the order is already saved and the items reserved for the customer.
      * @return string
-     *
-     * TODO Good or bad idea to have a form key for validation here? Maybe the session will expire before the payment?
      */
     public function getOrderPlaceRedirectUrl()
     {
-        /** @var Mage_Core_Model_Session $session */
-        $session = Mage::getSingleton('core/session');
-        return Mage::getUrl('opennode_bitcoin/payment/payment', ['form_key' => $session->getFormKey()]);
+        $transactionID = $this->getQuote()->getPayment()->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
+
+        if ($this->_config->isTestMode()) {
+            return sprintf('https://dev-checkout.opennode.com/%s', $transactionID);
+        }
+
+        return sprintf('https://checkout.opennode.com/%s', $transactionID);
     }
 
     /**

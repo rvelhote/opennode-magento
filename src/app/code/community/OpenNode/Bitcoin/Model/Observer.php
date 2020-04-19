@@ -58,4 +58,23 @@ class OpenNode_Bitcoin_Model_Observer extends Mage_Core_Helper_Abstract
             $session->addError($helper->__('DEVELOPMENT and PRODUCTION API Keys are the same! Watch out!'));
         }
     }
+
+    /**
+     * @param Varien_Event_Observer $observer
+     */
+    public function checkoutSaveOrderAfter($observer)
+    {
+        /** @var Mage_Sales_Model_Order $order */
+        $order = $observer->getData('order');
+
+        /** @var Mage_Sales_Model_Quote $quote */
+        $quote = $observer->getData('quote');
+
+        if (!$order || !$quote) {
+            return;
+        }
+
+        $txnId = $order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
+        $quote->getPayment()->setAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY, $txnId);
+    }
 }

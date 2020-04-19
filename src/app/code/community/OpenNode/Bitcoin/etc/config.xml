@@ -105,6 +105,16 @@
                 </args>
             </opennode_bitcoin>
         </routers>
+        <events>
+            <checkout_type_onepage_save_order_after>
+                <observers>
+                    <opennode_bitcoin_set_transaction_checkout_save_order_after>
+                        <class>opennode_bitcoin/observer</class>
+                        <method>checkoutSaveOrderAfter</method>
+                    </opennode_bitcoin_set_transaction_checkout_save_order_after>
+                </observers>
+            </checkout_type_onepage_save_order_after>
+        </events>
     </frontend>
     <crontab>
         <jobs>
