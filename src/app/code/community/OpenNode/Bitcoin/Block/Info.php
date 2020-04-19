@@ -67,6 +67,16 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
     }
 
     /**
+     * @return array|int|mixed|null
+     */
+    public function getPaymentEnvironment()
+    {
+        /** @var Mage_Sales_Model_Order_Payment $payment */
+        $payment = $this->getInfo();
+        return $payment->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_PARAMS_ENV);
+    }
+
+    /**
      * @return Mage_Sales_Model_Order
      */
     public function getOrder()

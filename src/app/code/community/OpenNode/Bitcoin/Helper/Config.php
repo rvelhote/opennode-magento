@@ -73,7 +73,8 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
      */
     public function getEnvironment()
     {
-        return $this->isProductionMode() ? 'live' : 'dev';
+        return $this->isProductionMode() ?
+            OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_ENV_LIVE : OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_ENV_DEV;
     }
 
     /**

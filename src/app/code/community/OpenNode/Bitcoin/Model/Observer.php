@@ -75,6 +75,9 @@ class OpenNode_Bitcoin_Model_Observer extends Mage_Core_Helper_Abstract
         }
 
         $txnId = $order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
+        $env = $order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_PARAMS_ENV);
+
         $quote->getPayment()->setAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY, $txnId);
+        $quote->getPayment()->setAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_PARAMS_ENV, $env);
     }
 }

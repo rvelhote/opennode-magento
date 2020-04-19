@@ -33,6 +33,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     const OPENNODE_PARAMS_KEY = 'opennode_params';
 
     /** @var string */
+    const OPENNODE_PARAMS_ENV = 'opennode_env';
+
+    /** @var string */
     const OPENNODE_STATUS_PAID = 'paid';
 
     /** @var string */
@@ -43,6 +46,12 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
 
     /** @var string */
     const OPENNODE_STATUS_UNDERPAID = 'underpaid';
+
+    /** @var string */
+    const OPENNODE_ENV_LIVE = 'live';
+
+    /** @var string */
+    const OPENNODE_ENV_DEV = 'dev';
 
     /** @var string */
     protected $_code = 'opennode_bitcoin';
@@ -196,6 +205,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
 
         $payment->setAdditionalInformation(self::OPENNODE_TXN_ID_KEY, $this->_charge->getTransactionId());
         $payment->setAdditionalInformation(self::OPENNODE_PARAMS_KEY, $core->jsonEncode($params));
+        $payment->setAdditionalInformation(self::OPENNODE_PARAMS_ENV, $this->_config->getEnvironment());
 
         return parent::initialize($paymentAction, $stateObject);
     }
@@ -259,9 +269,12 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function getOrderPlaceRedirectUrl()
     {
-        $transactionID = $this->getQuote()->getPayment()->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
+        $payment = $this->getQuote()->getPayment();
 
-        if ($this->_config->isTestMode()) {
+        $transactionID = $payment->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
+        $environment = $payment->getAdditionalInformation(self::OPENNODE_PARAMS_ENV);
+
+        if ($environment == self::OPENNODE_ENV_DEV) {
             return sprintf('https://dev-checkout.opennode.com/%s', $transactionID);
         }
 
@@ -275,9 +288,12 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
      */
     public function getOrderCheckoutUrl()
     {
-        $transactionId = $this->getOrder()->getPayment()->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
+        $payment = $this->getOrder()->getPayment();
 
-        if ($this->_config->isTestMode()) {
+        $transactionId = $payment->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
+        $environment = $payment->getAdditionalInformation(self::OPENNODE_PARAMS_ENV);
+
+        if ($environment == self::OPENNODE_ENV_DEV) {
             return sprintf('https://dev-checkout.opennode.com/%s', $transactionId);
         }
 
