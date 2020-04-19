@@ -19,9 +19,6 @@ EOF
 
 echo -e "${NONE}"
 
-echo -e "${YELLOW}Building Javascript...${NONE}"
-npm run build > /dev/null
-
 echo -e "${YELLOW}Building Release...${NONE}"
 git ls-tree -r --full-name master | grep -i src/ | awk '{print $4}' | zip dist/OpenNode_Bitcoin.zip -@ > /dev/null
 

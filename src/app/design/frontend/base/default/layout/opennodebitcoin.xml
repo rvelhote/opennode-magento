@@ -29,25 +29,4 @@
             <!--<block type="opennode_bitcoin/payment" name="opennode_bitcoin" template="opennode/bitcoin/checkout/success.phtml"/>-->
         <!--</reference>-->
     <!--</checkout_onepage_success>-->
-
-    <opennode_bitcoin_payment_payment>
-        <remove name="right"/>
-        <remove name="left"/>
-
-        <reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
-        </reference>
-
-        <reference name="head">
-            <action method="addJs">
-                <script>opennode/bitcoin/lib/qrcodegen.min.js</script>
-            </action>
-            <action method="addJs">
-                <script>opennode/bitcoin/lib/clipboard.min.js</script>
-            </action>
-            <action method="addJs">
-                <script>opennode/bitcoin/index.min.js</script>
-            </action>
-        </reference>
-    </opennode_bitcoin_payment_payment>
 </layout>
