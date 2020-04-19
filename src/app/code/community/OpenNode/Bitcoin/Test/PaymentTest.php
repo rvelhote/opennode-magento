@@ -106,4 +106,46 @@ class PaymentTest extends TestCase
         $this->assertEquals('processing', $order->getState());
         $this->assertEquals('processing', $order->getStatus());
     }
+
+    /**
+     * @dataProvider getCallbackDataProvider
+     * @throws Exception
+     */
+    public function testOpenNodeCallback($order, $callback, $code)
+    {
+        /** @var OpenNode_Bitcoin_Model_Sales_Order $order */
+        $order = Mage::getModel('opennode_bitcoin/sales_order')->load($order->getEntityId());
+        $order->callback($callback);
+
+        $this->expectExceptionCode($code);
+    }
+
+    public function getCallbackDataProvider() {
+        $order1 = Mage::getModel('opennode_bitcoin/sales_order');
+
+
+        /** @var OpenNode_Bitcoin_Model_Callback $callback1 */
+        $callback1 = new OpenNode_Bitcoin_Model_Callback();
+        $callback1->setData([
+            'id' => 'THIS ID DOES NOT EXIST',
+        ]);
+
+        /** @var OpenNode_Bitcoin_Model_Callback $callback2 */
+        $callback2 = new OpenNode_Bitcoin_Model_Callback();
+        $callback2->setData([
+            'id' => 'THIS ID DOES NOT EXIST',
+        ]);
+
+        /** @var OpenNode_Bitcoin_Model_Callback $callback3 */
+        $callback3 = new OpenNode_Bitcoin_Model_Callback();
+        $callback3->setData([
+            'id' => 'THIS ID DOES NOT EXIST',
+        ]);
+
+        return [
+            [$order1, $callback1, 1],
+            [$order2, $callback2, 2],
+            [$order3, $callback3, 3],
+        ];
+    }
 }
