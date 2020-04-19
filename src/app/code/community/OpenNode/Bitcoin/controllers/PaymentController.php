@@ -29,52 +29,6 @@ class OpenNode_Bitcoin_PaymentController extends Mage_Core_Controller_Front_Acti
     /**
      *
      */
-    public function paymentAction()
-    {
-        /** @var Mage_Checkout_Model_Session $session */
-        $session = Mage::getSingleton('checkout/session');
-
-        /** @var OpenNode_Bitcoin_Helper_Data $helper */
-        $helper = Mage::helper('opennode_bitcoin');
-
-        // FIXME Should cancel the order? Good of bad idea to perform a formkey validation here?
-        if (!$this->_validateFormKey()) {
-            $session->addError($helper->__('Your payment session has expired. Please try again!'));
-            parent::_redirect('checkout/cart');
-            return;
-        }
-
-        try {
-            /** @var Mage_Checkout_Model_Session $session */
-            $session = Mage::getSingleton('checkout/session');
-            $order = $session->getLastRealOrder();
-
-            if (!$order->getId()) {
-                Mage::throwException('No order for processing found');
-            }
-
-            /** @var OpenNode_Bitcoin_Model_Bitcoin $block */
-            $block = $this->getLayout()->createBlock('opennode_bitcoin/payment', 'bitcoin', [
-                'order' => $order,
-            ]);
-
-            $this->loadLayout();
-
-            /** @var Mage_Page_Block_Html_Head $head */
-            $head = $this->getLayout()->getBlock('head');
-            $head->setTitle($helper->__('Pay your order with Bitcoin', $order->getIncrementId()));
-
-            $this->getLayout()->getBlock('content')->append($block);
-            $this->renderLayout();
-        } catch (Exception $e) {
-            Mage::logException($e);
-            parent::_redirect('checkout/cart');
-        }
-    }
-
-    /**
-     *
-     */
     public function successAction()
     {
         /** @var Mage_Checkout_Model_Session $session */
