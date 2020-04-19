@@ -40,37 +40,17 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $callback = new OpenNode_Bitcoin_Model_Callback();
         $callback->setData($this->getRequest()->getParams());
 
-        /** @var OpenNode_Bitcoin_Helper_Config $config */
-        $config = Mage::helper('opennode_bitcoin/config');
-        $calculated = hash_hmac('sha256', $callback->getId(), $config->getAuthToken());
 
-        if (!hash_equals($callback->getHashedOrder(), $calculated)) {
-            $this->getResponse()->setHttpResponseCode(403);
-            return;
-        }
 
-        /** @var Mage_Sales_Model_Order $order */
-        $order = Mage::getModel('sales/order');
-        $order->loadByIncrementId($callback->getIncrementId());
-
-        if (!$order->getEntityId()) {
-            $this->getResponse()->setHttpResponseCode(404);
-            return;
-        }
-
-        $id = $order->getPayment()->getAdditionalInformation(OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_TXN_ID_KEY);
-        if ($callback->getId() != $id) {
-            $this->getResponse()->setHttpResponseCode(404);
-            return;
-        }
-
-        if ($callback->getStatus() !== OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PAID) {
-            $this->getResponse()->setHttpResponseCode(402);
-            return;
-        }
+        /** @var OpenNode_Bitcoin_Model_Sales_Order $order */
+        $order = Mage::getModel('opennode_bitcoin/sales_order')->loadByIncrementId($callback->getIncrementId());
 
         try {
-            $order->getPayment()->capture(null);
+            if (!$order->getEntityId()) {
+                throw new Exception('Order does not exist', 4);
+            }
+
+            $order->verifyCallback($callback)->getPayment()->capture(null);
 
             if (!$order->getEmailSent()) {
                 $order->queueNewOrderEmail();
@@ -80,7 +60,12 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
             $order->save();
         } catch (Exception $e) {
             Mage::logException($e);
-            $this->getResponse()->setHttpResponseCode(500);
+
+            /** @var OpenNode_Bitcoin_Helper_Logger $config */
+            $logger = Mage::helper('opennode_bitcoin/logger');
+            $logger->error($e->getMessage());
+
+            $this->getResponse()->setHttpResponseCode(404);
         }
     }
 }
