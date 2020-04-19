@@ -36,7 +36,7 @@ $block = $this; ?>
 <?php print $helper->__('Bitcoin'); ?>
 
 <?php if (is_null($charge)) : ?>
-    <?php print $helper->__('A valid CHARGE was found for this order. Please contact customer support.'); ?>
+    <?php print $helper->__('A valid CHARGE was NOT found for this order. Please contact customer support.'); ?>
     <?php return; ?>
 <?php endif; ?>
 
