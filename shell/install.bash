@@ -63,6 +63,7 @@ rm -rf src/var/*
 bin/n98-magerun.phar --root-dir=src customer:change-password janedoe@example.com password123 > /dev/null
 bin/n98-magerun.phar --root-dir=src config:set carriers/flatrate/active 0 > /dev/null
 bin/n98-magerun.phar --root-dir=src config:set carriers/freeshipping/free_shipping_subtotal 0 > /dev/null
+bin/n98-magerun.phar --root-dir=src config:set dev/log/active 1 > /dev/null
 bin/n98-magerun.phar --root-dir=src opennode:setup
 bin/n98-magerun.phar --root-dir=src cache:clean > /dev/null
 
