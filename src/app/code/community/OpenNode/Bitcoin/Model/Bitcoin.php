@@ -269,6 +269,22 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     }
 
     /**
+     * @return string
+     * FIXME getOrderPlaceRedirectUrl but in that one Magento only has the Quote available
+     *
+     */
+    public function getOrderCheckoutUrl()
+    {
+        $transactionId = $this->getOrder()->getPayment()->getAdditionalInformation(self::OPENNODE_TXN_ID_KEY);
+
+        if ($this->_config->isTestMode()) {
+            return sprintf('https://dev-checkout.opennode.com/%s', $transactionId);
+        }
+
+        return sprintf('https://checkout.opennode.com/%s', $transactionId);
+    }
+
+    /**
      * @return OpenNode_Bitcoin_Model_Charge
      */
     public function getCharge()

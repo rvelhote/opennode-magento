@@ -32,6 +32,9 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
     /** @var Mage_Sales_Model_Order */
     protected $_order;
 
+    /** @var OpenNode_Bitcoin_Helper_Config */
+    protected $_config;
+
     /**
      * Constructor. Set template.
      */
@@ -50,6 +53,17 @@ class OpenNode_Bitcoin_Block_Info extends Mage_Payment_Block_Info
         /** @var OpenNode_Bitcoin_Model_Bitcoin $method */
         $method = $this->getInfo()->getMethodInstance();
         return $method->getCharge();
+    }
+
+    /**
+     * @return string
+     * @throws Mage_Core_Exception
+     */
+    public function getInvoiceUrl()
+    {
+        /** @var OpenNode_Bitcoin_Model_Bitcoin $method */
+        $method = $this->getInfo()->getMethodInstance();
+        return $method->getOrderCheckoutUrl();
     }
 
     /**

@@ -40,29 +40,13 @@ $block = $this; ?>
     <?php return; ?>
 <?php endif; ?>
 
-<table>
-    <tbody>
-    <tr>
-        <td><?php print $helper->__('Status'); ?>:</td>
-        <td><?php print $block->escapeHtml($charge->getStatusLabel()); ?></td>
-    </tr>
-
+<ul>
+    <li><?php print $helper->__('Status'); ?>: <?php print $block->escapeHtml($charge->getStatusLabel()); ?></li>
     <?php if ($charge->isUnpaid()) : ?>
-    <tr>
-        <td colspan="2">
-            <strong><?php print $helper->__('Your order is still unpaid. ') ?></strong>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="<?php print $block->escapeHtml($charge->getLightningInvoice()->formatUri()); ?>">
-                <?php print $helper->__('Pay via Lightning Network'); ?>
-            </a>
-            <a href="<?php print $block->escapeHtml($charge->getChainInvoice()->formatUri($charge->getAmountBtc(), 'Pay')); ?>">
-                <?php print $helper->__('Pay On-Chain'); ?>
-            </a>
-        </td>
-    </tr>
+        <strong><?php print $helper->__('Your order is still unpaid. ') ?></strong>
+
+        <a rel="noopener noreferrer" href="<?php print $block->escapeUrl($block->getInvoiceUrl()) ?>" target="_blank">
+            <?php print $helper->__('Pay it now!'); ?>
+        </a>
     <?php endif; ?>
-    </tbody>
-</table>
+</ul>
