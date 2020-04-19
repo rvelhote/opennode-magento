@@ -34,7 +34,7 @@ trait OpenNode_Bitcoin_Test_Trait_Order {
         $store = Mage::app()->getStore(1);
 
         $paymentMethod = 'opennode_bitcoin';
-        $shippingMethod = 'flatrate_flatrate';
+        $shippingMethod = 'freeshipping_freeshipping';
 
         /** @var Mage_Sales_Model_Quote $quote */
         $quote = Mage::getModel('sales/quote');
