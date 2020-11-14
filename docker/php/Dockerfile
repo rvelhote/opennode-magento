@@ -17,13 +17,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y dist-upgrade
-RUN apt-get -y install php7.0 php7.0-fpm php7.0-xml php7.0-gd php7.0-json php7.0-mbstring php7.0-soap php7.0-zip php7.0-opcache php7.0-curl php7.0-mysql php-redis php7.0-mcrypt php-xdebug poppler-utils php7.0-imap php7.0-intl
-RUN mkdir /var/log/php/ && mkdir /run/php/
+RUN apt-get -y install php-cli php-fpm php-xml php-gd php-json php-mbstring php-soap php-zip php-opcache php-curl php-mysql php-xdebug php-imap php-intl gnupg
 
 COPY conf /
 
@@ -32,4 +31,4 @@ COPY conf /
 RUN useradd application
 
 EXPOSE 9000
-ENTRYPOINT ["php-fpm7.0", "--nodaemonize"]
+ENTRYPOINT ["php-fpm7.4", "--nodaemonize"]

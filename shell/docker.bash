@@ -26,9 +26,9 @@ EOF
 echo -e "${NONE}"
 
 echo -e "${YELLOW}Bulding Nginx...${NONE}"
-docker build -t magento-nginx docker/nginx/ > /dev/null
+docker build --no-cache -t magento-nginx docker/nginx/ > /dev/null
 
 echo -e "${YELLOW}Building PHP...${NONE}"
-docker build -t magento-php docker/php/ > /dev/null
+docker build --no-cache -t magento-php docker/php/ > /dev/null
 
 echo -e "${GREEN}All done!${NONE}"
