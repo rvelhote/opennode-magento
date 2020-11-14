@@ -20,6 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -81,7 +82,7 @@ class ChargeTest extends TestCase
     /**
      *
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = Mage::helper('opennode_bitcoin/config');
         $this->getConnection()->beginTransaction();
@@ -90,10 +91,8 @@ class ChargeTest extends TestCase
     /**
      *
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->getConnection()->rollBack();
     }
-
-
 }

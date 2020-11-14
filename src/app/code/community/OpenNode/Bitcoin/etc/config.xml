@@ -122,7 +122,9 @@
                 <schedule>
                     <cron_expr>* * * * *</cron_expr>
                 </schedule>
-                <run><model>opennode_bitcoin/cron::cancel</model></run>
+                <run>
+                    <model>opennode_bitcoin/cron::cancel</model>
+                </run>
             </opennode_bitcoin>
         </jobs>
     </crontab>

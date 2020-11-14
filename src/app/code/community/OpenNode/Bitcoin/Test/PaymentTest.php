@@ -20,6 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -120,7 +121,8 @@ class PaymentTest extends TestCase
         $this->expectExceptionCode($code);
     }
 
-    public function getCallbackDataProvider() {
+    public function getCallbackDataProvider()
+    {
         $order1 = Mage::getModel('opennode_bitcoin/sales_order');
 
 

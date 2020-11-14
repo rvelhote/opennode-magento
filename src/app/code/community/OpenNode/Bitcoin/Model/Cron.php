@@ -70,8 +70,7 @@ class OpenNode_Bitcoin_Model_Cron
         $this->_logger->info(sprintf('%d orders found with the OPENNODE_BITCOIN payment method', $orders->getSize()));
 
         $now = time();
-        $result = new class
-        {
+        $result = new class {
             public $errors = 0;
             public $canceled = 0;
             public $skipped = 0;

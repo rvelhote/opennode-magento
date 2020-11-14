@@ -24,7 +24,8 @@
 /**
  * Trait OpenNode_Bitcoin_Test_Trait_Order
  */
-trait OpenNode_Bitcoin_Test_Trait_Order {
+trait OpenNode_Bitcoin_Test_Trait_Order
+{
     /**
      * @return Mage_Sales_Model_Order
      * @throws Exception
