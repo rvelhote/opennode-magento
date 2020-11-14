@@ -1,8 +1,8 @@
 {
   "require-dev": {
     "aydin-hassan/magento-core-composer-installer": "*",
-    "openmage/magento-lts": "1.9.4.x-dev",
-    "phpunit/phpunit": "^6",
+    "openmage/magento-lts": "^20",
+    "phpunit/phpunit": "^9",
     "aschroder/smtp_pro": "^2.0",
     "magento-ecg/coding-standard": "^3.1"
   },
