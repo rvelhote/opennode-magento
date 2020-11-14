@@ -47,15 +47,44 @@
  * @method float getFee()
  * @method boolean getAutoSettle()
  * @method string getHashedOrder()
+ * @method string getTransactions()
  *
  */
 class OpenNode_Bitcoin_Model_Callback extends Varien_Object
 {
+    /** @var OpenNode_Bitcoin_Helper_Config */
+    protected $config;
+
     /**
-     * @return string
+     * OpenNode_Bitcoin_Model_Callback constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->config = Mage::helper('opennode_bitcoin/config');
+    }
+
+    /**
+     * Alternative method to get the order_id parameter with a more Magento-like idiom
+     * @return string The increment_id value of the order so it can be loaded
      */
     public function getIncrementId()
     {
         return $this->getOrderId();
+    }
+
+    /**
+     * Verifies the callback hashed_order parameter against the order id and the authentication token that generated it
+     * @return bool Is the hashed_order parameter valid or not
+     */
+    public function verify()
+    {
+        $calculated = hash_hmac('sha256', $this->getId(), $this->config->getAuthToken());
+
+        if (!hash_equals($this->getHashedOrder(), $calculated)) {
+            return false;
+        }
+
+        return true;
     }
 }
