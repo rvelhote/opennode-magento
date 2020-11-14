@@ -60,6 +60,7 @@ bin/n98-magerun.phar install \
 echo -e "${YELLOW}Delete the var folder to clear any stale caches...${NONE}"
 rm -rf src/var/*
 
+bin/n98-magerun.phar --root-dir=src admin:user:change-password admin password123 > /dev/null
 bin/n98-magerun.phar --root-dir=src customer:change-password janedoe@example.com password123 > /dev/null
 bin/n98-magerun.phar --root-dir=src config:set carriers/flatrate/active 0 > /dev/null
 bin/n98-magerun.phar --root-dir=src config:set carriers/freeshipping/free_shipping_subtotal 0 > /dev/null
