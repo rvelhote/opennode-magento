@@ -145,7 +145,8 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     }
 
     /**
-     * @return string
+     * Builds a short description for this order that will allow the user to confirm payment in the hosted payment page
+     * @return string A short description of this order (Store Name + Amount)
      */
     public function getDescription()
     {
@@ -228,6 +229,8 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     }
 
     /**
+     * Validates if the configuration is valid to use. This will check commong mismatches in configuration to avoid
+     * having inconsistent or invalid statuses which might result in bad/missing/incorrect payments.
      * @return bool
      */
     public function canUseCheckout()
@@ -251,10 +254,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     }
 
     /**
+     * Performs validation of the current payment/order to confirm that we are good to go and use this payment method
      * @return Mage_Payment_Model_Method_Abstract
-     * @throws Zend_Cache_Exception
-     * @throws Zend_Http_Client_Exception
-     * @throws Mage_Core_Exception
+     * @throws Exception
      */
     public function validate()
     {
@@ -286,9 +288,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     }
 
     /**
-     * @return string
+     * Obtain the checkout url that will redirect to the OpenNode hosted page that deals with the payment itself
+     * @return string A string with an URL adequate to the currently selected environment
      * FIXME getOrderPlaceRedirectUrl but in that one Magento only has the Quote available
-     *
      */
     public function getOrderCheckoutUrl()
     {
@@ -306,6 +308,7 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
 
     /**
      * @return OpenNode_Bitcoin_Model_Charge
+     * @throws Exception
      */
     public function getCharge()
     {

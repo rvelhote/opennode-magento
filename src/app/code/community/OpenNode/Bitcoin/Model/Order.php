@@ -19,9 +19,16 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
-     * @param OpenNode_Bitcoin_Model_Callback $callback
+     * Handles the four possible callback statuses:
+     *
+     * UNDERPAID: Transaction is seen but the charge is only partially paid. Waiting for the user to send the remainder.
+     * REFUNDED: Transaction was underpaid but the user canceled it, asking for a refund.
+     * PROCESSING: Transaction is seen for the first time on the mempool
+     * PAID: Transaction is confirmed on the Bitcoin blockchain.
+     *
+     * @param OpenNode_Bitcoin_Model_Callback $callback The callback with all the parameters from the HTTP request
      * @return $this
-     * @throws Exception
+     * @throws Exception Something went wrong with processing the REFUNDED or PAID statuses
      */
     public function handleCallback($callback)
     {
@@ -47,6 +54,8 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
+     * Handles the PAID callback status. This handler will create a Magento Invoice and update the order's state/status
+     * to PROCESSING from the PROCESSING_PAYMENT state/status
      * @return $this
      * @throws Exception
      */
@@ -71,17 +80,22 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
-     * @param string $sats
-     * @param string $btc
+     * Handles the UNDERPAID callback status. This handler will only add a message for each time it receives such
+     * status. It does not change the order's status which will remain PENDING_PAYMENT
+     * @param string $sats The missing amount in SATS
+     * @param string $btc The missing amount in BTC
      * @return $this
      */
     public function handleUnderpaid($sats, $btc)
     {
         $this->addStatusHistoryComment(sprintf('Current PAYMENT status: UNDERPAID by %s ~ %s', $sats, $btc));
+        $this->logger->info(sprintf('[%s] UNDERPAID by %s SATS callback received', $sats, $this->getIncrementId()));
         return $this;
     }
 
     /**
+     * Handles the PROCESSING callback status. This handler does not update the order's status and only adds a history
+     * message for each request it received with this status code.
      * @return $this
      */
     public function handleProcessing()
@@ -92,6 +106,9 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
+     * Handles the REFUNDED status callback. This handler will create a Creditmemo automatically for the entire order
+     * regardless of the amount refunded. By creating a Creditmemo for the entire order Magento will set the order
+     * status/state to CLOSED.
      * @return $this
      * @throws Exception
      */
@@ -108,6 +125,7 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
         $creditmemo = $service->prepareCreditmemo();
         $creditmemo->register()->save();
 
+        $this->logger->info(sprintf('[%s] REFUNDED Creditmemo issued', $this->getIncrementId()));
         return $this;
     }
 }

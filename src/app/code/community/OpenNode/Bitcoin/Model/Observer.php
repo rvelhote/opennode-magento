@@ -27,6 +27,7 @@
 class OpenNode_Bitcoin_Model_Observer extends Mage_Core_Helper_Abstract
 {
     /**
+     * Warn the user if there is some basic misconfiguration related to API Keys and Environment
      * @param Varien_Event_Observer $observer
      */
     public function systemConfigSectionChangeAfter($observer)
@@ -61,6 +62,7 @@ class OpenNode_Bitcoin_Model_Observer extends Mage_Core_Helper_Abstract
 
     /**
      * @param Varien_Event_Observer $observer
+     * @throws Exception
      */
     public function checkoutSaveOrderAfter($observer)
     {

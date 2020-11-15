@@ -62,6 +62,7 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
 
     /**
      * @return $this|bool|Charge
+     * @throws Exception
      */
     public function getCharge()
     {
@@ -75,7 +76,9 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * Creates a new CHARGE using the OpenNode API
      * @return $this
+     * @throws Exception
      */
     public function create()
     {
@@ -89,7 +92,10 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * Takes the OpenNode\Merchant\Charge object and converts it to a Magento compatible object so we can it Magento
+     * style in style!
      * @return $this
+     * @throws Exception
      */
     protected function mapChargeToObject()
     {
@@ -133,7 +139,8 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
-     * @return string
+     * Converts the transaction amount from SATS to BTC
+     * @return string The transaction amount converted from SATS to BTC
      */
     public function getAmountBtc()
     {
@@ -145,6 +152,8 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * Checks if the current CHARGE status is PAID
+     * This status means that the transaction is confirmed on the Bitcoin blockchain
      * @return bool
      */
     public function isPaid()
@@ -153,6 +162,8 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * Checks if the current CHARGE status is PROCESSING
+     * This status means that the transaction is seen for the first time on the mempool
      * @return bool
      */
     public function isProcessing()
@@ -161,6 +172,9 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * Checks if the current CHARGE status is UNPAID
+     * This status is the first status after a CHARGE is created and remains this way until a transaction is seen in
+     * the mempool
      * @return bool
      */
     public function isUnpaid()
@@ -169,11 +183,24 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
     }
 
     /**
+     * Checks if the current CHARGE status is UNDERPAID
+     * This status means that the transaction is seen but the charge is only partially paid. Waiting for the user to
+     * send the remainder
      * @return bool
      */
     public function isUnderpaid()
     {
         return $this->getStatus() === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNDERPAID;
+    }
+
+    /**
+     * Checks if the current CHARGE status is UNDERPAID
+     * This status means that the transaction was underpaid but the user canceled it, asking for a refund
+     * @return bool
+     */
+    public function isRefunded()
+    {
+        return $this->getStatus() === OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_REFUNDED;
     }
 
     /**
