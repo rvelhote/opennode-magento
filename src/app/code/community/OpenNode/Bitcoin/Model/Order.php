@@ -32,7 +32,8 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
      */
     public function handleCallback($callback)
     {
-        $this->logger->info(sprintf('[%s] Handling callback for order', $this->getIncrementId()));
+        $format = '[%s] Handling callback status %s';
+        $this->logger->info(sprintf($format, $callback->getIncrementId(), $callback->getStatus()));
 
         if ($callback->getStatus() == OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_REFUNDED) {
             $this->handleRefund();
@@ -48,6 +49,18 @@ class OpenNode_Bitcoin_Model_Order extends Mage_Sales_Model_Order
 
         if ($callback->getStatus() == OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PROCESSING) {
             $this->handleProcessing();
+        }
+
+        $statuses = [
+            OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_REFUNDED,
+            OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PAID,
+            OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_UNDERPAID,
+            OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PROCESSING,
+        ];
+
+        if (!in_array($callback->getStatus(), $statuses)) {
+            $format = '[%s] Callback contains an invalid status %s';
+            $this->logger->error(sprintf($format, $callback->getIncrementId(), $callback->getStatus()));
         }
 
         return $this;

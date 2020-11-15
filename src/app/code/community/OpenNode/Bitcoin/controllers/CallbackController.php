@@ -57,14 +57,18 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $callback = Mage::getModel('opennode_bitcoin/callback');
         $callback->setData($this->getRequest()->getParams());
 
-        $this->logger->info(sprintf('Callback received for TXN %s', $callback->getId()));
+        $format = '[%s] Callback received for TXN %s';
+        $this->logger->info(sprintf($format, $callback->getIncrementId(), $callback->getId()));
+
         if ($this->config->isDebug()) {
             $this->logger->info('REQUEST: ' . Mage::helper('core')->jsonEncode($this->getRequest()->getParams()));
             $this->logger->info('CALLBACK: ' . Mage::helper('core')->jsonEncode($callback->getData()));
         }
 
         if (!$callback->verify()) {
-            $this->logger->error('Callback request denied because HMAC verification failed');
+            $format = '[%s] HMAC verification failed for TXN %s';
+            $this->logger->error(sprintf($format, $callback->getIncrementId(), $callback->getId()));
+
             $this->getResponse()->setHttpResponseCode(403)->sendResponse();
             return;
         }
@@ -74,13 +78,13 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $order->loadByIncrementId($callback->getIncrementId());
 
         if (!$order->getEntityId()) {
-            $this->logger->error(sprintf('Order # %s does not exist!', $callback->getIncrementId()));
+            $format = '[%s] TXN %s contains an order that does not exist in Magento!';
+            $this->logger->error(sprintf($format, $callback->getIncrementId(), $callback->getId()));
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
 
         try {
-            $this->logger->info(sprintf('Order # %s found. Handling callback', $order->getIncrementId()));
             $order->handleCallback($callback)->save();
         } catch (Exception $e) {
             Mage::logException($e);
