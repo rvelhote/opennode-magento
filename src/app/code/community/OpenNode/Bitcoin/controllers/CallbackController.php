@@ -29,6 +29,9 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
     /** @var OpenNode_Bitcoin_Helper_Logger */
     protected $logger;
 
+    /** @var OpenNode_Bitcoin_Helper_Config */
+    protected $config;
+
     /**
      *
      */
@@ -36,6 +39,7 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
     {
         parent::_construct();
         $this->logger = Mage::helper('opennode_bitcoin/logger');
+        $this->configuration = Mage::helper('opennode_bitcoin/config');
     }
 
     /**
@@ -54,7 +58,9 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         $callback->setData($this->getRequest()->getParams());
 
         $this->logger->info(sprintf('Callback received for TXN %s', $callback->getId()));
-        $this->logger->info(Mage::helper('core')->jsonEncode($callback->getData()));
+        if ($this->config->isDebug()) {
+            $this->logger->info(Mage::helper('core')->jsonEncode($callback->getData()));
+        }
 
         if (!$callback->verify()) {
             $this->logger->error('Callback request denied because HMAC verification failed');

@@ -44,6 +44,9 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
     /** @var string */
     const XML_PATH_OPENNODE_CANCELLATION_TIMEFRAME = 'payment/opennode_bitcoin/cancelation_timeframe';
 
+    /** @var string */
+    const XML_PATH_OPENNODE_DEBUG = 'payment/opennode_bitcoin/debug';
+
     /**
      * @return bool
      */
@@ -133,5 +136,13 @@ class OpenNode_Bitcoin_Helper_Config extends Mage_Core_Helper_Abstract
     public function getCancelationTimeframeInSeconds()
     {
         return $this->getCancelationTimeframe() * 3600;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebug()
+    {
+        return (bool)Mage::getStoreConfig(self::XML_PATH_OPENNODE_DEBUG);
     }
 }

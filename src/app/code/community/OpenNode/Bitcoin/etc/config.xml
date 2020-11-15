@@ -55,6 +55,7 @@
                 <allowspecific>0</allowspecific>
                 <payment_action>initialize</payment_action>
                 <cancelation_timeframe>1</cancelation_timeframe>
+                <debug>0</debug>
             </opennode_bitcoin>
         </payment>
     </default>

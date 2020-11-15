@@ -105,6 +105,16 @@
                             <show_in_store>1</show_in_store>
                             <sort_order>8</sort_order>
                         </order_status>
+                        <debug translate="label">
+                            <label>Debug Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <comment>Adds additional logging for debugging purposes (mostly callbacks)</comment>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>9</sort_order>
+                        </debug>
                         <allowspecific translate="label">
                             <label>Payment from applicable countries</label>
                             <frontend_type>allowspecific</frontend_type>
@@ -112,7 +122,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <sort_order>9</sort_order>
+                            <sort_order>100</sort_order>
                         </allowspecific>
                         <specificcountry translate="label">
                             <label>Payment from Specific countries</label>
@@ -121,7 +131,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <sort_order>10</sort_order>
+                            <sort_order>101</sort_order>
                         </specificcountry>
                     </fields>
                 </opennode_bitcoin>
