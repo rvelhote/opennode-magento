@@ -16,19 +16,18 @@ The module was only tested with the default theme and Onepage Checkout.
 # Requirements
 
 - Magento 1.9 (and all the basic requirements that go with it)
-- Only PHP 7.0+ is supported
+- Only PHP 7.3+ is supported
 
 # Check it Out (For TEST environments only)
 
 1. Run `composer install`
-2. Run `npm install` and then `npm run watch`
-3. Run `bash shell/docker.bash` to setup some custom docker containers for development
-4. Run `docker-compose up` to setup an environment
-5. You should add the following lines to your hosts file `127.0.0.1 development.opennode.co db mailhog`
-6. [Download](https://anonymousfiles.io/f/magento-sample-data.zip) the Magento Sample Data. You don't have to use the 
+2. Run `bash shell/docker.bash` to setup some custom docker containers for development
+3. Run `docker-compose up` to setup an environment
+4. You should add the following lines to your hosts file `127.0.0.1 development.opennode.co db mailhog`
+5. [Download](https://anonymousfiles.io/f/magento-sample-data.zip) the Magento Sample Data. You don't have to use the 
 sample data of course but that means you wil have to create products and categories yourself
-7. Extract the sample data and copy the resulting folder to the *data* folder 
-8. Run `bash shell/install.bash` from the root directory of the project. This will setup a default Magento store with 
+6. Extract the sample data and copy the resulting folder to the *data* folder 
+7. Run `bash shell/install.bash` from the root directory of the project. This will setup a default Magento store with 
 actual products and categories. All products will be discounted by 99% to make sure you don't spend all your Testnet 
 coins. It will also ask you to input your development key which you should get from your account at OpenNode
 
@@ -55,7 +54,6 @@ To test the Crojob that handles the cancellation of pending order run the follow
 # Missing
 
 - Add translation files
-- What to do if the user navigates away from the payment
+- What to do if the user navigates away from the payment?
 - Create a companion module to add the BTC currency to Magento so that payments can be made in BTC
-- Better Unit Test coverage (PHP and Javascript)
-- Convert the Javascript part to Typescript
+- Better Unit Test coverage
