@@ -39,7 +39,7 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
     {
         parent::_construct();
         $this->logger = Mage::helper('opennode_bitcoin/logger');
-        $this->configuration = Mage::helper('opennode_bitcoin/config');
+        $this->config = Mage::helper('opennode_bitcoin/config');
     }
 
     /**
@@ -59,7 +59,8 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
 
         $this->logger->info(sprintf('Callback received for TXN %s', $callback->getId()));
         if ($this->config->isDebug()) {
-            $this->logger->info(Mage::helper('core')->jsonEncode($callback->getData()));
+            $this->logger->info('REQUEST: ' . Mage::helper('core')->jsonEncode($this->getRequest()->getParams()));
+            $this->logger->info('CALLBACK: ' . Mage::helper('core')->jsonEncode($callback->getData()));
         }
 
         if (!$callback->verify()) {
@@ -79,6 +80,7 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
         }
 
         try {
+            $this->logger->info(sprintf('Order # %s found. Handling callback', $order->getIncrementId()));
             $order->handleCallback($callback)->save();
         } catch (Exception $e) {
             Mage::logException($e);
