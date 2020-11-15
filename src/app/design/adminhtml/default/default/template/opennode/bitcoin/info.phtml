@@ -147,7 +147,7 @@ $charge = $block->getCharge(); ?>
         </tbody>
     <?php endif; ?>
 
-    <?php if ($charge->getTransactions()->count() > 0) : ?>
+    <?php if ($charge->getTransactions()->count() > 1) : ?>
         <tbody>
             <?php /** @var OpenNode_Bitcoin_Model_Transaction $transaction */ ?>
             <?php foreach ($charge->getTransactions() as $index => $transaction) : ?>
