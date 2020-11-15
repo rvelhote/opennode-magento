@@ -63,6 +63,10 @@ $charge = $block->getCharge(); ?>
         <td><?php print $helper->__('Auto-Settle'); ?></td>
         <td><?php print $block->escapeHtml($charge->getAutoSettle() ? $helper->__('Yes') : $helper->__('No')); ?></td>
     </tr>
+    <tr>
+      <td><?php print $helper->__('Transactions'); ?></td>
+      <td><?php print $block->escapeHtml($charge->getTransactions()->count()); ?></td>
+    </tr>
     </tbody>
 
     <?php if ($charge->getLightningInvoice()->hasData()) : ?>
@@ -142,4 +146,43 @@ $charge = $block->getCharge(); ?>
         </tr>
         </tbody>
     <?php endif; ?>
+
+    <?php if ($charge->getTransactions()->count() > 0) : ?>
+        <tbody>
+            <?php /** @var OpenNode_Bitcoin_Model_Transaction $transaction */ ?>
+            <?php foreach ($charge->getTransactions() as $index => $transaction) : ?>
+            <tr>
+                <td colspan="2" style="padding-top: 10px; font-weight: bold; border-bottom: 1px solid #d6d6d6;">
+                    <?php print $helper->__('Transaction #%d', $index + 1); ?>
+                </td>
+            </tr>
+            <tr>
+                <td><?php print $helper->__('Address'); ?></td>
+                <td>
+                    <a target="_blank" rel="noopener noreferrer" href="<?php print $block->escapeHtml($addressUrl); ?>">
+                        <?php print $block->escapeHtml($transaction->getAddress()); ?>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td><?php print $helper->__('Transaction ID'); ?></td>
+                <td>
+                    <a target="_blank" rel="noopener noreferrer" href="<?php print $block->escapeHtml($txUrl); ?>">
+                        <?php print $block->escapeHtml($transaction->getTx()); ?>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td><?php print $helper->__('Settled At'); ?></td>
+                <td>
+                    <?php if (!is_null($transaction->getSettledAt())) : ?>
+                        <?php print $block->escapeHtml($block->getStoreDate($transaction->getSettledAt())); ?>
+                    <?php else: ?>
+                        <?php print $helper->__('Not settled yet'); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+        <?php endif; ?>
 </table>

@@ -37,6 +37,7 @@ use OpenNode\Merchant\Charge;
  * @method bool getAutoSettle()
  * @method OpenNode_Bitcoin_Model_Invoice_Ligthning getLightningInvoice()
  * @method OpenNode_Bitcoin_Model_Invoice_OnChain getChainInvoice()
+ * @method Varien_Data_Collection getTransactions()
  */
 class OpenNode_Bitcoin_Model_Charge extends Varien_Object
 {
@@ -107,6 +108,18 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
         $this->setData('order_id', $this->_charge->order_id);
         $this->setData('success_url', $this->_charge->success_url);
         $this->setData('notes', $this->_charge->notes);
+
+        $this->setData('transactions', new Varien_Data_Collection());
+        if ($this->_charge->transactions && is_array($this->_charge->transactions)) {
+            $transactions = new Varien_Data_Collection();
+
+            foreach ($this->_charge->transactions as $transaction) {
+                $item = Mage::getModel('opennode_bitcoin/transaction', $transaction);
+                $transactions->addItem($item);
+            }
+
+            $this->setData('transactions', $transactions);
+        }
 
         $this->setData('lightning_invoice', Mage::getModel('opennode_bitcoin/invoice_ligthning',
             $this->_charge->lightning_invoice
@@ -237,5 +250,13 @@ class OpenNode_Bitcoin_Model_Charge extends Varien_Object
         ];
 
         return $core->jsonEncode($data);
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalTransactions()
+    {
+        return count($this->getTransactions());
     }
 }
