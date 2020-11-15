@@ -48,6 +48,9 @@ class OpenNode_Bitcoin_Model_Bitcoin extends Mage_Payment_Model_Method_Abstract
     const OPENNODE_STATUS_UNDERPAID = 'underpaid';
 
     /** @var string */
+    const OPENNODE_STATUS_REFUNDED = 'refunded';
+
+    /** @var string */
     const OPENNODE_ENV_LIVE = 'live';
 
     /** @var string */

@@ -49,11 +49,12 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
             return;
         }
 
-        $this->logger->info(Mage::helper('core')->jsonEncode($this->getRequest()->getParams()));
-
         /** @var OpenNode_Bitcoin_Model_Callback $callback */
         $callback = Mage::getModel('opennode_bitcoin/callback');
         $callback->setData($this->getRequest()->getParams());
+
+        $this->logger->info(sprintf('Callback received for TXN %s', $callback->getId()));
+        $this->logger->info(Mage::helper('core')->jsonEncode($callback->getData()));
 
         if (!$callback->verify()) {
             $this->logger->error('Callback request denied because HMAC verification failed');
@@ -61,34 +62,18 @@ class OpenNode_Bitcoin_CallbackController extends Mage_Core_Controller_Front_Act
             return;
         }
 
-        /** @var Mage_Sales_Model_Order $order */
-        $order = Mage::getModel('sales/order')->loadByIncrementId($callback->getIncrementId());
+        /** @var OpenNode_Bitcoin_Model_Order $order */
+        $order = Mage::getModel('opennode_bitcoin/order');
+        $order->loadByIncrementId($callback->getIncrementId());
+
         if (!$order->getEntityId()) {
-            $this->logger->error(sprintf('Order # %s does not exist. Check callback!', $callback->getIncrementId()));
+            $this->logger->error(sprintf('Order # %s does not exist!', $callback->getIncrementId()));
             $this->getResponse()->setHttpResponseCode(404);
             return;
         }
 
-        if ($order->getStatus() != Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
-            $this->logger->error(sprintf('Order # %s is already paid', $callback->getIncrementId()));
-            $this->getResponse()->setHttpResponseCode(409);
-            return;
-        }
-
         try {
-            if ($callback->getStatus() != OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PAID) {
-                $order->addStatusHistoryComment($this->__('Current status: %s', mb_strtoupper($callback->getStatus())));
-            }
-
-            if ($callback->getStatus() == OpenNode_Bitcoin_Model_Bitcoin::OPENNODE_STATUS_PAID) {
-                $order->getPayment()->capture(null);
-
-                if (!$order->getEmailSent()) {
-                    $order->queueNewOrderEmail()->setEmailSent(true);
-                }
-            }
-
-            $order->save();
+            $order->handleCallback($callback)->save();
         } catch (Exception $e) {
             Mage::logException($e);
             $this->logger->log($e->getMessage());

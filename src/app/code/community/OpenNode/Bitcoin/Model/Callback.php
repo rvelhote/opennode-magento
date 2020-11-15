@@ -48,6 +48,7 @@
  * @method boolean getAutoSettle()
  * @method string getHashedOrder()
  * @method string getTransactions()
+ * @method string getMissingAmt()
  *
  */
 class OpenNode_Bitcoin_Model_Callback extends Varien_Object
@@ -86,5 +87,17 @@ class OpenNode_Bitcoin_Model_Callback extends Varien_Object
         }
 
         return true;
+    }
+
+    /**
+     * Obtain the missing amount in BTC rather than Satoshis
+     * @return string
+     */
+    public function getMissingAmtBtc() {
+        if (function_exists('bcdiv')) {
+            return bcdiv($this->getMissingAmt(), 100000000, 8);
+        }
+
+        return number_format($this->getMissingAmt() / 100000000, 8, '.', '');
     }
 }
