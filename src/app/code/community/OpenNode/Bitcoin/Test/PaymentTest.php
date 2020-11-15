@@ -43,7 +43,7 @@ class PaymentTest extends TestCase
     /**
      *
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->getConnection()->beginTransaction();
     }
@@ -51,7 +51,7 @@ class PaymentTest extends TestCase
     /**
      *
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->getConnection()->rollBack();
     }
@@ -110,44 +110,37 @@ class PaymentTest extends TestCase
 
     /**
      * @dataProvider getCallbackDataProvider
-     * @throws Exception
+     * @param OpenNode_Bitcoin_Model_Callback $callback A sample callback mock
+     * @param bool $result The expected result of the callback verification
      */
-    public function testOpenNodeCallback($order, $callback, $code)
+    public function testOpenNodeCallbackVerify($callback, $result)
     {
-        /** @var OpenNode_Bitcoin_Model_Sales_Order $order */
-        $order = Mage::getModel('opennode_bitcoin/sales_order')->load($order->getEntityId());
-        $order->callback($callback);
-
-        $this->expectExceptionCode($code);
+        $this->assertEquals($result, $callback->verify());
     }
 
+    /**
+     * Important: This test will only work with a specific test key!
+     * @return array[]
+     */
     public function getCallbackDataProvider()
     {
-        $order1 = Mage::getModel('opennode_bitcoin/sales_order');
-
-
-        /** @var OpenNode_Bitcoin_Model_Callback $callback1 */
-        $callback1 = new OpenNode_Bitcoin_Model_Callback();
-        $callback1->setData([
-            'id' => 'THIS ID DOES NOT EXIST',
+        /** @var OpenNode_Bitcoin_Model_Callback $callback */
+        $valid = Mage::getModel('opennode_bitcoin/callback');
+        $valid->setData([
+            'id' => '8005befd-60ca-4cb8-80b7-a345514e7475',
+            'hashed_order' => 'ca84a4254b1b8a8e46a516724d56aa009c15262fa42bd0fc8af2f7eb418f2a80',
         ]);
 
-        /** @var OpenNode_Bitcoin_Model_Callback $callback2 */
-        $callback2 = new OpenNode_Bitcoin_Model_Callback();
-        $callback2->setData([
-            'id' => 'THIS ID DOES NOT EXIST',
-        ]);
-
-        /** @var OpenNode_Bitcoin_Model_Callback $callback3 */
-        $callback3 = new OpenNode_Bitcoin_Model_Callback();
-        $callback3->setData([
-            'id' => 'THIS ID DOES NOT EXIST',
+        /** @var OpenNode_Bitcoin_Model_Callback $invalid */
+        $invalid = Mage::getModel('opennode_bitcoin/callback');
+        $invalid->setData([
+            'id' => '8005befd-60ca-4cb8-80b7-a345514e7475',
+            'hashed_order' => 'INVALID INVALID INVALID INVALID INVALID',
         ]);
 
         return [
-            [$order1, $callback1, 1],
-            [$order2, $callback2, 2],
-            [$order3, $callback3, 3],
+            [$valid, true],
+            [$invalid, false],
         ];
     }
 }
